@@ -17,18 +17,25 @@ export default function WelcomeScreen() {
     };
   }, []);
 
+  const letterStyle = {
+    fontFamily: "var(--font-logo), system-ui, sans-serif",
+    fontWeight: 900,
+    fontStyle: "italic" as const,
+    letterSpacing: "-0.04em",
+  };
+
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#058BED]">
       {/* Буквы SC */}
       <div className="relative flex items-center justify-center">
         {/* Буква S */}
         <motion.span
-          className="absolute text-[120px] font-black leading-none text-white sm:text-[160px] md:text-[200px]"
-          style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
-          initial={{ scale: 1, x: -48, opacity: 1 }}
+          className="absolute text-[120px] leading-none text-white sm:text-[160px] md:text-[200px]"
+          style={letterStyle}
+          initial={{ scale: 1, x: -52, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: -48, opacity: 1 }
+              ? { scale: 1, x: -52, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 18,
@@ -51,12 +58,12 @@ export default function WelcomeScreen() {
 
         {/* Буква C — сначала стоит справа, потом наезжает на S */}
         <motion.span
-          className="absolute text-[120px] font-black leading-none text-white sm:text-[160px] md:text-[200px]"
-          style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
-          initial={{ scale: 1, x: 48, opacity: 1 }}
+          className="absolute text-[120px] leading-none text-white sm:text-[160px] md:text-[200px]"
+          style={letterStyle}
+          initial={{ scale: 1, x: 52, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: 48, opacity: 1 }
+              ? { scale: 1, x: 52, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 18,
@@ -98,7 +105,7 @@ export default function WelcomeScreen() {
         }
       />
 
-      {/* Заглушка следующего экрана (пока просто белый) */}
+      {/* Заглушка следующего экрана */}
       {stage === "done" && (
         <motion.div
           className="absolute inset-0 flex items-center justify-center bg-white"

@@ -49,7 +49,7 @@ export default function App() {
   };
 
   return (
-    <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[#058BED]">
+    <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[#F2F4F7]">
       <AnimatePresence mode="wait">
         {/* ===================== SPLASH ===================== */}
         {screen === "splash" && (
@@ -154,53 +154,49 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* ===== Верхняя синяя зона ===== */}
-            <div className="relative bg-[#058BED] pb-5 pt-3">
+            {/* Синий большой блок с сильным скруглением снизу */}
+            <div className="bg-[#058BED] px-4 pb-6 pt-3 rounded-b-[32px]">
               {/* Город */}
-              <div className="px-4">
-                <button
-                  onClick={() => setScreen("city-list")}
-                  className="mb-4 flex items-center gap-1.5 rounded-xl bg-white/15 px-3 py-2 active:bg-white/25"
-                >
-                  <span className="text-[15px] font-semibold text-white">{city}</span>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M4 6l4 4 4-4"
-                      stroke="white"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
+              <button
+                onClick={() => setScreen("city-list")}
+                className="mb-4 flex items-center gap-1.5 rounded-2xl bg-white/20 px-3.5 py-2.5 active:bg-white/30"
+              >
+                <span className="text-[15px] font-semibold text-white">{city}</span>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M4 6l4 4 4-4"
+                    stroke="white"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
 
               {/* Ряд карточек */}
-              <div className="flex gap-3 overflow-x-auto px-4 pb-1">
-                <div className="h-28 w-28 shrink-0 rounded-2xl bg-white/15" />
-                <div className="h-28 w-36 shrink-0 rounded-2xl bg-white/15" />
-                <div className="h-28 w-36 shrink-0 rounded-2xl bg-white/15" />
-                <div className="h-28 w-28 shrink-0 rounded-2xl bg-white/15" />
+              <div className="flex gap-2.5 overflow-x-auto pb-1">
+                <div className="h-[104px] w-[104px] shrink-0 rounded-2xl bg-white/20" />
+                <div className="h-[104px] w-[130px] shrink-0 rounded-2xl bg-white/20" />
+                <div className="h-[104px] w-[130px] shrink-0 rounded-2xl bg-white/20" />
+                <div className="h-[104px] w-[104px] shrink-0 rounded-2xl bg-white/20" />
               </div>
 
               {/* Длинная карточка */}
-              <div className="mt-3 px-4">
-                <div className="h-14 w-full rounded-2xl bg-white/15" />
-              </div>
+              <div className="mt-2.5 h-[52px] w-full rounded-2xl bg-white/20" />
             </div>
 
-            {/* ===== Нижняя белая зона ===== */}
-            <div className="-mt-4 flex-1 overflow-y-auto rounded-t-[28px] bg-[#F2F4F7] px-4 pt-5">
+            {/* Нижние белые карточки */}
+            <div className="flex-1 overflow-y-auto px-4 pt-4">
               <div className="space-y-3 pb-4">
-                <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
-                <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
-                <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
-                <div className="h-24 w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-[76px] w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-[76px] w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-[76px] w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-[88px] w-full rounded-2xl bg-white shadow-sm" />
               </div>
             </div>
 
-            {/* ===== Нижний таббар ===== */}
-            <div className="flex items-center justify-around border-t border-gray-200/80 bg-white px-2 pb-6 pt-2">
+            {/* Таббар */}
+            <div className="flex items-center justify-around border-t border-gray-200/60 bg-white px-2 pb-7 pt-2.5">
               {[
                 { label: "Главная", active: true },
                 { label: "Транспорт", active: false },
@@ -212,7 +208,7 @@ export default function App() {
                   className="flex flex-col items-center gap-1 px-3 py-1"
                 >
                   <div
-                    className={`h-6 w-6 rounded-md ${
+                    className={`h-6 w-6 rounded-lg ${
                       tab.active ? "bg-[#058BED]" : "bg-gray-300"
                     }`}
                   />

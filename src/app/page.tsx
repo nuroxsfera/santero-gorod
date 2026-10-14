@@ -25,7 +25,7 @@ export default function App() {
 
   useEffect(() => {
     if (screen !== "splash") return;
-    const t1 = setTimeout(() => setScreen("city-select"), 2600);
+    const t1 = setTimeout(() => setScreen("city-select"), 2400);
     return () => clearTimeout(t1);
   }, [screen]);
 
@@ -55,20 +55,21 @@ export default function App() {
         {screen === "splash" && (
           <motion.div
             key="splash"
-            className="absolute inset-0 flex items-center justify-center bg-[#058BED]"
+            className="absolute inset-0 flex items-center justify-center overflow-hidden bg-[#058BED]"
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
           >
             <div className="relative flex items-center justify-center">
               <motion.span
                 className="absolute text-[120px] font-black italic leading-none tracking-tighter text-white sm:text-[160px]"
-                initial={{ scale: 1, x: -42 }}
+                initial={{ scale: 1, x: -42, opacity: 1 }}
                 animate={{
-                  scale: [1, 1, 16],
+                  scale: [1, 1, 14],
                   x: [-42, -42, 0],
+                  opacity: [1, 1, 0],
                   transition: {
-                    duration: 2.4,
-                    times: [0, 0.45, 1],
+                    duration: 2.2,
+                    times: [0, 0.4, 1],
                     ease: [0.22, 1, 0.36, 1],
                   },
                 }}
@@ -77,13 +78,14 @@ export default function App() {
               </motion.span>
               <motion.span
                 className="absolute text-[105px] font-black italic leading-none tracking-tighter text-white sm:text-[140px]"
-                initial={{ scale: 1, x: 38 }}
+                initial={{ scale: 1, x: 38, opacity: 1 }}
                 animate={{
-                  scale: [1, 1, 16],
+                  scale: [1, 1, 14],
                   x: [38, 38, 0],
+                  opacity: [1, 1, 0],
                   transition: {
-                    duration: 2.4,
-                    times: [0, 0.45, 1],
+                    duration: 2.2,
+                    times: [0, 0.4, 1],
                     ease: [0.22, 1, 0.36, 1],
                   },
                 }}
@@ -92,14 +94,16 @@ export default function App() {
               </motion.span>
             </div>
 
+            {/* Белый flash — полностью перекрывает буквы */}
             <motion.div
               className="pointer-events-none absolute inset-0 bg-white"
               initial={{ opacity: 0 }}
               animate={{
-                opacity: [0, 0, 0.7, 1],
+                opacity: [0, 0, 1],
                 transition: {
-                  duration: 2.4,
-                  times: [0, 0.55, 0.85, 1],
+                  duration: 2.2,
+                  times: [0, 0.55, 1],
+                  ease: "easeIn",
                 },
               }}
             />
@@ -114,7 +118,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="w-full max-w-sm">
               <h1 className="mb-2 text-center text-2xl font-semibold tracking-tight text-gray-900">
@@ -180,7 +184,6 @@ export default function App() {
 
               {/* Карточки услуг */}
               <div className="flex gap-2.5 overflow-x-auto pb-1">
-                {/* Транспорт */}
                 <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
@@ -194,7 +197,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* События */}
                 <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
@@ -208,7 +210,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Работа */}
                 <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
@@ -222,7 +223,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Места */}
                 <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
@@ -271,7 +271,6 @@ export default function App() {
             {/* ===== Нижний контент ===== */}
             <div className="flex-1 overflow-y-auto px-4 pt-4">
               <div className="space-y-3 pb-5">
-                {/* Сегодня рядом */}
                 <div className="rounded-2xl bg-white p-4 shadow-sm">
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-[15px] font-semibold text-gray-900">Сегодня рядом</h3>
@@ -286,7 +285,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Вакансии */}
                 <div className="rounded-2xl bg-white p-4 shadow-sm">
                   <div className="mb-1 flex items-center justify-between">
                     <h3 className="text-[15px] font-semibold text-gray-900">Вакансии рядом</h3>
@@ -304,7 +302,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Места */}
                 <div className="rounded-2xl bg-white p-4 shadow-sm">
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-[15px] font-semibold text-gray-900">Популярные места</h3>
@@ -322,7 +319,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Погода / статус */}
                 <div className="flex gap-3">
                   <div className="flex-1 rounded-2xl bg-white p-4 shadow-sm">
                     <p className="text-[13px] text-gray-500">Сейчас</p>

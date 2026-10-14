@@ -3,16 +3,22 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// SVG буквы в стиле Яндекс Go — жирный динамичный курсив
+/* 
+  SVG буквы в духе Яндекс Go
+  Жирный, динамичный, с сильным наклоном
+*/
 function LetterS({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 120 140"
+      viewBox="0 0 100 120"
       fill="currentColor"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M98 28c-6-12-20-20-38-20-28 0-48 16-48 42 0 18 12 30 34 38l18 6c14 5 20 10 20 20 0 14-12 22-30 22-16 0-28-6-36-18l-16 14c12 18 32 28 54 28 34 0 56-18 56-46 0-22-14-34-40-44l-16-6c-12-4-18-9-18-18 0-12 10-18 26-18 12 0 22 4 28 14l16-14z" />
+      <path
+        d="M78 22c-5-9-16-15-30-15C28 7 12 20 12 42c0 15 9 25 28 32l14 5c11 4 16 8 16 16 0 11-9 17-24 17-13 0-22-5-29-14l-13 12c10 15 26 23 44 23 28 0 46-15 46-38 0-18-11-28-32-36l-13-5c-9-3-14-7-14-14 0-9 8-14 20-14 10 0 17 3 22 11l13-11z"
+        transform="skewX(-14)"
+      />
     </svg>
   );
 }
@@ -20,12 +26,15 @@ function LetterS({ className }: { className?: string }) {
 function LetterG({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 130 140"
+      viewBox="0 0 110 120"
       fill="currentColor"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M68 18c-32 0-56 24-56 58s24 58 58 58c18 0 34-6 44-18l-14-14c-8 8-18 12-30 12-22 0-36-16-36-38s14-38 36-38c14 0 24 6 30 16h-28v20h52c2-6 4-14 4-22 0-34-24-54-60-54z" />
+      <path
+        d="M55 12C28 12 8 32 8 60s20 48 48 48c15 0 28-5 37-15l-12-12c-6 6-14 9-24 9-18 0-30-13-30-30s12-30 30-30c11 0 19 5 24 13H57v16h44c1-5 2-11 2-17 0-28-20-44-48-44z"
+        transform="skewX(-14)"
+      />
     </svg>
   );
 }
@@ -48,14 +57,14 @@ export default function WelcomeScreen() {
         {/* Буква S */}
         <motion.div
           className="absolute text-white"
-          style={{ width: 110, height: 130 }}
-          initial={{ scale: 1, x: -42, opacity: 1 }}
+          style={{ width: 100, height: 120 }}
+          initial={{ scale: 1, x: -40, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: -42, opacity: 1 }
+              ? { scale: 1, x: -40, opacity: 1 }
               : stage === "fly"
               ? {
-                  scale: 16,
+                  scale: 15,
                   x: 0,
                   opacity: 1,
                   transition: {
@@ -64,7 +73,7 @@ export default function WelcomeScreen() {
                   },
                 }
               : {
-                  scale: 20,
+                  scale: 19,
                   opacity: 0,
                   transition: { duration: 0.35 },
                 }
@@ -76,14 +85,14 @@ export default function WelcomeScreen() {
         {/* Буква G — чуть меньше и ближе */}
         <motion.div
           className="absolute text-white"
-          style={{ width: 95, height: 115 }}
-          initial={{ scale: 1, x: 38, opacity: 1 }}
+          style={{ width: 88, height: 108 }}
+          initial={{ scale: 1, x: 36, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: 38, opacity: 1 }
+              ? { scale: 1, x: 36, opacity: 1 }
               : stage === "fly"
               ? {
-                  scale: 16,
+                  scale: 15,
                   x: 0,
                   opacity: 1,
                   transition: {
@@ -92,7 +101,7 @@ export default function WelcomeScreen() {
                   },
                 }
               : {
-                  scale: 20,
+                  scale: 19,
                   opacity: 0,
                   transition: { duration: 0.35 },
                 }

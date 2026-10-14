@@ -19,9 +19,9 @@ export default function WelcomeScreen() {
     fontFamily: "var(--font-logo), system-ui, sans-serif",
     fontWeight: 900,
     fontStyle: "italic" as const,
-    letterSpacing: "-0.06em",
-    // Дополнительный наклон, чтобы было ближе к Яндексу
-    transform: "skewX(-8deg)",
+    letterSpacing: "-0.08em",
+    // Сильный дополнительный наклон как у Яндекса
+    transform: "skewX(-12deg)",
   };
 
   return (
@@ -31,10 +31,10 @@ export default function WelcomeScreen() {
         <motion.span
           className="absolute text-[130px] leading-none text-white sm:text-[170px] md:text-[210px]"
           style={baseStyle}
-          initial={{ scale: 1, x: -38, opacity: 1 }}
+          initial={{ scale: 1, x: -36, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: -38, opacity: 1 }
+              ? { scale: 1, x: -36, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 18,
@@ -57,12 +57,12 @@ export default function WelcomeScreen() {
 
         {/* Буква G — чуть меньше и ближе */}
         <motion.span
-          className="absolute text-[112px] leading-none text-white sm:text-[148px] md:text-[182px]"
+          className="absolute text-[110px] leading-none text-white sm:text-[145px] md:text-[178px]"
           style={baseStyle}
-          initial={{ scale: 1, x: 34, opacity: 1 }}
+          initial={{ scale: 1, x: 30, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: 34, opacity: 1 }
+              ? { scale: 1, x: 30, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 18,

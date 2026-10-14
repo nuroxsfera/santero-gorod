@@ -154,48 +154,191 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Синий большой блок с сильным скруглением снизу */}
-            <div className="bg-[#058BED] px-4 pb-6 pt-3 rounded-b-[32px]">
-              {/* Город */}
-              <button
-                onClick={() => setScreen("city-list")}
-                className="mb-4 flex items-center gap-1.5 rounded-2xl bg-white/20 px-3.5 py-2.5 active:bg-white/30"
-              >
-                <span className="text-[15px] font-semibold text-white">{city}</span>
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M4 6l4 4 4-4"
-                    stroke="white"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
+            {/* ===== Синий блок ===== */}
+            <div className="bg-[#058BED] px-4 pb-5 pt-3 rounded-b-[32px]">
+              {/* Город + иконки */}
+              <div className="mb-4 flex items-center justify-between">
+                <button
+                  onClick={() => setScreen("city-list")}
+                  className="flex items-center gap-1.5 rounded-2xl bg-white/20 px-3.5 py-2.5 active:bg-white/30"
+                >
+                  <span className="text-[15px] font-semibold text-white">{city}</span>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
 
-              {/* Ряд карточек */}
+                <div className="flex items-center gap-2">
+                  <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Карточки услуг */}
               <div className="flex gap-2.5 overflow-x-auto pb-1">
-                <div className="h-[104px] w-[104px] shrink-0 rounded-2xl bg-white/20" />
-                <div className="h-[104px] w-[130px] shrink-0 rounded-2xl bg-white/20" />
-                <div className="h-[104px] w-[130px] shrink-0 rounded-2xl bg-white/20" />
-                <div className="h-[104px] w-[104px] shrink-0 rounded-2xl bg-white/20" />
+                {/* Транспорт */}
+                <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                      <rect x="4" y="4" width="16" height="12" rx="2" />
+                      <path d="M4 10h16M8 16v2M16 16v2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-900">Транспорт</p>
+                    <p className="text-[12px] text-gray-500">Маршруты</p>
+                  </div>
+                </div>
+
+                {/* События */}
+                <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                      <rect x="3" y="5" width="18" height="16" rx="2" />
+                      <path d="M3 10h18M8 3v4M16 3v4" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-900">События</p>
+                    <p className="text-[12px] text-gray-500">12 рядом</p>
+                  </div>
+                </div>
+
+                {/* Работа */}
+                <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                      <rect x="2" y="7" width="20" height="14" rx="2" />
+                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-900">Работа</p>
+                    <p className="text-[12px] text-gray-500">Вакансии</p>
+                  </div>
+                </div>
+
+                {/* Места */}
+                <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                      <path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z" />
+                      <circle cx="12" cy="10" r="2.5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-gray-900">Места</p>
+                    <p className="text-[12px] text-gray-500">Рядом</p>
+                  </div>
+                </div>
               </div>
 
-              {/* Длинная карточка */}
-              <div className="mt-2.5 h-[52px] w-full rounded-2xl bg-white/20" />
+              {/* Быстрые действия */}
+              <div className="mt-3 flex items-center justify-around rounded-2xl bg-white/15 py-3.5">
+                <button className="flex flex-col items-center gap-1.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8v4l2.5 2.5" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <span className="text-[12px] font-medium text-white">Расписание</span>
+                </button>
+                <button className="flex flex-col items-center gap-1.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <span className="text-[12px] font-medium text-white">Погода</span>
+                </button>
+                <button className="flex flex-col items-center gap-1.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <span className="text-[12px] font-medium text-white">Карта</span>
+                </button>
+              </div>
             </div>
 
-            {/* Нижние белые карточки */}
+            {/* ===== Нижний контент ===== */}
             <div className="flex-1 overflow-y-auto px-4 pt-4">
-              <div className="space-y-3 pb-4">
-                <div className="h-[76px] w-full rounded-2xl bg-white shadow-sm" />
-                <div className="h-[76px] w-full rounded-2xl bg-white shadow-sm" />
-                <div className="h-[76px] w-full rounded-2xl bg-white shadow-sm" />
-                <div className="h-[88px] w-full rounded-2xl bg-white shadow-sm" />
+              <div className="space-y-3 pb-5">
+                {/* Сегодня рядом */}
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-[15px] font-semibold text-gray-900">Сегодня рядом</h3>
+                    <span className="text-[13px] font-medium text-[#058BED]">Все</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="h-14 w-14 shrink-0 rounded-xl bg-[#058BED]/10" />
+                    <div className="flex flex-col justify-center">
+                      <p className="text-[14px] font-medium text-gray-900">Фестиваль еды</p>
+                      <p className="text-[13px] text-gray-500">Парк Горького · 18:00</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Вакансии */}
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-1 flex items-center justify-between">
+                    <h3 className="text-[15px] font-semibold text-gray-900">Вакансии рядом</h3>
+                    <span className="text-[13px] font-medium text-[#058BED]">Все</span>
+                  </div>
+                  <p className="mb-3 text-[13px] text-gray-500">24 новых за сегодня</p>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#058BED]/10 text-[13px] font-bold text-[#058BED]">
+                      IT
+                    </div>
+                    <div>
+                      <p className="text-[14px] font-medium text-gray-900">Frontend-разработчик</p>
+                      <p className="text-[13px] text-gray-500">от 180 000 ₽ · удалённо</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Места */}
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-[15px] font-semibold text-gray-900">Популярные места</h3>
+                    <span className="text-[13px] font-medium text-[#058BED]">Карта</span>
+                  </div>
+                  <div className="flex gap-2.5 overflow-x-auto">
+                    {["Кофейни", "Парки", "Музеи"].map((item) => (
+                      <div
+                        key={item}
+                        className="flex h-16 w-28 shrink-0 items-end rounded-xl bg-[#058BED]/10 px-3 pb-2.5"
+                      >
+                        <span className="text-[13px] font-medium text-gray-800">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Погода / статус */}
+                <div className="flex gap-3">
+                  <div className="flex-1 rounded-2xl bg-white p-4 shadow-sm">
+                    <p className="text-[13px] text-gray-500">Сейчас</p>
+                    <p className="text-[22px] font-semibold text-gray-900">+12°</p>
+                    <p className="text-[13px] text-gray-500">Облачно</p>
+                  </div>
+                  <div className="flex-1 rounded-2xl bg-white p-4 shadow-sm">
+                    <p className="text-[13px] text-gray-500">Пробки</p>
+                    <p className="text-[22px] font-semibold text-gray-900">4</p>
+                    <p className="text-[13px] text-gray-500">балла</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Таббар */}
+            {/* ===== Таббар ===== */}
             <div className="flex items-center justify-around border-t border-gray-200/60 bg-white px-2 pb-7 pt-2.5">
               {[
                 { label: "Главная", active: true },
@@ -203,10 +346,7 @@ export default function App() {
                 { label: "События", active: false },
                 { label: "Ещё", active: false },
               ].map((tab) => (
-                <button
-                  key={tab.label}
-                  className="flex flex-col items-center gap-1 px-3 py-1"
-                >
+                <button key={tab.label} className="flex flex-col items-center gap-1 px-3 py-1">
                   <div
                     className={`h-6 w-6 rounded-lg ${
                       tab.active ? "bg-[#058BED]" : "bg-gray-300"
@@ -241,13 +381,7 @@ export default function App() {
                 className="flex h-10 w-10 items-center justify-center rounded-full active:bg-gray-100"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M12.5 5L7.5 10l5 5"
-                    stroke="#111"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <path d="M12.5 5L7.5 10l5 5" stroke="#111" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
               <h2 className="text-lg font-semibold">Выбор города</h2>

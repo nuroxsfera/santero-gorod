@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 
 type Screen = "splash" | "city-select" | "main" | "city-list" | "travel";
+type Tab = "home" | "transport" | "events" | "more";
 
 const CITIES = [
   "Москва",
@@ -18,10 +19,65 @@ const CITIES = [
   "Уфа",
 ];
 
+const TABS: { id: Tab; label: string }[] = [
+  { id: "home", label: "Главная" },
+  { id: "transport", label: "Транспорт" },
+  { id: "events", label: "События" },
+  { id: "more", label: "Ещё" },
+];
+
+function IconHome({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={active ? "#058BED" : "#9CA3AF"} strokeWidth="2">
+      <path d="M3 10.5L12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconTransport({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={active ? "#058BED" : "#9CA3AF"} strokeWidth="2">
+      <rect x="4" y="4" width="16" height="12" rx="2" />
+      <path d="M4 10h16M8 16v2M16 16v2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconEvents({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={active ? "#058BED" : "#9CA3AF"} strokeWidth="2">
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconMore({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={active ? "#058BED" : "#9CA3AF"} strokeWidth="2">
+      <circle cx="6" cy="12" r="1.5" fill={active ? "#058BED" : "#9CA3AF"} />
+      <circle cx="12" cy="12" r="1.5" fill={active ? "#058BED" : "#9CA3AF"} />
+      <circle cx="18" cy="12" r="1.5" fill={active ? "#058BED" : "#9CA3AF"} />
+    </svg>
+  );
+}
+
+const ICONS: Record<Tab, (p: { active: boolean }) => React.ReactNode> = {
+  home: IconHome,
+  transport: IconTransport,
+  events: IconEvents,
+  more: IconMore,
+};
+
 export default function App() {
   const [screen, setScreen] = useState<Screen>("splash");
   const [city, setCity] = useState("Москва");
   const [nextCity, setNextCity] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>("home");
+  const [collapsed, setCollapsed] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (screen !== "splash") return;
@@ -48,6 +104,11 @@ export default function App() {
     setScreen("travel");
   };
 
+  const onScroll = () => {
+    if (!scrollRef.current) return;
+    setCollapsed(scrollRef.current.scrollTop > 40);
+  };
+
   return (
     <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[#F2F4F7]">
       <AnimatePresence mode="wait">
@@ -67,11 +128,7 @@ export default function App() {
                   scale: [1, 1, 14],
                   x: [-42, -42, 0],
                   opacity: [1, 1, 0],
-                  transition: {
-                    duration: 2.2,
-                    times: [0, 0.4, 1],
-                    ease: [0.22, 1, 0.36, 1],
-                  },
+                  transition: { duration: 2.2, times: [0, 0.4, 1], ease: [0.22, 1, 0.36, 1] },
                 }}
               >
                 S
@@ -83,28 +140,18 @@ export default function App() {
                   scale: [1, 1, 14],
                   x: [38, 38, 0],
                   opacity: [1, 1, 0],
-                  transition: {
-                    duration: 2.2,
-                    times: [0, 0.4, 1],
-                    ease: [0.22, 1, 0.36, 1],
-                  },
+                  transition: { duration: 2.2, times: [0, 0.4, 1], ease: [0.22, 1, 0.36, 1] },
                 }}
               >
                 G
               </motion.span>
             </div>
-
-            {/* Белый flash — полностью перекрывает буквы */}
             <motion.div
               className="pointer-events-none absolute inset-0 bg-white"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: [0, 0, 1],
-                transition: {
-                  duration: 2.2,
-                  times: [0, 0.55, 1],
-                  ease: "easeIn",
-                },
+                transition: { duration: 2.2, times: [0, 0.55, 1], ease: "easeIn" },
               }}
             />
           </motion.div>
@@ -127,7 +174,6 @@ export default function App() {
               <p className="mb-10 text-center text-base text-gray-500">
                 Всё для жизни в вашем городе
               </p>
-
               <button
                 onClick={() => {
                   setCity("Москва");
@@ -137,7 +183,6 @@ export default function App() {
               >
                 Определить город
               </button>
-
               <button
                 onClick={() => setScreen("city-list")}
                 className="flex w-full items-center justify-center rounded-2xl border border-gray-200 bg-white py-4 text-[17px] font-medium text-gray-800 active:scale-[0.98]"
@@ -158,21 +203,32 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* ===== Синий блок ===== */}
-            <div className="bg-[#058BED] px-4 pb-5 pt-3 rounded-b-[32px]">
-              {/* Город + иконки */}
-              <div className="mb-4 flex items-center justify-between">
-                <button
-                  onClick={() => setScreen("city-list")}
-                  className="flex items-center gap-1.5 rounded-2xl bg-white/20 px-3.5 py-2.5 active:bg-white/30"
-                >
-                  <span className="text-[15px] font-semibold text-white">{city}</span>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
+            {/* ===== Сворачиваемый верхний блок ===== */}
+            <motion.div
+              className="relative z-20 overflow-hidden bg-[#058BED]"
+              animate={{
+                borderBottomLeftRadius: collapsed ? 20 : 32,
+                borderBottomRightRadius: collapsed ? 20 : 32,
+              }}
+              transition={{ duration: 0.25 }}
+            >
+              {/* Компактная плашка при скролле */}
+              <motion.div
+                className="px-4"
+                animate={{ paddingTop: collapsed ? 10 : 12, paddingBottom: collapsed ? 10 : 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setScreen("city-list")}
+                    className="flex items-center gap-1.5 rounded-2xl bg-white/20 px-3.5 py-2 active:bg-white/30"
+                  >
+                    <span className="text-[15px] font-semibold text-white">{city}</span>
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
 
-                <div className="flex items-center gap-2">
                   <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                       <circle cx="11" cy="11" r="7" />
@@ -180,97 +236,114 @@ export default function App() {
                     </svg>
                   </button>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Карточки услуг */}
-              <div className="flex gap-2.5 overflow-x-auto pb-1">
-                <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
-                      <rect x="4" y="4" width="16" height="12" rx="2" />
-                      <path d="M4 10h16M8 16v2M16 16v2" strokeLinecap="round" />
-                    </svg>
+              {/* Развёрнутый контент — скрывается при скролле */}
+              <motion.div
+                className="overflow-hidden px-4"
+                animate={{
+                  height: collapsed ? 0 : "auto",
+                  opacity: collapsed ? 0 : 1,
+                  marginTop: collapsed ? 0 : 16,
+                  paddingBottom: collapsed ? 0 : 20,
+                }}
+                transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                {/* Карточки услуг */}
+                <div className="flex gap-2.5 overflow-x-auto pb-1">
+                  <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                        <rect x="4" y="4" width="16" height="12" rx="2" />
+                        <path d="M4 10h16M8 16v2M16 16v2" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-gray-900">Транспорт</p>
+                      <p className="text-[12px] text-gray-500">Маршруты</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[13px] font-semibold text-gray-900">Транспорт</p>
-                    <p className="text-[12px] text-gray-500">Маршруты</p>
+
+                  <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                        <rect x="3" y="5" width="18" height="16" rx="2" />
+                        <path d="M3 10h18M8 3v4M16 3v4" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-gray-900">События</p>
+                      <p className="text-[12px] text-gray-500">12 рядом</p>
+                    </div>
+                  </div>
+
+                  <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" />
+                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-gray-900">Работа</p>
+                      <p className="text-[12px] text-gray-500">Вакансии</p>
+                    </div>
+                  </div>
+
+                  <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
+                        <path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z" />
+                        <circle cx="12" cy="10" r="2.5" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-gray-900">Места</p>
+                      <p className="text-[12px] text-gray-500">Рядом</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
-                      <rect x="3" y="5" width="18" height="16" rx="2" />
-                      <path d="M3 10h18M8 3v4M16 3v4" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-semibold text-gray-900">События</p>
-                    <p className="text-[12px] text-gray-500">12 рядом</p>
-                  </div>
+                {/* Быстрые действия */}
+                <div className="mt-3 flex items-center justify-around rounded-2xl bg-white/15 py-3.5">
+                  <button className="flex flex-col items-center gap-1.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 8v4l2.5 2.5" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <span className="text-[12px] font-medium text-white">Расписание</span>
+                  </button>
+                  <button className="flex flex-col items-center gap-1.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <span className="text-[12px] font-medium text-white">Погода</span>
+                  </button>
+                  <button className="flex flex-col items-center gap-1.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                    </div>
+                    <span className="text-[12px] font-medium text-white">Карта</span>
+                  </button>
                 </div>
+              </motion.div>
+            </motion.div>
 
-                <div className="flex h-[112px] w-[130px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
-                      <rect x="2" y="7" width="20" height="14" rx="2" />
-                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-semibold text-gray-900">Работа</p>
-                    <p className="text-[12px] text-gray-500">Вакансии</p>
-                  </div>
-                </div>
-
-                <div className="flex h-[112px] w-[112px] shrink-0 flex-col justify-between rounded-2xl bg-white p-3.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#058BED]/15">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#058BED" strokeWidth="2">
-                      <path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z" />
-                      <circle cx="12" cy="10" r="2.5" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-semibold text-gray-900">Места</p>
-                    <p className="text-[12px] text-gray-500">Рядом</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Быстрые действия */}
-              <div className="mt-3 flex items-center justify-around rounded-2xl bg-white/15 py-3.5">
-                <button className="flex flex-col items-center gap-1.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 8v4l2.5 2.5" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <span className="text-[12px] font-medium text-white">Расписание</span>
-                </button>
-                <button className="flex flex-col items-center gap-1.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <span className="text-[12px] font-medium text-white">Погода</span>
-                </button>
-                <button className="flex flex-col items-center gap-1.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <span className="text-[12px] font-medium text-white">Карта</span>
-                </button>
-              </div>
-            </div>
-
-            {/* ===== Нижний контент ===== */}
-            <div className="flex-1 overflow-y-auto px-4 pt-4">
-              <div className="space-y-3 pb-5">
+            {/* ===== Скроллируемый контент ===== */}
+            <div
+              ref={scrollRef}
+              onScroll={onScroll}
+              className="flex-1 overflow-y-auto px-4 pt-4"
+              style={{ paddingBottom: 100 }}
+            >
+              <div className="space-y-3">
                 <div className="rounded-2xl bg-white p-4 shadow-sm">
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-[15px] font-semibold text-gray-900">Сегодня рядом</h3>
@@ -331,32 +404,59 @@ export default function App() {
                     <p className="text-[13px] text-gray-500">балла</p>
                   </div>
                 </div>
+
+                {/* Доп. карточки чтобы был скролл */}
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Новости города</h3>
+                  <p className="text-[13px] text-gray-500">Открытие новой линии метро · сегодня</p>
+                </div>
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Рекомендуем</h3>
+                  <p className="text-[13px] text-gray-500">Кафе с летней верандой рядом с вами</p>
+                </div>
               </div>
             </div>
 
-            {/* ===== Таббар ===== */}
-            <div className="flex items-center justify-around border-t border-gray-200/60 bg-white px-2 pb-7 pt-2.5">
-              {[
-                { label: "Главная", active: true },
-                { label: "Транспорт", active: false },
-                { label: "События", active: false },
-                { label: "Ещё", active: false },
-              ].map((tab) => (
-                <button key={tab.label} className="flex flex-col items-center gap-1 px-3 py-1">
-                  <div
-                    className={`h-6 w-6 rounded-lg ${
-                      tab.active ? "bg-[#058BED]" : "bg-gray-300"
-                    }`}
-                  />
-                  <span
-                    className={`text-[11px] font-medium ${
-                      tab.active ? "text-[#058BED]" : "text-gray-400"
-                    }`}
-                  >
-                    {tab.label}
-                  </span>
-                </button>
-              ))}
+            {/* ===== Плавающее меню ===== */}
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 flex justify-center pb-5 pt-2">
+              <div className="pointer-events-auto relative flex items-center gap-1 rounded-[28px] bg-white px-2 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                {/* Плавающий индикатор */}
+                <motion.div
+                  className="absolute top-2 h-11 rounded-full bg-[#058BED]/12"
+                  layoutId="tab-indicator"
+                  animate={{
+                    left: TABS.findIndex((t) => t.id === activeTab) * 72 + 8,
+                    width: 64,
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+
+                {TABS.map((tab) => {
+                  const Icon = ICONS[tab.id];
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className="relative z-10 flex w-[72px] flex-col items-center gap-0.5 py-1.5"
+                    >
+                      <motion.div
+                        animate={{ scale: isActive ? 1.08 : 1, y: isActive ? -1 : 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      >
+                        <Icon active={isActive} />
+                      </motion.div>
+                      <span
+                        className={`text-[10px] font-medium transition-colors ${
+                          isActive ? "text-[#058BED]" : "text-gray-400"
+                        }`}
+                      >
+                        {tab.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </motion.div>
         )}
@@ -382,7 +482,6 @@ export default function App() {
               </button>
               <h2 className="text-lg font-semibold">Выбор города</h2>
             </div>
-
             <div className="flex-1 overflow-y-auto">
               {CITIES.map((c) => (
                 <button
@@ -427,7 +526,6 @@ export default function App() {
                 />
               ))}
             </div>
-
             <motion.div
               className="relative z-10 text-center"
               initial={{ y: 20, opacity: 0 }}
@@ -437,7 +535,6 @@ export default function App() {
               <p className="mb-2 text-sm font-medium text-white/70">Путешествуем в</p>
               <h2 className="text-3xl font-bold text-white">{nextCity}</h2>
             </motion.div>
-
             <motion.div
               className="absolute left-1/2 z-20 h-5 w-5 -translate-x-1/2 rounded-full bg-white shadow-lg"
               initial={{ top: "15%" }}

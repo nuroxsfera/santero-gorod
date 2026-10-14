@@ -22,8 +22,12 @@ const logoFont = Rubik({
 export const metadata: Metadata = {
   title: "Santero Город",
   description: "Всё для жизни в городах России. Транспорт, события, работа, места — в одном приложении.",
-  icons: {
-    icon: "/favicon.ico",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
   },
 };
 
@@ -35,9 +39,9 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${geistSans.variable} ${geistMono.variable} ${logoFont.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${logoFont.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="h-full overflow-hidden">{children}</body>
     </html>
   );
 }

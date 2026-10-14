@@ -23,14 +23,12 @@ export default function App() {
   const [city, setCity] = useState("Москва");
   const [nextCity, setNextCity] = useState<string | null>(null);
 
-  // Splash timing
   useEffect(() => {
     if (screen !== "splash") return;
     const t1 = setTimeout(() => setScreen("city-select"), 2600);
     return () => clearTimeout(t1);
   }, [screen]);
 
-  // Travel animation timing
   useEffect(() => {
     if (screen !== "travel" || !nextCity) return;
     const t = setTimeout(() => {
@@ -108,7 +106,7 @@ export default function App() {
           </motion.div>
         )}
 
-        {/* ===================== CITY SELECT (first time) ===================== */}
+        {/* ===================== CITY SELECT ===================== */}
         {screen === "city-select" && (
           <motion.div
             key="city-select"
@@ -150,44 +148,83 @@ export default function App() {
         {screen === "main" && (
           <motion.div
             key="main"
-            className="absolute inset-0 bg-[#F2F4F7]"
+            className="absolute inset-0 flex flex-col bg-[#F2F4F7]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Верхний блок с городом */}
-            <div className="px-4 pt-3">
-              <button
-                onClick={() => setScreen("city-list")}
-                className="flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3.5 shadow-sm active:scale-[0.99]"
-              >
-                <span className="text-[17px] font-semibold text-gray-900">{city}</span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="ml-auto text-gray-400"
+            {/* ===== Верхняя синяя зона ===== */}
+            <div className="relative bg-[#058BED] pb-5 pt-3">
+              {/* Город */}
+              <div className="px-4">
+                <button
+                  onClick={() => setScreen("city-list")}
+                  className="mb-4 flex items-center gap-1.5 rounded-xl bg-white/15 px-3 py-2 active:bg-white/25"
                 >
-                  <path
-                    d="M4 6l4 4 4-4"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
+                  <span className="text-[15px] font-semibold text-white">{city}</span>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M4 6l4 4 4-4"
+                      stroke="white"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Ряд карточек */}
+              <div className="flex gap-3 overflow-x-auto px-4 pb-1 scrollbar-hide">
+                <div className="h-28 w-28 shrink-0 rounded-2xl bg-white/15" />
+                <div className="h-28 w-36 shrink-0 rounded-2xl bg-white/15" />
+                <div className="h-28 w-36 shrink-0 rounded-2xl bg-white/15" />
+                <div className="h-28 w-28 shrink-0 rounded-2xl bg-white/15" />
+              </div>
+
+              {/* Длинная карточка */}
+              <div className="mt-3 px-4">
+                <div className="h-14 w-full rounded-2xl bg-white/15" />
+              </div>
             </div>
 
-            {/* Заглушка остального контента */}
-            <div className="flex flex-1 flex-col items-center justify-center px-6 pt-20">
-              <p className="text-center text-gray-400">
-                Главный экран
-                <br />
-                <span className="text-sm">(контент добавим позже)</span>
-              </p>
+            {/* ===== Нижняя белая зона ===== */}
+            <div className="-mt-4 flex-1 overflow-y-auto rounded-t-[28px] bg-[#F2F4F7] px-4 pt-5">
+              <div className="space-y-3">
+                <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
+                <div className="h-24 w-full rounded-2xl bg-white shadow-sm" />
+              </div>
+            </div>
+
+            {/* ===== Нижний таббар ===== */}
+            <div className="flex items-center justify-around border-t border-gray-200/80 bg-white px-2 pb-6 pt-2">
+              {[
+                { label: "Главная", active: true },
+                { label: "Транспорт", active: false },
+                { label: "События", active: false },
+                { label: "Ещё", active: false },
+              ].map((tab) => (
+                <button
+                  key={tab.label}
+                  className="flex flex-col items-center gap-1 px-3 py-1"
+                >
+                  <div
+                    className={`h-6 w-6 rounded-md ${
+                      tab.active ? "bg-[#058BED]" : "bg-gray-300"
+                    }`}
+                  />
+                  <span
+                    className={`text-[11px] font-medium ${
+                      tab.active ? "text-[#058BED]" : "text-gray-400"
+                    }`}
+                  >
+                    {tab.label}
+                  </span>
+                </button>
+              ))}
             </div>
           </motion.div>
         )}
@@ -237,7 +274,7 @@ export default function App() {
           </motion.div>
         )}
 
-        {/* ===================== TRAVEL ANIMATION ===================== */}
+        {/* ===================== TRAVEL ===================== */}
         {screen === "travel" && nextCity && (
           <motion.div
             key="travel"
@@ -246,7 +283,6 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* Дорога / путь */}
             <div className="absolute inset-0 overflow-hidden">
               <motion.div
                 className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-white/30"
@@ -254,8 +290,6 @@ export default function App() {
                 animate={{ scaleY: 1 }}
                 transition={{ duration: 0.8 }}
               />
-
-              {/* Точки пути */}
               {[0.2, 0.45, 0.7].map((pos, i) => (
                 <motion.div
                   key={i}
@@ -278,7 +312,6 @@ export default function App() {
               <h2 className="text-3xl font-bold text-white">{nextCity}</h2>
             </motion.div>
 
-            {/* Движущийся маркер */}
             <motion.div
               className="absolute left-1/2 z-20 h-5 w-5 -translate-x-1/2 rounded-full bg-white shadow-lg"
               initial={{ top: "15%" }}

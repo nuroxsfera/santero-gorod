@@ -3,22 +3,19 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-/* 
-  SVG буквы в духе Яндекс Go
-  Жирный, динамичный, с сильным наклоном
+/*
+  Чистые жирные буквы S и G в динамичном стиле
+  (приближение к Яндекс Go)
 */
 function LetterS({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 100 120"
+      viewBox="0 0 90 110"
       fill="currentColor"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M78 22c-5-9-16-15-30-15C28 7 12 20 12 42c0 15 9 25 28 32l14 5c11 4 16 8 16 16 0 11-9 17-24 17-13 0-22-5-29-14l-13 12c10 15 26 23 44 23 28 0 46-15 46-38 0-18-11-28-32-36l-13-5c-9-3-14-7-14-14 0-9 8-14 20-14 10 0 17 3 22 11l13-11z"
-        transform="skewX(-14)"
-      />
+      <path d="M72 18.5C67.2 10.8 57.5 6 45.2 6 27.8 6 15 17.5 15 35.2c0 12.8 7.8 21.5 24.5 27.2l12.2 4.2c9.5 3.2 13.8 6.8 13.8 13.5 0 9.2-7.8 14.5-20.5 14.5-10.8 0-18.5-4-24.2-11.8l-11.5 10.2C18.5 102 32.2 108 47.8 108c23.5 0 39-12.5 39-31.5 0-15.2-9.5-24-27.5-30.5l-11-4c-8-2.8-12-5.8-12-12 0-7.8 6.5-12.2 17-12.2 8.2 0 14.5 2.8 18.5 9.2l11.2-9.5z" />
     </svg>
   );
 }
@@ -26,15 +23,12 @@ function LetterS({ className }: { className?: string }) {
 function LetterG({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 110 120"
+      viewBox="0 0 100 110"
       fill="currentColor"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M55 12C28 12 8 32 8 60s20 48 48 48c15 0 28-5 37-15l-12-12c-6 6-14 9-24 9-18 0-30-13-30-30s12-30 30-30c11 0 19 5 24 13H57v16h44c1-5 2-11 2-17 0-28-20-44-48-44z"
-        transform="skewX(-14)"
-      />
+      <path d="M50 8C26.5 8 9 26.5 9 52s17.5 44 42.5 44c13.2 0 24.8-4.2 32.5-12.5l-10.5-10.2c-5.5 5.2-12.5 8-20.5 8-16 0-26.5-11.5-26.5-27.5S36 26.5 52 26.5c9.5 0 16.8 4 21 11H51.5v14H92c1.2-4.5 2-9.5 2-15 0-24.5-17.5-36.5-44-36.5z" />
     </svg>
   );
 }
@@ -53,15 +47,15 @@ export default function WelcomeScreen() {
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#058BED]">
-      <div className="relative flex items-center justify-center">
+      <div className="relative flex items-center justify-center" style={{ transform: "skewX(-10deg)" }}>
         {/* Буква S */}
         <motion.div
           className="absolute text-white"
-          style={{ width: 100, height: 120 }}
-          initial={{ scale: 1, x: -40, opacity: 1 }}
+          style={{ width: 92, height: 112 }}
+          initial={{ scale: 1, x: -38, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: -40, opacity: 1 }
+              ? { scale: 1, x: -38, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 15,
@@ -82,14 +76,14 @@ export default function WelcomeScreen() {
           <LetterS className="h-full w-full" />
         </motion.div>
 
-        {/* Буква G — чуть меньше и ближе */}
+        {/* Буква G */}
         <motion.div
           className="absolute text-white"
-          style={{ width: 88, height: 108 }}
-          initial={{ scale: 1, x: 36, opacity: 1 }}
+          style={{ width: 82, height: 102 }}
+          initial={{ scale: 1, x: 34, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: 36, opacity: 1 }
+              ? { scale: 1, x: 34, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 15,

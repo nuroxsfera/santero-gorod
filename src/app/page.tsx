@@ -49,7 +49,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-white">
+    <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[#058BED]">
       <AnimatePresence mode="wait">
         {/* ===================== SPLASH ===================== */}
         {screen === "splash" && (
@@ -176,7 +176,7 @@ export default function App() {
               </div>
 
               {/* Ряд карточек */}
-              <div className="flex gap-3 overflow-x-auto px-4 pb-1 scrollbar-hide">
+              <div className="flex gap-3 overflow-x-auto px-4 pb-1">
                 <div className="h-28 w-28 shrink-0 rounded-2xl bg-white/15" />
                 <div className="h-28 w-36 shrink-0 rounded-2xl bg-white/15" />
                 <div className="h-28 w-36 shrink-0 rounded-2xl bg-white/15" />
@@ -191,7 +191,7 @@ export default function App() {
 
             {/* ===== Нижняя белая зона ===== */}
             <div className="-mt-4 flex-1 overflow-y-auto rounded-t-[28px] bg-[#F2F4F7] px-4 pt-5">
-              <div className="space-y-3">
+              <div className="space-y-3 pb-4">
                 <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
                 <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />
                 <div className="h-20 w-full rounded-2xl bg-white shadow-sm" />

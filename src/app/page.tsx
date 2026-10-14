@@ -7,9 +7,7 @@ export default function WelcomeScreen() {
   const [stage, setStage] = useState<"idle" | "fly" | "done">("idle");
 
   useEffect(() => {
-    // Стоим спокойно как у Яндекса
     const t1 = setTimeout(() => setStage("fly"), 1400);
-    // После разлёта переходим дальше
     const t2 = setTimeout(() => setStage("done"), 2800);
     return () => {
       clearTimeout(t1);
@@ -17,25 +15,26 @@ export default function WelcomeScreen() {
     };
   }, []);
 
-  const letterStyle = {
+  const baseStyle = {
     fontFamily: "var(--font-logo), system-ui, sans-serif",
     fontWeight: 900,
     fontStyle: "italic" as const,
-    letterSpacing: "-0.04em",
+    letterSpacing: "-0.06em",
+    // Дополнительный наклон, чтобы было ближе к Яндексу
+    transform: "skewX(-8deg)",
   };
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#058BED]">
-      {/* Буквы SC */}
       <div className="relative flex items-center justify-center">
         {/* Буква S */}
         <motion.span
-          className="absolute text-[120px] leading-none text-white sm:text-[160px] md:text-[200px]"
-          style={letterStyle}
-          initial={{ scale: 1, x: -52, opacity: 1 }}
+          className="absolute text-[130px] leading-none text-white sm:text-[170px] md:text-[210px]"
+          style={baseStyle}
+          initial={{ scale: 1, x: -38, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: -52, opacity: 1 }
+              ? { scale: 1, x: -38, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 18,
@@ -56,18 +55,18 @@ export default function WelcomeScreen() {
           S
         </motion.span>
 
-        {/* Буква C — сначала стоит справа, потом наезжает на S */}
+        {/* Буква G — чуть меньше и ближе */}
         <motion.span
-          className="absolute text-[120px] leading-none text-white sm:text-[160px] md:text-[200px]"
-          style={letterStyle}
-          initial={{ scale: 1, x: 52, opacity: 1 }}
+          className="absolute text-[112px] leading-none text-white sm:text-[148px] md:text-[182px]"
+          style={baseStyle}
+          initial={{ scale: 1, x: 34, opacity: 1 }}
           animate={
             stage === "idle"
-              ? { scale: 1, x: 52, opacity: 1 }
+              ? { scale: 1, x: 34, opacity: 1 }
               : stage === "fly"
               ? {
                   scale: 18,
-                  x: 0, // наезжает на S
+                  x: 0,
                   opacity: 1,
                   transition: {
                     duration: 1.15,
@@ -81,11 +80,11 @@ export default function WelcomeScreen() {
                 }
           }
         >
-          C
+          G
         </motion.span>
       </div>
 
-      {/* Белый flash в момент максимального увеличения — помогает переходу */}
+      {/* Белый flash */}
       <motion.div
         className="pointer-events-none absolute inset-0 bg-white"
         initial={{ opacity: 0 }}
@@ -105,7 +104,6 @@ export default function WelcomeScreen() {
         }
       />
 
-      {/* Заглушка следующего экрана */}
       {stage === "done" && (
         <motion.div
           className="absolute inset-0 flex items-center justify-center bg-white"

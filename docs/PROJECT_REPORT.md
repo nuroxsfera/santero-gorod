@@ -1,9 +1,17 @@
 # Рабочий отчёт
 
-**Neon path ready**
+**2026-10-16 — Neon OK**
 
-- Guide: `docs/backend/NEON.md`
-- `POST /api/v1/admin/db/migrate` + `MIGRATE_SECRET`
-- Owner must create Neon project and set env on Vercel
+Проверено: `https://santero-gorod.vercel.app/api/v1/health`
 
-H1 ✅ · H2 ✅ · Neon waiting for URL
+```json
+"database": {
+  "configured": true,
+  "connected": true,
+  "message": "Postgres reachable",
+  "latencyMs": 808
+}
+```
+
+H1 ✅ · H2 ✅ · Neon ✅  
+Дальше: H3 или schema migrate, если таблицы ещё не созданы.

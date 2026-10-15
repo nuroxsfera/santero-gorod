@@ -1,7 +1,7 @@
 # Santero Город — полный прогресс
 
 **Пилот:** Новосибирск  
-**Обновление:** 2026-10-15
+**Обновление:** 2026-10-16
 
 ---
 
@@ -11,8 +11,8 @@
 |-----------|---|
 | Функции прототипа | ~52 |
 | Визуальная оболочка | ~45 |
-| Инфраструктура | ~48 |
-| Публичный запуск | ~28 |
+| Инфраструктура | ~55 |
+| Публичный запуск | ~32 |
 
 ---
 
@@ -20,13 +20,13 @@
 
 ---
 
-## Горизонт 2 — ✅ (smoke + code)
+## Горизонт 2 — ✅ ЗАКРЫТ
 
-- [x] Все code-пункты H2
-- [x] Mobile smoke (владелец)
-- [x] Neon: migrate API + guide (`docs/backend/NEON.md`)
-- [ ] Owner: вставить `DATABASE_URL` + `MIGRATE_SECRET` в Vercel и применить schema
-- [ ] Design pass 2 — отдельно
+- [x] Code + mobile smoke
+- [x] **Neon / Postgres** — `DATABASE_URL` на Vercel, health: `configured: true`, `connected: true`
+- [ ] Design pass 2 — отдельный UX-этап
+
+Проверка 2026-10-16: `GET https://santero-gorod.vercel.app/api/v1/health` → Postgres reachable.
 
 ---
 
@@ -42,18 +42,21 @@
 
 ---
 
-## Горизонт 4–6
+## Горизонт 4 — экосистема
 
-См. MASTER_PLAN. Skeletons: events, transport.
+- [x] Events / Transport domain skeletons
+- [ ] UI и live-слои
 
 ---
 
-## Neon — очередь владельца
+## Горизонт 5–6
 
-1. Создать проект на console.neon.tech
-2. `DATABASE_URL` + `MIGRATE_SECRET` в Vercel
-3. Redeploy
-4. SQL Editor **или** `POST /api/v1/admin/db/migrate`
-5. Проверить `GET /api/v1/health` → `database.connected: true`
+По MASTER_PLAN.
 
-Инструкция: [`docs/backend/NEON.md`](./backend/NEON.md)
+---
+
+## Очередь
+
+1. Horizon 3
+2. Design-2 по сигналу
+3. Schema migrate — если ещё не гонял, SQL Editor или migrate API

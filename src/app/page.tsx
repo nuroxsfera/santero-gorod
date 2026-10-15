@@ -20,27 +20,7 @@ import {
   ApplicationsScreen,
   type Vacancy,
 } from "@/jobs";
-
-type Screen =
-  | "splash"
-  | "city-select"
-  | "main"
-  | "city-list"
-  | "travel"
-  | "news"
-  | "news-article"
-  | "jobs"
-  | "vacancy"
-  | "resume"
-  | "applications";
-type Tab = "home" | "transport" | "events" | "more";
-
-const TABS: { id: Tab; label: string }[] = [
-  { id: "home", label: "Главная" },
-  { id: "transport", label: "Транспорт" },
-  { id: "events", label: "События" },
-  { id: "more", label: "Ещё" },
-];
+import { type Screen, type Tab, TABS } from "./navigation";
 
 function TabIcon({ active }: { active: boolean }) {
   return (

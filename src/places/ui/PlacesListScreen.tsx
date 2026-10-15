@@ -8,13 +8,10 @@ import { getPlaceService } from "../service/PlaceService";
 interface Props {
   city: Locality | null;
   onBack: () => void;
+  onOpenMap?: () => void;
 }
 
-/**
- * List-first places view for pilot (Map B1 later).
- * Demo POI only — not a live catalog.
- */
-export function PlacesListScreen({ city, onBack }: Props) {
+export function PlacesListScreen({ city, onBack, onOpenMap }: Props) {
   const [items, setItems] = useState<Place[]>([]);
   const [isDemo, setIsDemo] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -52,15 +49,24 @@ export function PlacesListScreen({ city, onBack }: Props) {
         >
           ←
         </button>
-        <div>
+        <div className="min-w-0 flex-1">
           <h1 className="text-[17px] font-semibold text-gray-900">Места</h1>
           <p className="text-[12px] text-gray-500">{city?.name ?? "Город"}</p>
         </div>
+        {onOpenMap && (
+          <button
+            type="button"
+            onClick={onOpenMap}
+            className="rounded-full bg-[#058BED] px-3 py-1.5 text-[12px] font-medium text-white active:opacity-90"
+          >
+            Карта
+          </button>
+        )}
       </header>
 
       {isDemo && (
         <div className="mx-4 mt-3 rounded-2xl bg-amber-50 px-3 py-2.5 text-[13px] text-amber-900">
-          Демо-точки для пилота. Карта и полный каталог ещё не подключены.
+          Демо-точки для пилота. Полный каталог не подключён.
         </div>
       )}
 

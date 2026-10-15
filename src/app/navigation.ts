@@ -14,7 +14,8 @@ export type Screen =
   | "vacancy"
   | "resume"
   | "applications"
-  | "places";
+  | "places"
+  | "map";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

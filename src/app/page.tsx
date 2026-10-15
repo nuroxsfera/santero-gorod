@@ -20,6 +20,7 @@ import {
   type Vacancy,
 } from "@/jobs";
 import { PlacesListScreen } from "@/places";
+import { CityMapScreen } from "@/map";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -107,6 +108,7 @@ export default function App() {
             onOpenJobs={() => setScreen("jobs")}
             onOpenNews={() => setScreen("news")}
             onOpenPlaces={() => setScreen("places")}
+            onOpenMap={() => setScreen("map")}
             onTabChange={handleTabChange}
           />
         )}
@@ -128,6 +130,23 @@ export default function App() {
           </motion.div>
         )}
 
+        {screen === "map" && (
+          <motion.div
+            key="map"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          >
+            <CityMapScreen
+              city={city}
+              onBack={() => setScreen("main")}
+              onOpenList={() => setScreen("places")}
+            />
+          </motion.div>
+        )}
+
         {screen === "places" && (
           <motion.div
             key="places"
@@ -137,7 +156,11 @@ export default function App() {
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 320 }}
           >
-            <PlacesListScreen city={city} onBack={() => setScreen("main")} />
+            <PlacesListScreen
+              city={city}
+              onBack={() => setScreen("main")}
+              onOpenMap={() => setScreen("map")}
+            />
           </motion.div>
         )}
 

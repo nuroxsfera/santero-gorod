@@ -14,6 +14,7 @@ interface Props {
   onOpenJobs: () => void;
   onOpenNews: () => void;
   onOpenPlaces: () => void;
+  onOpenMap: () => void;
   onTabChange: (tab: Tab) => void;
 }
 
@@ -24,6 +25,7 @@ export function MainHomeScreen({
   onOpenJobs,
   onOpenNews,
   onOpenPlaces,
+  onOpenMap,
   onTabChange,
 }: Props) {
   const [collapsed, setCollapsed] = useState(false);
@@ -84,7 +86,7 @@ export function MainHomeScreen({
             transition={{ duration: 0.28 }}
           >
             <div className="flex gap-2.5 overflow-x-auto pb-1">
-              <Shortcut label="Транспорт" subtitle="Скоро" />
+              <Shortcut label="Карта" subtitle="2D · B1" onClick={onOpenMap} />
               <Shortcut label="Новости" subtitle="Открыть" onClick={onOpenNews} />
               <Shortcut label="Работа" subtitle="Открыть" onClick={onOpenJobs} />
               <Shortcut label="Места" subtitle="Список" onClick={onOpenPlaces} />
@@ -105,23 +107,33 @@ export function MainHomeScreen({
               <div className="rounded-2xl border border-[#058BED]/20 bg-white p-4 shadow-sm">
                 <p className="text-[12px] font-medium text-[#058BED]">Пилотный город</p>
                 <p className="mt-1 text-[13px] text-gray-600">
-                  Новосибирск — основной город разработки. Данные новостей и вакансий пока
-                  демонстрационные.
+                  Новосибирск — пилот. Карта 2D (OSM), новости и вакансии пока демо.
                 </p>
               </div>
             )}
 
+            <button
+              type="button"
+              onClick={onOpenMap}
+              className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
+            >
+              <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Карта города</h3>
+              <p className="text-[13px] text-gray-500">
+                2D · OpenStreetMap · демо-маркеры
+              </p>
+            </button>
+
             <div className="rounded-2xl bg-white p-4 shadow-sm">
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Погода</h3>
               <p className="text-[13px] text-gray-500">
-                Виджет не подключён — нужен погодный API (после согласования).
+                Не подключено — нужен погодный API после согласования.
               </p>
             </div>
 
             <div className="rounded-2xl bg-white p-4 shadow-sm">
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">События рядом</h3>
               <p className="text-[13px] text-gray-500">
-                Календарь событий · {cityName} — раздел пока не подключён
+                Календарь · {cityName} — пока не подключён
               </p>
             </div>
 
@@ -131,9 +143,7 @@ export function MainHomeScreen({
               className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
             >
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Места</h3>
-              <p className="text-[13px] text-gray-500">
-                Демо-точки · {cityName} (карта позже)
-              </p>
+              <p className="text-[13px] text-gray-500">Список демо-точек · {cityName}</p>
             </button>
 
             <button

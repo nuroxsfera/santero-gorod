@@ -14,10 +14,14 @@ interface Props {
   onTabChange: (tab: Tab) => void;
 }
 
-/** Floating bottom navigation — visual only for transport/more until those modules exist. */
+/**
+ * Floating bottom nav.
+ * home / events wired; transport / more are visible but not real modules yet
+ * (parent decides what happens on select).
+ */
 export function BottomNav({ activeTab, onTabChange }: Props) {
   return (
-    <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 flex justify-center pb-5">
+    <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 flex justify-center pb-5 safe-area-pb">
       <div className="pointer-events-auto relative flex items-center gap-1 rounded-[28px] bg-white px-2 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
         <motion.div
           className="absolute top-2 h-11 rounded-full bg-[#058BED]/12"

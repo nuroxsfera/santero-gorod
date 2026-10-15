@@ -6,9 +6,6 @@ import type { Locality } from "@/geography";
 import type { Tab } from "../navigation";
 import { BottomNav } from "./BottomNav";
 
-/** Shortcut tiles — not real modules yet (except labels for future work). */
-const SHORTCUT_LABELS = ["Транспорт", "События", "Работа", "Места"] as const;
-
 interface Props {
   city: Locality | null;
   activeTab: Tab;
@@ -19,8 +16,8 @@ interface Props {
 }
 
 /**
- * Main home shell: collapsible city header, feed cards, bottom nav.
- * Cards for Jobs and News navigate to real modules; others are placeholders.
+ * Main home shell. Jobs/News open real modules.
+ * Transport / Places shortcuts are not implemented yet.
  */
 export function MainHomeScreen({
   city,
@@ -81,15 +78,10 @@ export function MainHomeScreen({
             transition={{ duration: 0.28 }}
           >
             <div className="flex gap-2.5 overflow-x-auto pb-1">
-              {SHORTCUT_LABELS.map((title) => (
-                <div
-                  key={title}
-                  className="flex h-[100px] w-[110px] shrink-0 flex-col justify-end rounded-2xl bg-white p-3.5"
-                >
-                  <p className="text-[13px] font-semibold text-gray-900">{title}</p>
-                  <p className="mt-0.5 text-[10px] text-gray-400">Скоро</p>
-                </div>
-              ))}
+              <Shortcut label="Транспорт" subtitle="Скоро" />
+              <Shortcut label="События" subtitle="Скоро" onClick={onOpenNews} />
+              <Shortcut label="Работа" subtitle="Открыть" onClick={onOpenJobs} />
+              <Shortcut label="Места" subtitle="Скоро" />
             </div>
           </motion.div>
         </motion.div>
@@ -131,5 +123,32 @@ export function MainHomeScreen({
         <BottomNav activeTab={activeTab} onTabChange={onTabChange} />
       </div>
     </motion.div>
+  );
+}
+
+function Shortcut({
+  label,
+  subtitle,
+  onClick,
+}: {
+  label: string;
+  subtitle: string;
+  onClick?: () => void;
+}) {
+  const className =
+    "flex h-[100px] w-[110px] shrink-0 flex-col justify-end rounded-2xl bg-white p-3.5 text-left";
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`${className} active:scale-[0.98]`}>
+        <p className="text-[13px] font-semibold text-gray-900">{label}</p>
+        <p className="mt-0.5 text-[10px] text-gray-400">{subtitle}</p>
+      </button>
+    );
+  }
+  return (
+    <div className={className}>
+      <p className="text-[13px] font-semibold text-gray-900">{label}</p>
+      <p className="mt-0.5 text-[10px] text-gray-400">{subtitle}</p>
+    </div>
   );
 }

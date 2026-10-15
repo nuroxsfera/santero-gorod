@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import {
   CitySearchScreen,
   getCityContext,
-  getGeographicService,
   type Locality,
 } from "@/geography";
 import {
@@ -21,43 +20,20 @@ import {
   type Vacancy,
 } from "@/jobs";
 import { type Screen, type Tab } from "./navigation";
+import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
+import { CitySelectScreen } from "./ui/CitySelectScreen";
 import { MainHomeScreen } from "./ui/MainHomeScreen";
+import { TravelScreen } from "./ui/TravelScreen";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("splash");
-  const [city, setCity] = useState<Locality | null>(null);
+  const { city, setCity } = useCityBootstrap();
   const [nextCity, setNextCity] = useState<Locality | null>(null);
   const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
   const [activeVacancy, setActiveVacancy] = useState<Vacancy | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("home");
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const svc = getGeographicService();
-        await svc.ensureLoaded();
-        const ctx = getCityContext();
-        const state = await ctx.hydrate();
-        if (cancelled) return;
-        if (state.selectedLocality) {
-          setCity(state.selectedLocality);
-        } else {
-          const moscow = svc.searchCities({ query: "Москва", limit: 1 }).items[0];
-          if (moscow) {
-            ctx.selectLocality(moscow);
-            setCity(moscow);
-          }
-        }
-      } catch {
-        /* seed fallback */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const [navHint, setNavHint] = useState<string | null>(null);
 
   useEffect(() => {
     if (screen !== "splash") return;
@@ -74,7 +50,13 @@ export default function App() {
       setScreen("main");
     }, 2200);
     return () => clearTimeout(t);
-  }, [screen, nextCity]);
+  }, [screen, nextCity, setCity]);
+
+  useEffect(() => {
+    if (!navHint) return;
+    const t = setTimeout(() => setNavHint(null), 2200);
+    return () => clearTimeout(t);
+  }, [navHint]);
 
   const handleSelectCity = (selected: Locality) => {
     if (city && selected.id === city.id) {
@@ -87,7 +69,20 @@ export default function App() {
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
-    if (tab === "events") setScreen("news");
+    if (tab === "home") {
+      setScreen("main");
+      return;
+    }
+    if (tab === "events") {
+      setScreen("news");
+      return;
+    }
+    // transport / more — no module yet
+    setNavHint(
+      tab === "transport"
+        ? "Раздел «Транспорт» пока в разработке"
+        : "Раздел «Ещё» пока в разработке"
+    );
   };
 
   return (
@@ -96,51 +91,12 @@ export default function App() {
         {screen === "splash" && <SplashScreen />}
 
         {screen === "city-select" && (
-          <motion.div
-            key="city-select"
-            className="absolute inset-0 flex flex-col items-center justify-center bg-white px-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="w-full max-w-sm">
-              <h1 className="mb-2 text-center text-2xl font-semibold tracking-tight text-gray-900">
-                Santero Город
-              </h1>
-              <p className="mb-10 text-center text-base text-gray-500">
-                Всё для жизни в вашем городе
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  if (city) {
-                    setScreen("main");
-                    return;
-                  }
-                  const moscow = getGeographicService().searchCities({
-                    query: "Москва",
-                    limit: 1,
-                  }).items[0];
-                  if (moscow) {
-                    getCityContext().selectLocality(moscow);
-                    setCity(moscow);
-                  }
-                  setScreen("main");
-                }}
-                className="mb-3 flex w-full items-center justify-center rounded-2xl bg-[#058BED] py-4 text-[17px] font-medium text-white active:scale-[0.98]"
-              >
-                {city ? `Продолжить · ${city.name}` : "Определить город"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setScreen("city-list")}
-                className="flex w-full items-center justify-center rounded-2xl border border-gray-200 bg-white py-4 text-[17px] font-medium text-gray-800 active:scale-[0.98]"
-              >
-                Выбрать вручную
-              </button>
-            </div>
-          </motion.div>
+          <CitySelectScreen
+            city={city}
+            onContinue={() => setScreen("main")}
+            onPickManually={() => setScreen("city-list")}
+            onCityResolved={setCity}
+          />
         )}
 
         {screen === "main" && (
@@ -174,7 +130,7 @@ export default function App() {
         {screen === "news" && (
           <motion.div
             key="news"
-            className="absolute inset-0 flex flex-col bg-[#F2F4F7]"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -197,7 +153,7 @@ export default function App() {
         {screen === "news-article" && activeArticle && (
           <motion.div
             key="news-article"
-            className="absolute inset-0 flex flex-col bg-white"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -216,7 +172,7 @@ export default function App() {
         {screen === "jobs" && (
           <motion.div
             key="jobs"
-            className="absolute inset-0 flex flex-col bg-[#F2F4F7]"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -238,7 +194,7 @@ export default function App() {
         {screen === "vacancy" && activeVacancy && (
           <motion.div
             key="vacancy"
-            className="absolute inset-0 flex flex-col bg-white"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -258,7 +214,7 @@ export default function App() {
         {screen === "resume" && (
           <motion.div
             key="resume"
-            className="absolute inset-0 flex flex-col bg-white"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -271,7 +227,7 @@ export default function App() {
         {screen === "applications" && (
           <motion.div
             key="applications"
-            className="absolute inset-0 flex flex-col bg-[#F2F4F7]"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -281,22 +237,16 @@ export default function App() {
           </motion.div>
         )}
 
-        {screen === "travel" && nextCity && (
-          <motion.div
-            key="travel"
-            className="absolute inset-0 flex flex-col items-center justify-center bg-[#058BED]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <p className="mb-2 text-sm font-medium text-white/70">Путешествуем в</p>
-            <h2 className="text-3xl font-bold text-white">{nextCity.name}</h2>
-            {nextCity.regionName && (
-              <p className="mt-1 text-sm text-white/60">{nextCity.regionName}</p>
-            )}
-          </motion.div>
-        )}
+        {screen === "travel" && nextCity && <TravelScreen city={nextCity} />}
       </AnimatePresence>
+
+      {navHint && (
+        <div className="pointer-events-none absolute bottom-24 left-0 right-0 z-40 flex justify-center px-4">
+          <p className="rounded-2xl bg-gray-900/90 px-4 py-2.5 text-center text-[13px] text-white shadow-lg">
+            {navHint}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,13 +2,19 @@ import { parseRssMinimal, type RssMetaItem } from "./parseRssMinimal";
 import type { NewsArticle } from "../domain/types";
 import { createHash } from "crypto";
 
-/** Allowed public RSS endpoints for Horizon 1 live metadata (title+link+date only). */
+/** Public RSS — metadata only (title + link + date). Horizon 3: ≥2 sources. */
 export const LIVE_RSS_SOURCES = [
   {
     id: "toggazeta",
     name: "Тогучинская газета",
     feedUrl: "https://toggazeta.ru/feed/",
     homeUrl: "https://toggazeta.ru/",
+  },
+  {
+    id: "lenta",
+    name: "Lenta.ru",
+    feedUrl: "https://lenta.ru/rss",
+    homeUrl: "https://lenta.ru/",
   },
 ] as const;
 
@@ -47,7 +53,7 @@ export function rssItemToArticle(
   };
 }
 
-export async function fetchLiveRssArticles(limit = 20): Promise<NewsArticle[]> {
+export async function fetchLiveRssArticles(limit = 15): Promise<NewsArticle[]> {
   const out: NewsArticle[] = [];
   for (const src of LIVE_RSS_SOURCES) {
     try {

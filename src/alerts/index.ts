@@ -8,3 +8,4 @@ export type {
 } from "./domain/types";
 export { AlertService, getAlertService } from "./service/AlertService";
 export { InMemoryAlertRepository } from "./repository/InMemoryAlertRepository";
+export { AlertsScreen } from "./ui/AlertsScreen";

@@ -16,6 +16,7 @@ interface Props {
   onOpenPlaces: () => void;
   onOpenMap: () => void;
   onOpenSearch: () => void;
+  onOpenAlerts: () => void;
   onTabChange: (tab: Tab) => void;
 }
 
@@ -28,6 +29,7 @@ export function MainHomeScreen({
   onOpenPlaces,
   onOpenMap,
   onOpenSearch,
+  onOpenAlerts,
   onTabChange,
 }: Props) {
   const [collapsed, setCollapsed] = useState(false);
@@ -46,7 +48,6 @@ export function MainHomeScreen({
       transition={{ duration: 0.3 }}
     >
       <div className="mx-auto flex h-full w-full max-w-lg flex-col">
-        {/* Sticky top bar */}
         <div className="relative z-20 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
           <div className="flex items-center gap-2">
             <button
@@ -86,7 +87,6 @@ export function MainHomeScreen({
           className="flex-1 overflow-y-auto px-4"
           style={{ paddingBottom: 120 }}
         >
-          {/* Hero */}
           <motion.div
             className="mb-5 overflow-hidden rounded-[var(--sg-radius-xl)] p-5 text-white shadow-[var(--sg-shadow-md)]"
             style={{
@@ -118,46 +118,30 @@ export function MainHomeScreen({
             )}
           </motion.div>
 
-          {/* Service grid */}
           <p className="mb-3 px-0.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[var(--sg-ink-faint)]">
             Сервисы
           </p>
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <ServiceTile
-              title="Карта"
-              subtitle="2D · OSM"
-              accent="#e8f4fd"
-              icon="🗺️"
-              onClick={onOpenMap}
-            />
-            <ServiceTile
-              title="Новости"
-              subtitle="Лента · демо"
-              accent="#f0f9ff"
-              icon="📰"
-              onClick={onOpenNews}
-            />
-            <ServiceTile
-              title="Работа"
-              subtitle="Вакансии · демо"
-              accent="#f0fdf4"
-              icon="💼"
-              onClick={onOpenJobs}
-            />
-            <ServiceTile
-              title="Места"
-              subtitle="Точки города"
-              accent="#fefce8"
-              icon="📍"
-              onClick={onOpenPlaces}
-            />
+            <ServiceTile title="Карта" subtitle="2D · OSM" accent="#e8f4fd" icon="🗺️" onClick={onOpenMap} />
+            <ServiceTile title="Новости" subtitle="Live + демо" accent="#f0f9ff" icon="📰" onClick={onOpenNews} />
+            <ServiceTile title="Работа" subtitle="Только демо" accent="#f0fdf4" icon="💼" onClick={onOpenJobs} />
+            <ServiceTile title="Места" subtitle="Точки города" accent="#fefce8" icon="📍" onClick={onOpenPlaces} />
           </div>
 
-          {/* Feed-style cards */}
           <p className="mb-3 px-0.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[var(--sg-ink-faint)]">
             Сейчас
           </p>
           <div className="space-y-3">
+            <button
+              type="button"
+              onClick={onOpenAlerts}
+              className="w-full rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
+            >
+              <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Предупреждения</p>
+              <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
+                Demo-лента · без фейковых угроз
+              </p>
+            </button>
             <InfoCard
               title="Погода"
               body="Виджет появится после подключения API. Пока без выдуманных цифр."
@@ -172,14 +156,6 @@ export function MainHomeScreen({
               <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
                 Новосибирск · маркеры пилота · OpenStreetMap
               </p>
-            </button>
-            <button
-              type="button"
-              onClick={onOpenNews}
-              className="w-full rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
-            >
-              <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Новости города</p>
-              <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">Демо-лента · {cityName}</p>
             </button>
           </div>
         </div>

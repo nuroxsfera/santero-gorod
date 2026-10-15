@@ -22,6 +22,7 @@ import {
 import { PlacesListScreen } from "@/places";
 import { CityMapScreen } from "@/map";
 import { SearchScreen } from "@/search/ui/SearchScreen";
+import { AlertsScreen } from "@/alerts";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -119,6 +120,7 @@ export default function App() {
             onOpenPlaces={() => setScreen("places")}
             onOpenMap={() => setScreen("map")}
             onOpenSearch={() => setScreen("search")}
+            onOpenAlerts={() => setScreen("alerts")}
             onTabChange={handleTabChange}
           />
         )}
@@ -160,7 +162,18 @@ export default function App() {
                 setActiveTab("home");
                 setScreen("main");
               }}
+              onOpenAlerts={() => setScreen("alerts")}
             />
+          </motion.div>
+        )}
+
+        {screen === "alerts" && (
+          <motion.div
+            key="alerts"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
+          >
+            <AlertsScreen city={city} onBack={() => setScreen("main")} />
           </motion.div>
         )}
 

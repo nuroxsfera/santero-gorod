@@ -13,7 +13,8 @@ export type Screen =
   | "places"
   | "map"
   | "search"
-  | "more";
+  | "more"
+  | "alerts";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

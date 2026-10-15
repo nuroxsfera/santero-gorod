@@ -1,9 +1,9 @@
 # Рабочий отчёт
 
-**2026-10-15**
+**Neon path ready**
 
-- H1 ✅
-- H2 code ✅
-- **Mobile smoke ✅** (владелец, 2026-10-15)
+- Guide: `docs/backend/NEON.md`
+- `POST /api/v1/admin/db/migrate` + `MIGRATE_SECRET`
+- Owner must create Neon project and set env on Vercel
 
-Опционально: Neon `DATABASE_URL`. Design-2 — отдельно.
+H1 ✅ · H2 ✅ · Neon waiting for URL

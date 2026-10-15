@@ -8,8 +8,13 @@ import {
   getGeographicService,
   type Locality,
 } from "@/geography";
+import {
+  NewsFeedScreen,
+  NewsArticleScreen,
+  type NewsArticle,
+} from "@/news";
 
-type Screen = "splash" | "city-select" | "main" | "city-list" | "travel";
+type Screen = "splash" | "city-select" | "main" | "city-list" | "travel" | "news" | "news-article";
 type Tab = "home" | "transport" | "events" | "more";
 
 const TABS: { id: Tab; label: string }[] = [
@@ -31,6 +36,7 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>("splash");
   const [city, setCity] = useState<Locality | null>(null);
   const [nextCity, setNextCity] = useState<Locality | null>(null);
+  const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [collapsed, setCollapsed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -251,10 +257,14 @@ export default function App() {
                   <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Вакансии</h3>
                   <p className="text-[13px] text-gray-500">Работа в {cityName}</p>
                 </div>
-                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setScreen("news")}
+                  className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
+                >
                   <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Новости города</h3>
                   <p className="text-[13px] text-gray-500">Лента для {cityName}</p>
-                </div>
+                </button>
               </div>
             </div>
 
@@ -275,7 +285,10 @@ export default function App() {
                     <button
                       key={tab.id}
                       type="button"
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        if (tab.id === "events") setScreen("news");
+                      }}
                       className="relative z-10 flex w-[72px] flex-col items-center gap-0.5 py-1.5"
                     >
                       <TabIcon active={isActive} />
@@ -307,6 +320,48 @@ export default function App() {
               title="Выбор города"
               onBack={() => setScreen(city ? "main" : "city-select")}
               onSelect={handleSelectCity}
+            />
+          </motion.div>
+        )}
+
+        {screen === "news" && (
+          <motion.div
+            key="news"
+            className="absolute inset-0 flex flex-col bg-[#F2F4F7]"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          >
+            <NewsFeedScreen
+              city={city}
+              onBack={() => {
+                setActiveTab("home");
+                setScreen("main");
+              }}
+              onOpenArticle={(article) => {
+                setActiveArticle(article);
+                setScreen("news-article");
+              }}
+            />
+          </motion.div>
+        )}
+
+        {screen === "news-article" && activeArticle && (
+          <motion.div
+            key="news-article"
+            className="absolute inset-0 flex flex-col bg-white"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          >
+            <NewsArticleScreen
+              article={activeArticle}
+              onBack={() => {
+                setActiveArticle(null);
+                setScreen("news");
+              }}
             />
           </motion.div>
         )}

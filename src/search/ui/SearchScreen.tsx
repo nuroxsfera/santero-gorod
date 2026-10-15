@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { Locality } from "@/geography";
 import { universalSearch, type SearchHit } from "../universalSearch";
+import { EmptyState, LoadingState } from "@/app/ui/states";
 
 interface Props {
   city: Locality | null;
@@ -61,43 +62,44 @@ export function SearchScreen({ city, onBack, onOpenNews, onOpenJobs, onOpenPlace
   };
 
   return (
-    <div className="flex h-full flex-col bg-[#F2F4F7]">
-      <header className="bg-white px-4 py-3 shadow-sm">
+    <div className="flex h-full flex-col bg-[var(--sg-surface)]">
+      <header className="bg-white/90 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[var(--sg-shadow-sm)] backdrop-blur-md">
         <div className="mb-3 flex items-center gap-2">
           <button
             type="button"
             onClick={onBack}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--sg-surface)] text-[var(--sg-ink)]"
             aria-label="Назад"
           >
             ←
           </button>
-          <h1 className="text-[17px] font-semibold text-gray-900">Поиск</h1>
+          <h1 className="text-[18px] font-semibold tracking-tight text-[var(--sg-ink)]">Поиск</h1>
         </div>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Новости, вакансии, места…"
-          className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-[15px] outline-none focus:border-[#058BED]"
+          className="w-full rounded-[var(--sg-radius-md)] border-0 bg-[var(--sg-surface)] px-4 py-3.5 text-[15px] outline-none ring-1 ring-[var(--sg-border)] focus:ring-2 focus:ring-[var(--sg-blue)]/40"
           autoFocus
         />
       </header>
 
       {isDemo && q.trim() && (
-        <p className="mx-4 mt-2 text-[12px] text-amber-800">
-          Результаты могут включать демо-данные.
+        <p className="mx-4 mt-3 text-[12px] font-medium text-[var(--sg-warning-text)]">
+          В результатах могут быть демо-данные
         </p>
       )}
 
       <div className="flex-1 overflow-y-auto px-4 py-3">
-        {loading && <p className="text-center text-[13px] text-gray-400">Ищем…</p>}
+        {loading && <LoadingState label="Ищем…" />}
         {!loading && q.trim() && hits.length === 0 && (
-          <p className="text-center text-[13px] text-gray-500">Ничего не найдено</p>
+          <EmptyState title="Ничего не найдено" description="Попробуйте другой запрос" />
         )}
-        {!q.trim() && (
-          <p className="text-center text-[13px] text-gray-400">
-            Введите запрос по городу {city?.name ?? ""}
-          </p>
+        {!q.trim() && !loading && (
+          <EmptyState
+            title="Что ищем?"
+            description={`Новости, работа и места · ${city?.name ?? "город"}`}
+          />
         )}
         <ul className="space-y-2">
           {hits.map((h) => (
@@ -105,11 +107,13 @@ export function SearchScreen({ city, onBack, onOpenNews, onOpenJobs, onOpenPlace
               <button
                 type="button"
                 onClick={() => openHit(h)}
-                className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
+                className="w-full rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
               >
-                <p className="text-[11px] font-medium text-[#058BED]">{KIND_LABEL[h.kind]}</p>
-                <p className="mt-0.5 text-[15px] font-semibold text-gray-900">{h.title}</p>
-                <p className="mt-1 text-[12px] text-gray-500">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--sg-blue)]">
+                  {KIND_LABEL[h.kind]}
+                </p>
+                <p className="mt-1 text-[15px] font-semibold text-[var(--sg-ink)]">{h.title}</p>
+                <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
                   {h.subtitle}
                   {h.isDemo ? " · демо" : ""}
                 </p>

@@ -1,18 +1,7 @@
-# Santero Город — рабочий отчёт
+# Рабочий отчёт
 
-**2026-10-15 14:50 CEST**
+**2026-10-15** — Design system 2026 (токены, home, nav, onboarding, search/more/places).
 
-## H2 (код)
+Логика и API без ломки. Demo-флаги сохранены.
 
-Закрыто без Postgres: search, places, map B1, more, **nav icons**, **states**, **MOBILE_SMOKE.md**.
-
-Открыто в H2: только **Neon** (владелец).
-
-## Документы
-
-- `PROGRESS.md` — все горизонты
-- `MOBILE_SMOKE.md` — чеклист телефона
-
-## Далее
-
-H3-prep или ждать DATABASE_URL. Mobile smoke — прогон владельцем.
+Далее: News/Jobs visual · CI · feedback владельца.

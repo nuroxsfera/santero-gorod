@@ -40,25 +40,25 @@ export function PlacesListScreen({ city, onBack, onOpenMap }: Props) {
   }, [city?.id]);
 
   return (
-    <div className="flex h-full flex-col bg-[#F2F4F7]">
-      <header className="flex items-center gap-3 bg-white px-4 py-3 shadow-sm">
+    <div className="flex h-full flex-col bg-[var(--sg-surface)]">
+      <header className="flex items-center gap-3 bg-white/90 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[var(--sg-shadow-sm)] backdrop-blur-md">
         <button
           type="button"
           onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-800 active:bg-gray-200"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--sg-surface)]"
           aria-label="Назад"
         >
           ←
         </button>
         <div className="min-w-0 flex-1">
-          <h1 className="text-[17px] font-semibold text-gray-900">Места</h1>
-          <p className="text-[12px] text-gray-500">{city?.name ?? "Город"}</p>
+          <h1 className="text-[18px] font-semibold tracking-tight text-[var(--sg-ink)]">Места</h1>
+          <p className="text-[12px] text-[var(--sg-ink-muted)]">{city?.name ?? "Город"}</p>
         </div>
         {onOpenMap && (
           <button
             type="button"
             onClick={onOpenMap}
-            className="rounded-full bg-[#058BED] px-3 py-1.5 text-[12px] font-medium text-white active:opacity-90"
+            className="rounded-[var(--sg-radius-pill)] bg-[var(--sg-blue)] px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_6px_16px_rgba(5,139,237,0.3)]"
           >
             Карта
           </button>
@@ -66,28 +66,28 @@ export function PlacesListScreen({ city, onBack, onOpenMap }: Props) {
       </header>
 
       {isDemo && (
-        <div className="mx-4 mt-3 rounded-2xl bg-amber-50 px-3 py-2.5 text-[13px] text-amber-900">
-          Демо-точки для пилота. Полный каталог не подключён.
+        <div className="mx-4 mt-3 rounded-[var(--sg-radius-md)] bg-[var(--sg-warning-bg)] px-3.5 py-2.5 text-[13px] text-[var(--sg-warning-text)]">
+          Демо-точки пилота. Полный каталог ещё не подключён.
         </div>
       )}
 
       <div className="flex-1 overflow-y-auto px-4 py-3" style={{ paddingBottom: 32 }}>
         {loading && <LoadingState />}
         {!loading && items.length === 0 && (
-          <EmptyState
-            title="Нет точек"
-            description="Для этого города пока нет мест в каталоге."
-          />
+          <EmptyState title="Нет точек" description="Для этого города пока нет мест в каталоге." />
         )}
         <ul className="space-y-2">
           {items.map((p) => (
-            <li key={p.id} className="rounded-2xl bg-white p-4 shadow-sm">
-              <p className="text-[15px] font-semibold text-gray-900">{p.name}</p>
+            <li
+              key={p.id}
+              className="rounded-[var(--sg-radius-lg)] bg-white p-4 shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)]"
+            >
+              <p className="text-[15px] font-semibold text-[var(--sg-ink)]">{p.name}</p>
               {p.addressText && (
-                <p className="mt-1 text-[13px] text-gray-500">{p.addressText}</p>
+                <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">{p.addressText}</p>
               )}
-              <p className="mt-2 text-[11px] text-gray-400">
-                {p.category} · {p.geo.lat.toFixed(4)}, {p.geo.lon.toFixed(4)}
+              <p className="mt-2 text-[11px] font-medium text-[var(--sg-ink-faint)]">
+                {p.category}
                 {p.isDemo ? " · демо" : ""}
               </p>
             </li>

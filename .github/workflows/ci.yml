@@ -25,11 +25,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # No package-lock.json in repo yet — cache by package.json only
-          cache: npm
+          # package-lock.json is not in the repo yet — do not enable npm cache
 
       - name: Install dependencies
-        # Prefer lockfile when present; fall back to install for current repo state
         run: |
           if [ -f package-lock.json ]; then
             npm ci

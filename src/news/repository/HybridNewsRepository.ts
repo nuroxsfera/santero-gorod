@@ -48,7 +48,7 @@ export class HybridNewsRepository implements NewsRepository {
       live = live.filter((a) => matchesText(a, query.query!));
     }
 
-    let merged = dedupeByHash([...live, ...demo.items]);
+    const merged = dedupeByHash([...live, ...demo.items]);
     merged.sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
 
     const total = merged.length;

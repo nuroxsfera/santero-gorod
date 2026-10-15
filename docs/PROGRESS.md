@@ -12,7 +12,7 @@
 | Функции прототипа | ~52 |
 | Визуальная оболочка | ~45 |
 | Инфраструктура | ~42 |
-| Публичный запуск | ~22 |
+| Публичный запуск | ~28 |
 
 ---
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Горизонт 2 — цельная демонстрация ✅ CODE-COMPLETE
+## Горизонт 2 — цельная демонстрация ✅
 
 - [x] Честные demo-метки
 - [x] Map B1
@@ -33,14 +33,14 @@
 - [x] Shared empty / error / loading
 - [x] Mobile smoke checklist (док)
 - [x] Design system pass 1
-- [x] **Клиент новостей → hybrid API** (live + demo в UI)
-- [x] **PostgresNewsRepository** + upsert live в feed при `DATABASE_URL`
+- [x] Клиент новостей → hybrid API (live + demo в UI)
+- [x] PostgresNewsRepository + upsert live при `DATABASE_URL`
 - [x] Бейджи live/демо в ленте и статье
-- [ ] Owner: mobile smoke на устройстве *(операция, не код)*
+- [x] **Owner: mobile smoke на устройстве** — passed 2026-10-15 (`MOBILE_SMOKE.md`)
 - [ ] Owner: `DATABASE_URL` + schema.sql в Neon *(операция)*
-- [ ] Design pass 2 — **вне code-complete H2**, отдельный этап по UX
+- [ ] Design pass 2 — отдельный этап по UX
 
-**Итог H2 по коду:** закрыт. Остались только действия владельца (smoke, Neon URL) и осознанно отложенный design-2.
+**Итог H2:** code + mobile smoke закрыты. Остаётся опциональный Neon URL и design-2.
 
 ---
 
@@ -78,12 +78,12 @@
 
 ## Модули (кратко)
 
-A ~55 · B ~18 · C ~62 · D ~10 · H ~40 · L/M ~8 · T ~30 · Z ~25 · Places ~32 · Geography ~70 · Auth guest · Postgres layer
+A ~55 · B ~18 · C ~62 · D ~10 · H ~40 · L/M ~8 · T ~30 · Z ~25 · Places ~32 · Geography ~70
 
 ---
 
-## Очередь после H2
+## Очередь
 
-1. CI
-2. Horizon 3 (Alerts UI, больше источников) — без возврата к H1/H2 коду
-3. Design-2 по сигналу владельца
+1. Horizon 3 (Alerts UI, источники) — по готовности
+2. Neon URL — когда будет
+3. Design-2 — по сигналу

@@ -1,11 +1,9 @@
 # Рабочий отчёт
 
-**Horizon 2 CODE-COMPLETE**
+**2026-10-15**
 
-- Клиент новостей через `/api/v1/news/feed`
-- Postgres upsert live при DATABASE_URL
-- UI бейджи live/демо
+- H1 ✅
+- H2 code ✅
+- **Mobile smoke ✅** (владелец, 2026-10-15)
 
-Owner remaining: mobile smoke, Neon URL+schema. Design-2 отдельным этапом.
-
-H1 ✅ · H2 code ✅
+Опционально: Neon `DATABASE_URL`. Design-2 — отдельно.

@@ -1,79 +1,70 @@
 # Santero Город — рабочий отчёт проекта
 
-**Последнее обновление:** 2026-10-15 12:45 CEST
+**Последнее обновление:** 2026-10-15 12:55 CEST
 
 ---
 
 ## 1. Текущее состояние
 
-Клиентский прототип Next.js 16. CI workflow добавлен в репозиторий.
+Клиентский прототип. **CI на GitHub Actions — зелёный.**
 
 | Модуль | % |
 |--------|---|
-| Ядро / Geography / News / Jobs | как ранее (~55% MVP клиент) |
+| Ядро / Geography / News / Jobs | ~55% MVP клиент |
 | Backend / Auth | 0% |
-| Достоверный CI-прогон | **ожидается** (workflow создан) |
+| Достоверный CI | **подтверждён** |
 
 ---
 
-## 2. Изменения этой сессии
+## 2. Изменения сессии
 
-### Сделано
-- Добавлен `.github/workflows/ci.yml`:
-  - триггеры: `push`/`pull_request` на `main`, `workflow_dispatch`
-  - Node 20, `ubuntu-latest`
-  - шаги: install → typecheck → test → lint → build
-  - без секретов, без изменения прав репозитория
-  - `npm ci` если есть lockfile, иначе `npm install`
-- В репозитории **нет** `package-lock.json` (HTTP 404) — CI это учитывает
-
-### Проверено
-- Логика фильтров (ранее): OK
-- **Полный CI run:** см. раздел 4 после опроса Actions API
-
-### Не проверено локально в sandbox
-- npm install в агенте по-прежнему падает с EIO
+- `.github/workflows/ci.yml` — typecheck → test → lint → build (Node 20, без секретов)
+- Исправление lint: `ApplicationsScreen`, `ResumeScreen` (react-hooks/set-state-in-effect)
+- Убран `cache: npm` без lockfile (ломал Setup Node)
 
 ---
 
-## 3. Демо
+## 3. Проверки (факт CI)
 
-Новости, вакансии, резюме, отклики — только demo.
+**Run:** https://github.com/nuroxsfera/santero-gorod/actions/runs/38723262071  
+**Commit:** `b7a0f4b`  
+**Conclusion:** **success**
 
----
+| Шаг | Результат |
+|-----|-----------|
+| Install | OK |
+| Typecheck (`tsc --noEmit`) | **OK** |
+| Unit tests (vitest) | **OK — 6 files, 39 tests** |
+| Lint (eslint) | **OK** |
+| Production build (`next build`) | **OK** |
 
-## 4. Результаты CI
-
-*(заполняется после фактического прогона workflow)*
-
-| Шаг | Статус |
-|-----|--------|
-| Workflow файл в main | да |
-| Run triggered / completed | TBD |
-| typecheck | TBD |
-| test | TBD |
-| lint | TBD |
-| build | TBD |
+Ранее (run #3): typecheck+test OK, lint FAIL → исправлено → run #4 green.
 
 ---
 
-## 5. Блокеры / долг
+## 4. Демо
 
-1. Нет package-lock.json — воспроизводимость install ниже (не критично для первого CI)
-2. До зелёного CI — не начинать backend
-3. page.tsx всё ещё толстый
+Новости, вакансии, резюме, отклики — demo only.
+
+---
+
+## 5. Долг
+
+1. Нет `package-lock.json` (желательно добавить после локального `npm i`)
+2. page.tsx толстый
+3. Backend / auth — не начаты
+4. Node 20 deprecation warning на Actions runners (не блокер)
 
 ---
 
 ## 6. Следующий шаг
 
-1. Дождаться / запустить workflow `CI` на main
-2. По логам исправить ошибки кода
-3. После зелёного build — Этап 2/3 по плану
+Этап 1 стабилизации **закрыт по CI**.  
+Можно переходить к **Этапу 2** (упорядочивание ядра UI) или проектированию **Этапа 3** (backend) — по приоритету владельца.
 
 ---
 
 ## 7. От владельца
 
-Если Actions не запустился автоматически: вкладка Actions → workflow **CI** → **Run workflow** на `main`.
-Или открой: https://github.com/nuroxsfera/santero-gorod/actions
+Ничего обязательного. По желанию: открыть Actions и убедиться, что badge зелёный.  
+Ссылка: https://github.com/nuroxsfera/santero-gorod/actions

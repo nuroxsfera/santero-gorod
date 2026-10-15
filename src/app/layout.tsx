@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Rubik } from "next/font/google";
 import "./globals.css";
 
@@ -15,33 +15,39 @@ const geistMono = Geist_Mono({
 const logoFont = Rubik({
   variable: "--font-logo",
   subsets: ["latin", "cyrillic"],
-  weight: ["900"],
-  style: ["italic"],
+  weight: ["600", "700", "800", "900"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
   title: "Santero Город",
-  description: "Всё для жизни в городах России. Транспорт, события, работа, места — в одном приложении.",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: "cover",
+  description:
+    "Цифровое пространство города: карта, новости, работа и сервисы — в одном месте.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Santero Город",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#f4f6f9",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} ${logoFont.variable} h-full`}
     >
-      <body className="h-full overflow-hidden">{children}</body>
+      <body className="h-full overflow-hidden antialiased">{children}</body>
     </html>
   );
 }

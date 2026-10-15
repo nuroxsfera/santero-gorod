@@ -30,6 +30,13 @@ import { MainHomeScreen } from "./ui/MainHomeScreen";
 import { TravelScreen } from "./ui/TravelScreen";
 import { MoreScreen } from "./ui/MoreScreen";
 
+const sheet = {
+  initial: { x: "100%", opacity: 0.9 },
+  animate: { x: 0, opacity: 1 },
+  exit: { x: "100%", opacity: 0.9 },
+  transition: { type: "spring" as const, damping: 32, stiffness: 340 },
+};
+
 export default function App() {
   const [screen, setScreen] = useState<Screen>("splash");
   const { city, setCity } = useCityBootstrap();
@@ -52,7 +59,7 @@ export default function App() {
       setCity(nextCity);
       setNextCity(null);
       setScreen("main");
-    }, 2200);
+    }, 1800);
     return () => clearTimeout(t);
   }, [screen, nextCity, setCity]);
 
@@ -89,7 +96,7 @@ export default function App() {
   };
 
   return (
-    <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[#F2F4F7]">
+    <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[var(--sg-surface)]">
       <AnimatePresence mode="wait">
         {screen === "splash" && <SplashScreen />}
 
@@ -117,14 +124,7 @@ export default function App() {
         )}
 
         {screen === "city-list" && (
-          <motion.div
-            key="city-list"
-            className="absolute inset-0 flex flex-col bg-white"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
-          >
+          <motion.div key="city-list" className="absolute inset-0 flex flex-col bg-white" {...sheet}>
             <CitySearchScreen
               title="Выбор города"
               onBack={() => setScreen(city ? "main" : "city-select")}
@@ -136,11 +136,8 @@ export default function App() {
         {screen === "search" && (
           <motion.div
             key="search"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <SearchScreen
               city={city}
@@ -155,11 +152,8 @@ export default function App() {
         {screen === "more" && (
           <motion.div
             key="more"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <MoreScreen
               onBack={() => {
@@ -173,11 +167,8 @@ export default function App() {
         {screen === "map" && (
           <motion.div
             key="map"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <CityMapScreen
               city={city}
@@ -190,11 +181,8 @@ export default function App() {
         {screen === "places" && (
           <motion.div
             key="places"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <PlacesListScreen
               city={city}
@@ -207,11 +195,8 @@ export default function App() {
         {screen === "news" && (
           <motion.div
             key="news"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <NewsFeedScreen
               city={city}
@@ -231,10 +216,7 @@ export default function App() {
           <motion.div
             key="news-article"
             className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            {...sheet}
           >
             <NewsArticleScreen
               article={activeArticle}
@@ -249,11 +231,8 @@ export default function App() {
         {screen === "jobs" && (
           <motion.div
             key="jobs"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <JobsFeedScreen
               city={city}
@@ -272,10 +251,7 @@ export default function App() {
           <motion.div
             key="vacancy"
             className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            {...sheet}
           >
             <VacancyDetailScreen
               vacancy={activeVacancy}
@@ -292,10 +268,7 @@ export default function App() {
           <motion.div
             key="resume"
             className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            {...sheet}
           >
             <ResumeScreen onBack={() => setScreen("jobs")} />
           </motion.div>
@@ -304,11 +277,8 @@ export default function App() {
         {screen === "applications" && (
           <motion.div
             key="applications"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
           >
             <ApplicationsScreen onBack={() => setScreen("jobs")} />
           </motion.div>
@@ -318,8 +288,8 @@ export default function App() {
       </AnimatePresence>
 
       {navHint && (
-        <div className="pointer-events-none absolute bottom-24 left-0 right-0 z-40 flex justify-center px-4">
-          <p className="rounded-2xl bg-gray-900/90 px-4 py-2.5 text-center text-[13px] text-white shadow-lg">
+        <div className="pointer-events-none absolute bottom-28 left-0 right-0 z-40 flex justify-center px-4">
+          <p className="rounded-[var(--sg-radius-pill)] bg-[var(--sg-ink)]/90 px-4 py-2.5 text-center text-[13px] font-medium text-white shadow-[var(--sg-shadow-lg)] backdrop-blur">
             {navHint}
           </p>
         </div>

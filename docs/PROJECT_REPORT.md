@@ -1,18 +1,19 @@
 # Рабочий отчёт
 
-**2026-10-15**
+**2026-10-15 — Horizon 1 CLOSED**
 
-## Сделано
+## Закрыто
 
-- Восстановлен **полный** `PROGRESS.md` (горизонты 1–6, модули A–AA)
-- H3: **Alerts** domain + InMemory + tests + `GET /api/v1/alerts` (demo, not official)
-- H4 prep: **Events** domain + API + tests (demo, not afisha UI)
-- Дизайн pass 2 **не** начат (по запросу — позже)
+1. **Postgres layer** — `schema.sql`, `src/db`, health probe; runtime без URL = memory
+2. **Live RSS metadata** — HybridNewsRepository + API feed
+3. **Auth H1** — guest session (`src/auth`); аккаунты сознательно H3
 
-## Дальше по плану
+См. `docs/backend/H1_CLOSE.md`.
 
-Transport domain skeleton · не редизайн.
+## CI
 
-## Блокеры
+Ожидается success после install `pg`.
 
-Neon · RSS · weather · owner smoke · design-2 feedback cycle
+## Дальше
+
+H2 owner smoke / Neon apply · H3 без возврата к дырам H1.

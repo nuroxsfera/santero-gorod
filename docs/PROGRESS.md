@@ -1,155 +1,116 @@
 # Santero Город — полный прогресс
 
-**Источник истины по продукту:** [`MASTER_PLAN.md`](./MASTER_PLAN.md)  
-**Smoke:** [`MOBILE_SMOKE.md`](./MOBILE_SMOKE.md)  
+**Источник истины:** [`MASTER_PLAN.md`](./MASTER_PLAN.md)  
+**H1 close:** [`backend/H1_CLOSE.md`](./backend/H1_CLOSE.md)  
 **Пилот:** Новосибирск  
 **Обновление:** 2026-10-15
 
-**Правило галочки:** сделано **и** проверено (CI / контракт). Заглушка ≠ готово.  
-**Дизайн:** улучшен, но **не** на уровне целевых продуктов — отдельная итерация позже (не блокирует план).
+**Правило галочки:** сделано **и** проверено (CI / контракт).
 
 ---
 
-## Сводка готовности
+## Сводка
 
-| Измерение | % | Комментарий |
-|-----------|---|-------------|
-| Функции прототипа | ~42 | + alerts/events/transport skeletons |
-| Визуальная оболочка | ~45 | Design pass 1; ещё «карточно», сыро |
-| Инфраструктура | ~20 | CI + больше API routes; нет БД |
-| Публичный запуск | ~12 | Demo ≠ live city OS |
+| Измерение | % |
+|-----------|---|
+| Функции прототипа | ~48 |
+| Визуальная оболочка | ~45 |
+| Инфраструктура | ~35 |
+| Публичный запуск | ~18 |
 
 ---
 
-## Горизонт 1 — прототип
+## Горизонт 1 — прототип ✅ ЗАКРЫТ
 
 - [x] Geography contract + city UX
 - [x] Demo News UI + filters + article
-- [x] Demo Jobs UI (feed, vacancy, resume, applications)
-- [x] API v1 health / news / jobs / places (demo)
-- [x] CI (typecheck, tests, lint, build)
+- [x] Demo Jobs UI
+- [x] API v1 health / news / jobs / places
+- [x] CI
 - [x] MASTER_PLAN.md
 - [x] Пилот Новосибирск
 - [x] Nav «Новости»
 - [x] Places domain + list + API
 - [x] Home pilot + honest stubs
 - [x] Map B1 MapLibre + OSM + markers
-- [ ] Neon Postgres
-- [ ] Live news metadata в публичной ленте
-- [ ] Auth
+- [x] **Postgres layer** — schema.sql + probe + health (`DATABASE_URL` опционален)
+- [x] **Live news metadata** — Hybrid feed API (RSS title/link/date)
+- [x] **Auth H1** — guest session only (аккаунты = H3+)
+
+> Neon «подключён в проде» = владелец ставит `DATABASE_URL` и гоняет schema. Код и контракт H1 закрыты.
 
 ---
 
 ## Горизонт 2 — цельная демонстрация
 
-- [x] Честные demo-метки
-- [x] Map B1
-- [x] Universal search v0
-- [x] Demo POI НСК (~8)
-- [x] Экран «Ещё»
-- [x] Иконки bottom nav
-- [x] Shared empty / error / loading
-- [x] Mobile smoke checklist (док)
-- [x] Design system pass 1 (токены, home, nav, onboarding)
-- [ ] Postgres news *(блокер: DATABASE_URL)*
-- [ ] Owner mobile smoke на устройстве
-- [ ] Design pass 2 (меньше «карточек», уровень Яндекс/Сбер) — **отложено по запросу**
-
-**H2 code-complete** кроме Postgres и owner smoke / design-2.
+- [x] Demo-метки · Map B1 · Search v0 · POI · Ещё · nav icons · states · smoke doc · design pass 1
+- [ ] Postgres **заполненный** news table в Neon (нужен URL + apply schema)
+- [ ] Owner mobile smoke
+- [ ] Design pass 2 — отложено
 
 ---
 
-## Горизонт 3 — польза жителям пилота
+## Горизонт 3 — польза жителям
 
-- [ ] 1–2 легальных live news source
-- [x] Alerts domain skeleton (типы + InMemory + API + tests)
-- [ ] Places catalog из OSM extract НСК
-- [ ] Alerts UI read-only при наличии данных
-- [ ] Weather widget (API после OK)
-- [ ] Jobs: партнёр или явная политика «только demo»
-- [ ] Auth для избранного
-- [ ] Moderation basics (W минимум)
-
----
-
-## Горизонт 4 — расширенная экосистема
-
-- [x] Events domain skeleton (типы + InMemory + API + tests)
-- [x] Transport domain skeleton (stops/routes demo + API + tests) — **без realtime**
-- [ ] Events calendar UI (модуль M)
-- [ ] Transport UI / GTFS live
-- [ ] Organization profiles
-- [ ] Map B2 (extrusions / richer layers)
-- [ ] Business tools U
-- [ ] Unified notifications V
-- [ ] Realty / commerce reference catalogs
+- [x] Alerts domain skeleton
+- [ ] Больше live news sources
+- [ ] Places OSM extract НСК
+- [ ] Alerts UI
+- [ ] Weather API (после OK)
+- [ ] Auth accounts (поверх guest)
+- [ ] Moderation basics
 
 ---
 
-## Горизонт 5 — пространственная платформа
+## Горизонт 4 — экосистема
 
-- [ ] Map B3 selective twin
-- [ ] Deep spatial layers / analytics
-- [ ] Partner 3D assets pipeline
-- [ ] Offline/cache strategy для карты
-
----
-
-## Горизонт 6 — масштабирование на города
-
-- [ ] City onboarding playbook
-- [ ] Standardized feeds & data SLAs
-- [ ] Multi-city ops / support
-- [ ] Partner API (Z) стабильный
+- [x] Events domain skeleton
+- [x] Transport domain skeleton
+- [ ] Events UI · Transport UI · Org · Map B2 · Business U · Notifications V · Realty
 
 ---
 
-## Модули A–AA
+## Горизонт 5 — spatial
 
-| ID | Модуль | % | Статус |
-|----|--------|---|--------|
-| A | Главная | ~55 | UI pass 1; визуал дорабатывать позже |
-| B | Карта | ~18 | B1 done |
-| C | Новости | ~45 | Demo |
-| D | Алерты | ~10 | Domain + API |
-| E | Погода | 0 | Stub |
-| F–G | Медицина / образование | 0 | — |
-| H | Работа | ~40 | Demo |
-| I–K | Недвиж. / магазины / еда | 0 | — |
-| L | Транспорт | ~8 | Domain skeleton |
-| M | События | ~8 | Domain skeleton |
-| N–S | Прочие | 0 | — |
-| T | Поиск/профиль | ~30 | Search v0 |
-| U–Y | Бизнес / уведомл. / админ / ЧС | 0–2 | — |
-| Z | Developer API | ~16 | + alerts/events/transport |
-| AA | Multi-city | 0 | — |
-| — | Places / Geography | ~32 / ~70 | — |
+- [ ] Map B3 · layers · 3D pipeline · offline cache
+
+---
+
+## Горизонт 6 — мультигород
+
+- [ ] Onboarding · SLAs · ops · partner API
+
+---
+
+## Модули A–AA (кратко)
+
+| ID | % | ID | % |
+|----|---|----|---|
+| A ~55 | B ~18 | C ~55 (live meta API) | D ~10 |
+| E 0 | H ~40 | L ~8 | M ~8 |
+| T ~30 | Z ~22 | Places ~32 | Geography ~70 |
+| Auth guest ~15 | Postgres layer ~40 | | |
 
 ---
 
 ## API
 
-- [x] health, news, jobs, places
-- [x] `/api/v1/alerts`
-- [x] `/api/v1/events`
-- [x] `/api/v1/transport`
-- [ ] Postgres · write · auth · ingestion
+- [x] health (db + auth + news status)
+- [x] news/feed hybrid
+- [x] jobs, places, alerts, events, transport
 
 ---
 
-## Блокеры владельца
+## Блокеры владельца (после H1)
 
-- [ ] Neon `DATABASE_URL`
-- [ ] Legal RSS OK
-- [ ] Weather API
-- [ ] Auth timing
-- [ ] Mobile smoke на телефоне
-- [ ] Design pass 2 (когда вернёмся)
+- [ ] Вставить `DATABASE_URL` в Vercel + выполнить schema.sql
+- [ ] Mobile smoke
+- [ ] Design pass 2
+- [ ] Weather API choice
 
 ---
 
 ## Очередь
 
-1. Подтвердить CI
-2. Дальше по плану без редизайна (Org skeleton / notifications event bus types)
-3. Design-2 — только по твоему сигналу
+1. CI H1 close
+2. Начать H2 остатки / H3 без дыр H1

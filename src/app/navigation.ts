@@ -1,7 +1,3 @@
-/**
- * App-level screen and tab contracts.
- */
-
 export type Screen =
   | "splash"
   | "city-select"
@@ -15,7 +11,9 @@ export type Screen =
   | "resume"
   | "applications"
   | "places"
-  | "map";
+  | "map"
+  | "search"
+  | "more";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

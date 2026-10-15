@@ -1,6 +1,5 @@
 /**
  * App-level screen and tab contracts.
- * Keeps page.tsx thinner; no business logic here.
  */
 
 export type Screen =
@@ -14,12 +13,9 @@ export type Screen =
   | "jobs"
   | "vacancy"
   | "resume"
-  | "applications";
+  | "applications"
+  | "places";
 
-/**
- * Tabs: home + news (honest label) + transport/more stubs.
- * Events calendar is a future module — not aliased as news.
- */
 export type Tab = "home" | "transport" | "news" | "more";
 
 export const TABS: { id: Tab; label: string }[] = [

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { Locality } from "@/geography";
+import { PILOT_CITY } from "@/config/pilot";
 import type { Tab } from "../navigation";
 import { BottomNav } from "./BottomNav";
 
@@ -12,24 +13,24 @@ interface Props {
   onOpenCityList: () => void;
   onOpenJobs: () => void;
   onOpenNews: () => void;
+  onOpenPlaces: () => void;
   onTabChange: (tab: Tab) => void;
 }
 
-/**
- * Main home shell. Jobs/News open real modules.
- * Transport / Places shortcuts are not implemented yet.
- */
 export function MainHomeScreen({
   city,
   activeTab,
   onOpenCityList,
   onOpenJobs,
   onOpenNews,
+  onOpenPlaces,
   onTabChange,
 }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const cityName = city?.name ?? "Город";
+  const isPilot =
+    city?.id === PILOT_CITY.localityId || city?.name === PILOT_CITY.name;
 
   return (
     <motion.div
@@ -66,6 +67,11 @@ export function MainHomeScreen({
                 />
               </svg>
             </button>
+            {isPilot && (
+              <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-medium text-white">
+                Пилот
+              </span>
+            )}
           </div>
 
           <motion.div
@@ -79,9 +85,9 @@ export function MainHomeScreen({
           >
             <div className="flex gap-2.5 overflow-x-auto pb-1">
               <Shortcut label="Транспорт" subtitle="Скоро" />
-              <Shortcut label="События" subtitle="Новости" onClick={onOpenNews} />
+              <Shortcut label="Новости" subtitle="Открыть" onClick={onOpenNews} />
               <Shortcut label="Работа" subtitle="Открыть" onClick={onOpenJobs} />
-              <Shortcut label="Места" subtitle="Скоро" />
+              <Shortcut label="Места" subtitle="Список" onClick={onOpenPlaces} />
             </div>
           </motion.div>
         </motion.div>
@@ -95,27 +101,57 @@ export function MainHomeScreen({
           style={{ paddingBottom: 100 }}
         >
           <div className="space-y-3">
+            {isPilot && (
+              <div className="rounded-2xl border border-[#058BED]/20 bg-white p-4 shadow-sm">
+                <p className="text-[12px] font-medium text-[#058BED]">Пилотный город</p>
+                <p className="mt-1 text-[13px] text-gray-600">
+                  Новосибирск — основной город разработки. Данные новостей и вакансий пока
+                  демонстрационные.
+                </p>
+              </div>
+            )}
+
             <div className="rounded-2xl bg-white p-4 shadow-sm">
-              <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Сегодня рядом</h3>
+              <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Погода</h3>
               <p className="text-[13px] text-gray-500">
-                События · {cityName} — раздел пока не подключён
+                Виджет не подключён — нужен погодный API (после согласования).
               </p>
             </div>
+
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <h3 className="mb-2 text-[15px] font-semibold text-gray-900">События рядом</h3>
+              <p className="text-[13px] text-gray-500">
+                Календарь событий · {cityName} — раздел пока не подключён
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onOpenPlaces}
+              className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
+            >
+              <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Места</h3>
+              <p className="text-[13px] text-gray-500">
+                Демо-точки · {cityName} (карта позже)
+              </p>
+            </button>
+
             <button
               type="button"
               onClick={onOpenJobs}
               className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
             >
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Вакансии</h3>
-              <p className="text-[13px] text-gray-500">Работа · {cityName}</p>
+              <p className="text-[13px] text-gray-500">Работа · {cityName} · демо</p>
             </button>
+
             <button
               type="button"
               onClick={onOpenNews}
               className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
             >
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Новости города</h3>
-              <p className="text-[13px] text-gray-500">Лента · {cityName}</p>
+              <p className="text-[13px] text-gray-500">Лента · {cityName} · демо</p>
             </button>
           </div>
         </div>

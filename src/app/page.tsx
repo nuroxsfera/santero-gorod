@@ -19,6 +19,7 @@ import {
   ApplicationsScreen,
   type Vacancy,
 } from "@/jobs";
+import { PlacesListScreen } from "@/places";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -105,6 +106,7 @@ export default function App() {
             onOpenCityList={() => setScreen("city-list")}
             onOpenJobs={() => setScreen("jobs")}
             onOpenNews={() => setScreen("news")}
+            onOpenPlaces={() => setScreen("places")}
             onTabChange={handleTabChange}
           />
         )}
@@ -123,6 +125,19 @@ export default function App() {
               onBack={() => setScreen(city ? "main" : "city-select")}
               onSelect={handleSelectCity}
             />
+          </motion.div>
+        )}
+
+        {screen === "places" && (
+          <motion.div
+            key="places"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          >
+            <PlacesListScreen city={city} onBack={() => setScreen("main")} />
           </motion.div>
         )}
 

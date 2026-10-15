@@ -11,7 +11,7 @@ export type {
 
 export { getNewsService, NewsService } from "./service/NewsService";
 export { InMemoryNewsRepository } from "./repository/InMemoryNewsRepository";
-export { matchesGeo, matchesText, dedupeByHash } from "./service/filters";
+export { matchesGeo, matchesText, dedupeByHash, type FeedMode } from "./service/filters";
 export { NEWS_CATEGORIES, DEMO_ARTICLES } from "./data/demo";
 export { NewsFeedScreen } from "./ui/NewsFeedScreen";
 export { NewsArticleScreen } from "./ui/NewsArticleScreen";

@@ -63,7 +63,7 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
                 tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
                 tileSize: 256,
                 attribution:
-                  "© <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
+                  '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
               },
             },
             layers: [
@@ -76,10 +76,12 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
           },
           center,
           zoom: 12,
-          attributionControl: true,
         });
 
-        map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-right");
+        map.addControl(
+          new maplibregl.NavigationControl({ showCompass: true }),
+          "top-right"
+        );
         mapRef.current = map;
 
         map.on("load", () => {
@@ -95,13 +97,11 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
       map?.remove();
       mapRef.current = null;
     };
-    // center only on mount / city change via remount key from parent
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [city?.id]);
 
   useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !ready || places.length === 0) return;
+    if (!ready || places.length === 0) return;
 
     let cancelled = false;
     const markers: import("maplibre-gl").Marker[] = [];
@@ -170,7 +170,7 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
         <div ref={containerRef} className="absolute inset-0" />
 
         <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-10">
-          <p className="pointer-events-none rounded-lg bg-white/90 px-2 py-1 text-[10px] text-gray-600 shadow">
+          <p className="rounded-lg bg-white/90 px-2 py-1 text-[10px] text-gray-600 shadow">
             Демо-маркеры · не полный каталог · © OpenStreetMap
           </p>
         </div>

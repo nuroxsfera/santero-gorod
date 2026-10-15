@@ -61,6 +61,7 @@ export interface NewsArticle {
 export interface NewsFeedQuery {
   localityId?: string | null;
   regionId?: string | null;
+  feedMode?: "city" | "region" | "federal" | "all";
   scope?: NewsScope | "all";
   categoryId?: NewsCategoryId | "all";
   query?: string;

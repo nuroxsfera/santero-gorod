@@ -13,15 +13,13 @@ export class InMemoryNewsRepository implements NewsRepository {
   async getFeed(query: NewsFeedQuery): Promise<NewsFeedResult> {
     let items = [...this.articles];
 
-    if (query.scope && query.scope !== "all") {
-      items = items.filter((a) => a.geo.scope === query.scope);
-    }
-
+    // Geo filtering is fully handled by matchesGeo (feedMode preferred over scope)
     items = items.filter((a) =>
       matchesGeo(a, {
         localityId: query.localityId,
         regionId: query.regionId,
         scope: query.scope,
+        feedMode: query.feedMode,
       })
     );
 

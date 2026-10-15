@@ -2,7 +2,9 @@ import { describe, it, expect } from "vitest";
 import { dedupeByHash, matchesGeo, matchesText } from "../service/filters";
 import type { NewsArticle } from "../domain/types";
 
-function make(partial: Partial<NewsArticle> & Pick<NewsArticle, "id" | "contentHash">): NewsArticle {
+function make(
+  partial: Partial<NewsArticle> & Pick<NewsArticle, "id" | "contentHash">
+): NewsArticle {
   return {
     title: "t",
     summary: "s",
@@ -27,6 +29,35 @@ function make(partial: Partial<NewsArticle> & Pick<NewsArticle, "id" | "contentH
   };
 }
 
+const mskLocal = make({
+  id: "l",
+  contentHash: "l",
+  title: "Транспорт Москвы",
+  geo: {
+    scope: "locality",
+    localityId: "msk",
+    localityName: "Москва",
+    regionId: "RU-MOW",
+    regionName: "Москва",
+    countryCode: "RU",
+  },
+});
+
+const taRegion = make({
+  id: "r",
+  contentHash: "r",
+  geo: {
+    scope: "region",
+    localityId: null,
+    localityName: null,
+    regionId: "RU-TA",
+    regionName: "Татарстан",
+    countryCode: "RU",
+  },
+});
+
+const federal = make({ id: "f", contentHash: "f" });
+
 describe("dedupeByHash", () => {
   it("removes duplicates by contentHash", () => {
     const a = make({ id: "1", contentHash: "h1" });
@@ -37,39 +68,33 @@ describe("dedupeByHash", () => {
 });
 
 describe("matchesText", () => {
-  it("matches title", () => {
-    const a = make({ id: "1", contentHash: "x", title: "Транспорт Москвы" });
-    expect(matchesText(a, "транспорт")).toBe(true);
-    expect(matchesText(a, "спортзал")).toBe(false);
+  it("matches title case-insensitively", () => {
+    expect(matchesText(mskLocal, "транспорт")).toBe(true);
+    expect(matchesText(mskLocal, "спортзал")).toBe(false);
   });
 });
 
-describe("matchesGeo", () => {
-  const local = make({
-    id: "l",
-    contentHash: "l",
-    geo: {
-      scope: "locality",
-      localityId: "msk",
-      localityName: "Москва",
-      regionId: "RU-MOW",
-      regionName: "Москва",
-      countryCode: "RU",
-    },
-  });
-  const federal = make({ id: "f", contentHash: "f" });
-
-  it("includes federal in city feed", () => {
-    expect(matchesGeo(federal, { localityId: "msk", regionId: "RU-MOW" })).toBe(true);
+describe("matchesGeo feedMode", () => {
+  it("city mode includes federal + locality + region", () => {
+    expect(
+      matchesGeo(federal, { feedMode: "city", localityId: "msk", regionId: "RU-MOW" })
+    ).toBe(true);
+    expect(
+      matchesGeo(mskLocal, { feedMode: "city", localityId: "msk", regionId: "RU-MOW" })
+    ).toBe(true);
+    expect(
+      matchesGeo(taRegion, { feedMode: "city", localityId: "msk", regionId: "RU-MOW" })
+    ).toBe(false);
   });
 
-  it("matches locality id", () => {
-    expect(matchesGeo(local, { localityId: "msk" })).toBe(true);
-    expect(matchesGeo(local, { localityId: "spb" })).toBe(false);
+  it("region mode excludes federal, includes region localities", () => {
+    expect(matchesGeo(federal, { feedMode: "region", regionId: "RU-MOW" })).toBe(false);
+    expect(matchesGeo(mskLocal, { feedMode: "region", regionId: "RU-MOW" })).toBe(true);
+    expect(matchesGeo(taRegion, { feedMode: "region", regionId: "RU-TA" })).toBe(true);
   });
 
-  it("strict federal scope", () => {
-    expect(matchesGeo(federal, { scope: "federal" })).toBe(true);
-    expect(matchesGeo(local, { scope: "federal" })).toBe(false);
+  it("federal mode only federal", () => {
+    expect(matchesGeo(federal, { feedMode: "federal" })).toBe(true);
+    expect(matchesGeo(mskLocal, { feedMode: "federal" })).toBe(false);
   });
 });

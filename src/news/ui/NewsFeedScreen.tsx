@@ -44,12 +44,7 @@ export function NewsFeedScreen({ city, onOpenArticle, onBack }: Props) {
         const res = await svc.getFeed({
           localityId: scope === "federal" ? null : city?.id ?? null,
           regionId: scope === "federal" ? null : city?.regionId ?? null,
-          scope:
-            scope === "city"
-              ? undefined
-              : scope === "region"
-                ? "region"
-                : "federal",
+          feedMode: scope,
           categoryId,
           query: query.trim() || undefined,
           limit: 40,

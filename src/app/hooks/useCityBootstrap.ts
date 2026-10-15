@@ -28,18 +28,15 @@ export function useCityBootstrap(): {
         if (cancelled) return;
         if (state.selectedLocality) {
           setCity(state.selectedLocality);
-        } else {
-          const pilot =
-            svc.searchCities({ query: PILOT_CITY.searchQuery, limit: 1 }).items[0] ??
-            svc.getLocalityById?.(PILOT_CITY.localityId);
-          // getLocalityById may not exist — fallback search only
-          const chosen =
-            pilot ??
-            svc.searchCities({ query: PILOT_CITY.searchQuery, limit: 1 }).items[0];
-          if (chosen) {
-            ctx.selectLocality(chosen);
-            setCity(chosen);
-          }
+          return;
+        }
+        const pilot = svc.searchCities({
+          query: PILOT_CITY.searchQuery,
+          limit: 1,
+        }).items[0];
+        if (pilot) {
+          ctx.selectLocality(pilot);
+          setCity(pilot);
         }
       } catch {
         /* leave null */

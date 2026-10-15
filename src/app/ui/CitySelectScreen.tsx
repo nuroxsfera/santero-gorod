@@ -6,6 +6,7 @@ import {
   getGeographicService,
   type Locality,
 } from "@/geography";
+import { PILOT_CITY } from "@/config/pilot";
 
 interface Props {
   city: Locality | null;
@@ -14,7 +15,7 @@ interface Props {
   onCityResolved: (city: Locality) => void;
 }
 
-/** Welcome / city entry — not the full city search list. */
+/** Welcome / city entry — default resolve to pilot Novosibirsk. */
 export function CitySelectScreen({
   city,
   onContinue,
@@ -34,8 +35,11 @@ export function CitySelectScreen({
         <h1 className="mb-2 text-center text-2xl font-semibold tracking-tight text-gray-900">
           Santero Город
         </h1>
-        <p className="mb-10 text-center text-base text-gray-500">
+        <p className="mb-2 text-center text-base text-gray-500">
           Всё для жизни в вашем городе
+        </p>
+        <p className="mb-10 text-center text-xs text-gray-400">
+          Пилот: {PILOT_CITY.name}
         </p>
         <button
           type="button"
@@ -44,26 +48,26 @@ export function CitySelectScreen({
               onContinue(city);
               return;
             }
-            const moscow = getGeographicService().searchCities({
-              query: "Москва",
+            const pilot = getGeographicService().searchCities({
+              query: PILOT_CITY.searchQuery,
               limit: 1,
             }).items[0];
-            if (moscow) {
-              getCityContext().selectLocality(moscow);
-              onCityResolved(moscow);
+            if (pilot) {
+              getCityContext().selectLocality(pilot);
+              onCityResolved(pilot);
             }
-            onContinue(moscow ?? null);
+            onContinue(pilot ?? null);
           }}
           className="mb-3 flex w-full items-center justify-center rounded-2xl bg-[#058BED] py-4 text-[17px] font-medium text-white active:scale-[0.98]"
         >
-          {city ? `Продолжить · ${city.name}` : "Определить город"}
+          {city ? `Продолжить · ${city.name}` : `Начать · ${PILOT_CITY.name}`}
         </button>
         <button
           type="button"
           onClick={onPickManually}
           className="flex w-full items-center justify-center rounded-2xl border border-gray-200 bg-white py-4 text-[17px] font-medium text-gray-800 active:scale-[0.98]"
         >
-          Выбрать вручную
+          Выбрать другой город
         </button>
       </div>
     </motion.div>

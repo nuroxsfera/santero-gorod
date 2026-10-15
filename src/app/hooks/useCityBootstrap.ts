@@ -6,10 +6,10 @@ import {
   getGeographicService,
   type Locality,
 } from "@/geography";
+import { PILOT_CITY } from "@/config/pilot";
 
 /**
- * Loads Geography service and hydrates last selected city (or Moscow seed).
- * Does not change browsing city on resume/applications data.
+ * Hydrates last selected city, or pilot (Novosibirsk) when none saved.
  */
 export function useCityBootstrap(): {
   city: Locality | null;
@@ -29,14 +29,20 @@ export function useCityBootstrap(): {
         if (state.selectedLocality) {
           setCity(state.selectedLocality);
         } else {
-          const moscow = svc.searchCities({ query: "Москва", limit: 1 }).items[0];
-          if (moscow) {
-            ctx.selectLocality(moscow);
-            setCity(moscow);
+          const pilot =
+            svc.searchCities({ query: PILOT_CITY.searchQuery, limit: 1 }).items[0] ??
+            svc.getLocalityById?.(PILOT_CITY.localityId);
+          // getLocalityById may not exist — fallback search only
+          const chosen =
+            pilot ??
+            svc.searchCities({ query: PILOT_CITY.searchQuery, limit: 1 }).items[0];
+          if (chosen) {
+            ctx.selectLocality(chosen);
+            setCity(chosen);
           }
         }
       } catch {
-        /* seed / offline fallback — leave city null */
+        /* leave null */
       }
     })();
     return () => {

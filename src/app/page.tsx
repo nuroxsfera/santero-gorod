@@ -73,11 +73,10 @@ export default function App() {
       setScreen("main");
       return;
     }
-    if (tab === "events") {
+    if (tab === "news") {
       setScreen("news");
       return;
     }
-    // transport / more — no module yet
     setNavHint(
       tab === "transport"
         ? "Раздел «Транспорт» пока в разработке"

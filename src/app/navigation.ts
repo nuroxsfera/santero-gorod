@@ -16,11 +16,15 @@ export type Screen =
   | "resume"
   | "applications";
 
-export type Tab = "home" | "transport" | "events" | "more";
+/**
+ * Tabs: home + news (honest label) + transport/more stubs.
+ * Events calendar is a future module — not aliased as news.
+ */
+export type Tab = "home" | "transport" | "news" | "more";
 
 export const TABS: { id: Tab; label: string }[] = [
   { id: "home", label: "Главная" },
   { id: "transport", label: "Транспорт" },
-  { id: "events", label: "События" },
+  { id: "news", label: "Новости" },
   { id: "more", label: "Ещё" },
 ];

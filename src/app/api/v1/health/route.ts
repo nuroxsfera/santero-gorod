@@ -1,29 +1,47 @@
 import { NextResponse } from "next/server";
-import { probeDatabase, isDatabaseConfigured } from "@/db";
+import { isDatabaseConfigured } from "@/db/config";
 
-/** Liveness + H1 dependency status */
+/** Liveness + H1/H2 dependency status (probe only when configured) */
 export async function GET() {
-  const db = await probeDatabase();
+  let db: {
+    configured: boolean;
+    connected: boolean;
+    message: string;
+    latencyMs?: number;
+  } = {
+    configured: false,
+    connected: false,
+    message: "DATABASE_URL not set — using in-memory stores",
+  };
+
+  if (isDatabaseConfigured()) {
+    try {
+      const { probeDatabase } = await import("@/db/status");
+      db = await probeDatabase();
+    } catch (e) {
+      db = {
+        configured: true,
+        connected: false,
+        message: e instanceof Error ? e.message : "probe failed",
+      };
+    }
+  }
 
   return NextResponse.json({
     ok: true,
     service: "santero-gorod",
     version: "0.1.0",
-    horizon: 1,
+    horizon: 2,
     mode: "api-v1",
-    database: {
-      configured: db.configured,
-      connected: db.connected,
-      message: db.message,
-      latencyMs: "latencyMs" in db ? db.latencyMs : undefined,
-    },
+    database: db,
     auth: {
       mode: "guest",
-      note: "Anonymous guest session only in H1. Accounts deferred to H3.",
+      note: "Anonymous guest session only in H1/H2. Accounts deferred to H3.",
     },
     news: {
       liveRss: true,
-      note: "Metadata-only RSS (title/link/date) merged in /api/v1/news/feed",
+      clientViaApi: true,
+      note: "Metadata-only RSS merged in /api/v1/news/feed; UI uses API",
     },
     dataFallback: isDatabaseConfigured() ? "postgres-when-up" : "in-memory",
   });

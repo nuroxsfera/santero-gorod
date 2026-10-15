@@ -1,2 +1,2 @@
 export { getDatabaseUrl, isDatabaseConfigured } from "./config";
-export { probeDatabase, type DbStatus } from "./status";
+/** probeDatabase uses `pg` — import from `@/db/status` only on server routes */

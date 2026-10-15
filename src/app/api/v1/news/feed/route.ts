@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HybridNewsRepository } from "@/news/repository/HybridNewsRepository";
-import {
-  PostgresNewsRepository,
-  isPostgresNewsAvailable,
-} from "@/news/repository/PostgresNewsRepository";
 import type { NewsCategoryId } from "@/news";
-
-export const runtime = "nodejs";
+import { isDatabaseConfigured } from "@/db";
 
 const hybrid = new HybridNewsRepository();
 
@@ -39,13 +34,16 @@ export async function GET(req: NextRequest) {
     const liveCount = result.items.filter((a) => !a.isDemo).length;
 
     let persisted = 0;
-    if (isPostgresNewsAvailable() && liveCount > 0) {
+    if (isDatabaseConfigured() && liveCount > 0) {
       try {
+        const { PostgresNewsRepository } = await import(
+          "@/news/repository/PostgresNewsRepository"
+        );
         const pg = new PostgresNewsRepository();
         const liveOnly = result.items.filter((a) => !a.isDemo);
         persisted = await pg.upsertMany(liveOnly);
       } catch {
-        /* DB optional — do not fail feed */
+        /* DB optional */
       }
     }
 
@@ -54,7 +52,7 @@ export async function GET(req: NextRequest) {
       source: "server",
       liveCount,
       persisted,
-      postgres: isPostgresNewsAvailable(),
+      postgres: isDatabaseConfigured(),
       note:
         liveCount > 0
           ? "Feed includes live RSS metadata (title, link, date). Full text at source."

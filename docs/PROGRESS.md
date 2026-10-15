@@ -14,9 +14,9 @@
 
 | Измерение | % | Комментарий |
 |-----------|---|-------------|
-| Функции прототипа | ~40 | Geo, demo news/jobs, places, map B1, search |
+| Функции прототипа | ~42 | + alerts/events/transport skeletons |
 | Визуальная оболочка | ~45 | Design pass 1; ещё «карточно», сыро |
-| Инфраструктура | ~18 | CI + API; нет БД/auth |
+| Инфраструктура | ~20 | CI + больше API routes; нет БД |
 | Публичный запуск | ~12 | Demo ≠ live city OS |
 
 ---
@@ -62,7 +62,7 @@
 ## Горизонт 3 — польза жителям пилота
 
 - [ ] 1–2 легальных live news source
-- [x] Alerts domain skeleton (типы + InMemory + API + tests) — **без UI live, без фейковых угроз**
+- [x] Alerts domain skeleton (типы + InMemory + API + tests)
 - [ ] Places catalog из OSM extract НСК
 - [ ] Alerts UI read-only при наличии данных
 - [ ] Weather widget (API после OK)
@@ -74,9 +74,10 @@
 
 ## Горизонт 4 — расширенная экосистема
 
-- [x] Events domain skeleton (типы + InMemory demo + API) — **не календарь UI**
+- [x] Events domain skeleton (типы + InMemory + API + tests)
+- [x] Transport domain skeleton (stops/routes demo + API + tests) — **без realtime**
 - [ ] Events calendar UI (модуль M)
-- [ ] Transport layer (справочник)
+- [ ] Transport UI / GTFS live
 - [ ] Organization profiles
 - [ ] Map B2 (extrusions / richer layers)
 - [ ] Business tools U
@@ -107,38 +108,31 @@
 
 | ID | Модуль | % | Статус |
 |----|--------|---|--------|
-| A | Главная | ~55 | UI pass 1; ещё дорабатывать визуал |
-| B | Карта | ~18 | B1 done; B2/B3 нет |
+| A | Главная | ~55 | UI pass 1; визуал дорабатывать позже |
+| B | Карта | ~18 | B1 done |
 | C | Новости | ~45 | Demo |
-| D | Алерты | ~8 | Domain + API skeleton |
+| D | Алерты | ~10 | Domain + API |
 | E | Погода | 0 | Stub |
-| F | Медицина | 0 | — |
-| G | Образование | 0 | — |
+| F–G | Медицина / образование | 0 | — |
 | H | Работа | ~40 | Demo |
-| I | Недвижимость | 0 | — |
-| J | Магазины | 0 | — |
-| K | Еда | 0 | — |
-| L | Транспорт | 0 | Nav stub |
+| I–K | Недвиж. / магазины / еда | 0 | — |
+| L | Транспорт | ~8 | Domain skeleton |
 | M | События | ~8 | Domain skeleton |
 | N–S | Прочие | 0 | — |
 | T | Поиск/профиль | ~30 | Search v0 |
-| U | Бизнес-кабинет | 0 | — |
-| V | Уведомления | ~2 | Toast |
-| W | Админка | 0 | — |
-| X | Accessibility | 0 | — |
-| Y | Emergency | 0 | — |
-| Z | Developer API | ~14 | + alerts/events routes |
+| U–Y | Бизнес / уведомл. / админ / ЧС | 0–2 | — |
+| Z | Developer API | ~16 | + alerts/events/transport |
 | AA | Multi-city | 0 | — |
-| — | Places core | ~32 | — |
-| — | Geography | ~70 | — |
+| — | Places / Geography | ~32 / ~70 | — |
 
 ---
 
 ## API
 
 - [x] health, news, jobs, places
-- [x] `/api/v1/alerts` (demo skeleton)
-- [x] `/api/v1/events` (demo skeleton)
+- [x] `/api/v1/alerts`
+- [x] `/api/v1/events`
+- [x] `/api/v1/transport`
 - [ ] Postgres · write · auth · ingestion
 
 ---
@@ -156,6 +150,6 @@
 
 ## Очередь
 
-1. CI после skeletons
-2. Transport domain skeleton (H4)
-3. Не трогать массовый редизайн, пока не скажешь
+1. Подтвердить CI
+2. Дальше по плану без редизайна (Org skeleton / notifications event bus types)
+3. Design-2 — только по твоему сигналу

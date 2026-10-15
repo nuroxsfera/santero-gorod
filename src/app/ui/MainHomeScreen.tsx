@@ -79,7 +79,7 @@ export function MainHomeScreen({
           >
             <div className="flex gap-2.5 overflow-x-auto pb-1">
               <Shortcut label="Транспорт" subtitle="Скоро" />
-              <Shortcut label="События" subtitle="Скоро" onClick={onOpenNews} />
+              <Shortcut label="События" subtitle="Новости" onClick={onOpenNews} />
               <Shortcut label="Работа" subtitle="Открыть" onClick={onOpenJobs} />
               <Shortcut label="Места" subtitle="Скоро" />
             </div>
@@ -98,7 +98,7 @@ export function MainHomeScreen({
             <div className="rounded-2xl bg-white p-4 shadow-sm">
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Сегодня рядом</h3>
               <p className="text-[13px] text-gray-500">
-                События в {cityName} — раздел пока не подключён
+                События · {cityName} — раздел пока не подключён
               </p>
             </div>
             <button
@@ -107,7 +107,7 @@ export function MainHomeScreen({
               className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
             >
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Вакансии</h3>
-              <p className="text-[13px] text-gray-500">Работа в {cityName}</p>
+              <p className="text-[13px] text-gray-500">Работа · {cityName}</p>
             </button>
             <button
               type="button"
@@ -115,7 +115,7 @@ export function MainHomeScreen({
               className="w-full rounded-2xl bg-white p-4 text-left shadow-sm active:scale-[0.99]"
             >
               <h3 className="mb-2 text-[15px] font-semibold text-gray-900">Новости города</h3>
-              <p className="text-[13px] text-gray-500">Лента для {cityName}</p>
+              <p className="text-[13px] text-gray-500">Лента · {cityName}</p>
             </button>
           </div>
         </div>

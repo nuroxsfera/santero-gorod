@@ -1,39 +1,37 @@
 # Santero Город — рабочий отчёт
 
-**Обновление:** 2026-10-15 13:30 CEST
+**Обновление:** 2026-10-15 13:50 CEST
 
 ---
 
-## Состояние
+## PostgreSQL
 
-- Этап 1 CI: закрыт
-- Этап 2 UI shell: в основном закрыт
-- **Этап 3 backend: старт** — API v1 поверх demo-хранилища
+**Выбор: Neon Free** (см. `docs/backend/POSTGRES.md`).
+Аккаунт и `DATABASE_URL` — только действия владельца. В коде секретов нет. Схема не накатывалась.
 
----
+## RSS
 
-## Этап 3 — что сделано
+Проверен рабочий feed: **https://toggazeta.ru/rss** (Тогучинская газета).
+nso.ru / toguchin.nso.ru — 403 с нашей среды.
 
-- `GET /api/v1/health`
-- `GET /api/v1/news/feed`, `GET /api/v1/news/:id`
-- `GET /api/v1/jobs/vacancies`, `GET /api/v1/jobs/vacancies/:id`
-- `HttpNewsRepository` (опционально, UI ещё на InMemory)
-- `docs/backend/README.md`
+Интеграция: парсер **только метаданных** + тесты. Preview API **запрещён** без `ENABLE_RSS_PREVIEW=1`.
+В публичную ленту RSS **не** подключён. Полный текст не сохраняем.
 
-**Важно:** данные по-прежнему **demo** (`isDemo` / warning в JSON). Это не live-новости и не реальные вакансии.
+## API
 
----
+Ранее: health, news feed/id, jobs vacancies (demo).
+Новое: `/api/v1/news/rss-preview` (off by default).
 
 ## CI
 
-Ожидается прогон после push. Предыдущие runs #8–#9 были success.
+Ожидается run после этого push.
 
----
+## Реальные vs demo
 
-## Следующее по backend (нужны решения владельца)
-
-1. Согласие на хостинг БД (бесплатный tier) или self-hosted
-2. Согласие на конкретный легальный источник новостей
-3. Auth (провайдер / email magic link / и т.д.)
-
-Без этого API остаётся контрактом над demo.
+| | Статус |
+|--|--------|
+| Новости в UI / `/api/v1/news/feed` | **demo** |
+| Вакансии | **demo** |
+| RSS live в ленте | **нет** |
+| Postgres | **нет** |
+| Auth | **нет** |

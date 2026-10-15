@@ -25,14 +25,14 @@ export function SearchScreen({ city, onBack, onOpenNews, onOpenJobs, onOpenPlace
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      let cancelled = false;
+    let cancelled = false;
+    const timer = setTimeout(() => {
       (async () => {
         if (!q.trim()) {
-          setHits([]);
+          if (!cancelled) setHits([]);
           return;
         }
-        setLoading(true);
+        if (!cancelled) setLoading(true);
         try {
           const res = await universalSearch({
             query: q,
@@ -47,11 +47,11 @@ export function SearchScreen({ city, onBack, onOpenNews, onOpenJobs, onOpenPlace
           if (!cancelled) setLoading(false);
         }
       })();
-      return () => {
-        cancelled = true;
-      };
     }, 280);
-    return () => clearTimeout(t);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [q, city?.id, city?.regionId]);
 
   const openHit = (h: SearchHit) => {

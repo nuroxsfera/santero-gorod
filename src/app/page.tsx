@@ -21,12 +21,14 @@ import {
 } from "@/jobs";
 import { PlacesListScreen } from "@/places";
 import { CityMapScreen } from "@/map";
+import { SearchScreen } from "@/search/ui/SearchScreen";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
 import { CitySelectScreen } from "./ui/CitySelectScreen";
 import { MainHomeScreen } from "./ui/MainHomeScreen";
 import { TravelScreen } from "./ui/TravelScreen";
+import { MoreScreen } from "./ui/MoreScreen";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -79,11 +81,11 @@ export default function App() {
       setScreen("news");
       return;
     }
-    setNavHint(
-      tab === "transport"
-        ? "Раздел «Транспорт» пока в разработке"
-        : "Раздел «Ещё» пока в разработке"
-    );
+    if (tab === "more") {
+      setScreen("more");
+      return;
+    }
+    setNavHint("Раздел «Транспорт» пока в разработке");
   };
 
   return (
@@ -109,6 +111,7 @@ export default function App() {
             onOpenNews={() => setScreen("news")}
             onOpenPlaces={() => setScreen("places")}
             onOpenMap={() => setScreen("map")}
+            onOpenSearch={() => setScreen("search")}
             onTabChange={handleTabChange}
           />
         )}
@@ -126,6 +129,43 @@ export default function App() {
               title="Выбор города"
               onBack={() => setScreen(city ? "main" : "city-select")}
               onSelect={handleSelectCity}
+            />
+          </motion.div>
+        )}
+
+        {screen === "search" && (
+          <motion.div
+            key="search"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          >
+            <SearchScreen
+              city={city}
+              onBack={() => setScreen("main")}
+              onOpenNews={() => setScreen("news")}
+              onOpenJobs={() => setScreen("jobs")}
+              onOpenPlaces={() => setScreen("places")}
+            />
+          </motion.div>
+        )}
+
+        {screen === "more" && (
+          <motion.div
+            key="more"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[#F2F4F7]"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          >
+            <MoreScreen
+              onBack={() => {
+                setActiveTab("home");
+                setScreen("main");
+              }}
             />
           </motion.div>
         )}

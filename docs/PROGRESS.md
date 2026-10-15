@@ -1,182 +1,119 @@
 # Santero Город — полный прогресс
 
-**Источник истины по продукту:** [`MASTER_PLAN.md`](./MASTER_PLAN.md)  
-**Этот файл:** чек-листы и статусы «что закрыто / что нет».  
-**Пилот:** Новосибирск (`src/config/pilot.ts`)  
+**Продукт:** [`MASTER_PLAN.md`](./MASTER_PLAN.md)  
+**Пилот:** Новосибирск  
 **Обновление:** 2026-10-15
 
-**Правило галочки:** только если сделано **и** проверено (CI / контракт / браузер). Заглушка ≠ готово.
+Галочка = сделано **и** проверено (CI / контракт).
 
 ---
 
-## Сводка готовности
+## Сводка
 
-| Измерение | % | Комментарий |
-|-----------|---|-------------|
-| Функции прототипа | ~30 | Geo + demo news/jobs + places + map B1 |
-| Визуальная оболочка | ~40 | Splash…map; мало иконок |
-| Инфраструктура | ~18 | CI + API; нет БД/auth |
-| Публичный запуск | ~12 | Demo нельзя выдавать за live city OS |
+| Измерение | % |
+|-----------|---|
+| Функции прототипа | ~35 |
+| Визуальная оболочка | ~42 |
+| Инфраструктура | ~18 |
+| Публичный запуск | ~12 |
 
 ---
 
-## Горизонт 1 — текущий прототип
+## Горизонт 1 — прототип
 
-- [x] Geography contract + city UX
-- [x] Demo News UI + filters + article
-- [x] Demo Jobs UI (feed, vacancy, resume, applications)
-- [x] API v1 health / news / jobs / places (demo payload)
-- [x] CI (typecheck, tests, lint, build)
-- [x] MASTER_PLAN.md
-- [x] Пилот Новосибирск (default welcome/bootstrap)
-- [x] Nav: вкладка «Новости» (не путаница с событиями)
-- [x] Places domain + InMemory + list UI
-- [x] Home: бейдж пилота, честные stubs (погода/события/демо)
-- [x] Map B1: MapLibre + OSM + demo markers (CI green)
-- [ ] Neon Postgres подключён
-- [ ] Live news metadata в **публичной** ленте
+- [x] Geography + city UX
+- [x] Demo News / Jobs
+- [x] API v1 (demo)
+- [x] CI
+- [x] MASTER_PLAN
+- [x] Пилот Новосибирск
+- [x] Nav «Новости»
+- [x] Places + list + API
+- [x] Home pilot + honest stubs
+- [x] Map B1 MapLibre+OSM
+- [ ] Neon
+- [ ] Live news in feed
 - [ ] Auth
 
----
+## Горизонт 2 — демонстрация
 
-## Горизонт 2 — цельная публичная демонстрация
+- [x] Честные demo-метки
+- [x] Map B1
+- [x] Universal search v0 (news+jobs+places)
+- [x] Больше demo POI (~8 точек НСК)
+- [x] Экран «Ещё» (roadmap stubs)
+- [ ] Postgres news
+- [ ] Mobile smoke checklist
+- [ ] Иконки bottom nav
+- [ ] Унификация empty/error
 
-**Обязательно для «можно показывать» без обмана**
+## Горизонт 3 — польза жителям
 
-- [x] Честные метки demo везде, где demo
-- [x] Map B1 для пилота (2D + markers)
-- [ ] Universal search v0 (news + jobs + places)
-- [ ] Больше demo POI Новосибирска (10–30 точек)
-- [ ] Раздел «Ещё»: экран-заглушка со списком будущих модулей
-- [ ] Postgres для news metadata (после DATABASE_URL)
-- [ ] Mobile smoke checklist (документ + прогон)
-- [ ] Иконки bottom nav (не цветные квадраты)
-- [ ] Пустые/error состояния унифицированы
+- [ ] Live legal news sources
+- [ ] OSM places extract НСК
+- [ ] Alerts v1
+- [ ] Weather API (после OK)
+- [ ] Jobs real or explicit demo-only region
+- [ ] Auth favorites
+- [ ] Moderation basics
 
-**Не обязательно в H2:** auth, 3D buildings, payments, live alerts.
+## Горизонт 4 — экосистема
 
----
+- [ ] Events
+- [ ] Transport layer
+- [ ] Org profiles
+- [ ] Map B2
+- [ ] Business tools U
+- [ ] Notifications V
+- [ ] Realty/commerce reference
 
-## Горизонт 3 — польза жителям пилота
+## Горизонт 5 — spatial platform
 
-- [ ] 1–2 **легальных** live news source (metadata)
-- [ ] Places catalog из открытых данных (OSM extract) для НСК
-- [ ] Alerts v1 (модель + UI) при наличии официальных фидов
-- [ ] Weather widget (API после OK владельца)
-- [ ] Jobs: партнёр **или** явный «только demo»
-- [ ] Auth для избранного / подписок
-- [ ] Moderation basics (модуль W минимум)
-- [ ] Push — только после OK
+- [ ] Map B3 selective twin
+- [ ] Deep layers / analytics
+- [ ] 3D assets pipeline
+- [ ] Offline/cache map
 
----
-
-## Горизонт 4 — расширенная экосистема
-
-- [ ] Events calendar (модуль M)
-- [ ] Transport layer (справочник остановок/маршрутов)
-- [ ] Organization profiles
-- [ ] Map B2 (extrusions / richer layers где данные есть)
-- [ ] Business tools U (claimed profiles)
-- [ ] Unified notifications V
-- [ ] Realty / commerce **reference** catalogs
-
----
-
-## Горизонт 5 — пространственная платформа
-
-- [ ] Map B3 selective digital twin (зоны по контракту)
-- [ ] Deep spatial layers / analytics
-- [ ] Partner 3D assets pipeline
-- [ ] Offline/cache strategy для карты
-
----
-
-## Горизонт 6 — масштабирование на города
+## Горизонт 6 — мультигород
 
 - [ ] City onboarding playbook
-- [ ] Standardized feeds & data SLAs
-- [ ] Multi-city ops / support model
-- [ ] Partner API (модуль Z) стабильный
+- [ ] Feeds & SLAs
+- [ ] Ops/support
+- [ ] Partner API stable
 
 ---
 
-## Модули A–AA (статус)
+## Модули A–AA
 
-| ID | Модуль | % | Статус |
-|----|--------|---|--------|
-| A | Главная | ~55 | Пилот-баннер, shortcuts, stubs |
-| B | Карта 3D/2D | ~15 | **B1** done; B2/B3 нет |
-| C | Новости | ~45 | Demo + API; live нет |
-| D | Городские алерты | 0 | — |
-| E | Погода | 0 | Stub на home |
-| F | Медицина | 0 | — |
-| G | Образование | 0 | — |
-| H | Работа | ~40 | Demo product |
-| I | Недвижимость | 0 | — |
-| J | Магазины | 0 | — |
-| K | Еда | 0 | — |
-| L | Транспорт | 0 | Nav stub |
-| M | События/досуг | 0 | Stub на home |
-| N | Туризм | 0 | — |
-| O | Спорт | 0 | — |
-| P | Семья/быт | 0 | — |
-| Q | Муниципальные | 0 | — |
-| R | Безопасность | 0 | — |
-| S | Сообщества | 0 | — |
-| T | Профиль/поиск | ~5 | City search only |
-| U | Бизнес-кабинет | 0 | — |
-| V | Уведомления | ~2 | Toast nav only |
-| W | Админка/качество | 0 | — |
-| X | Accessibility city | 0 | — |
-| Y | Emergency official | 0 | — |
-| Z | Developer API | ~10 | v1 read demo endpoints |
-| AA | Multi-city ops | 0 | — |
-| — | **Places core** | ~20 | Domain + list + map markers |
-| — | **Geography** | ~70 | v1.0 contract, seed |
+| ID | Модуль | % |
+|----|--------|---|
+| A | Главная | ~60 |
+| B | Карта | ~18 B1 |
+| C | Новости | ~45 demo |
+| D | Алерты | 0 |
+| E | Погода | 0 stub |
+| F | Медицина | 0 |
+| G | Образование | 0 |
+| H | Работа | ~40 demo |
+| I–S | Прочие каталоги | 0 |
+| T | Поиск/профиль | ~25 search v0 |
+| U–Y | Бизнес/админ/ЧС | 0 |
+| Z | API | ~12 |
+| AA | Multi-city | 0 |
+| Places | core | ~30 |
+| Geography | | ~70 |
 
 ---
 
-## Карта — уровни B1–B3
+## Блокеры владельца
 
-| Уровень | Содержание | Статус |
-|---------|------------|--------|
-| B1 | 2D MapLibre + OSM + markers + sheet | [x] код + CI |
-| B2 | Extrusion / richer POI layers | [ ] |
-| B3 | Selective twin | [ ] |
+- [ ] Neon DATABASE_URL
+- [ ] Legal RSS OK
+- [ ] Weather API choice
+- [ ] Auth timing
 
----
+## Очередь
 
-## API / Backend
-
-- [x] `GET /api/v1/health`
-- [x] `GET /api/v1/news/feed`, `/news/:id` (demo)
-- [x] `GET /api/v1/jobs/vacancies`, `/vacancies/:id` (demo)
-- [x] `GET /api/v1/places` (demo)
-- [x] `GET /api/v1/news/rss-preview` (off without env)
-- [ ] Postgres schema applied
-- [ ] Write endpoints + auth
-- [ ] Ingestion job (RSS metadata)
-
----
-
-## Решения владельца (блокеры)
-
-- [ ] Neon: `DATABASE_URL` в Vercel
-- [ ] Live news: legal OK (напр. toggazeta metadata)
-- [ ] `ENABLE_RSS_PREVIEW=1` для теста
-- [ ] Погодный API (какой)
-- [ ] Когда включать Auth
-
----
-
-## Очередь ближайших задач
-
-1. [ ] Universal search v0
-2. [ ] Расширить demo POI Новосибирска
-3. [ ] Экран «Ещё»
-4. [ ] Иконки nav
-5. [ ] После OK: Neon migrations / RSS metadata feed
-
----
-
-*При закрытии пункта — ставить `[x]` здесь и кратко в `PROJECT_REPORT.md`.*
+1. CI после search/more
+2. Иконки nav
+3. После OK — Neon / RSS

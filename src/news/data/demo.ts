@@ -3,6 +3,7 @@ import type { NewsArticle, NewsCategory, NewsSource } from "../domain/types";
 /**
  * DEMO DATA ONLY — not real news, not scraped from media.
  * Used until legal news sources / partner APIs are connected.
+ * localityId values MUST match Geography v1.0 seed / catalog.
  */
 
 export const NEWS_CATEGORIES: NewsCategory[] = [
@@ -27,7 +28,8 @@ export const NEWS_SOURCES: NewsSource[] = [
   },
 ];
 
-const MOSCOW_ID = "0c5b2444-70a0-4932-980c-b4dc0d3f02b5";
+/** IDs from src/geography/data/seed.ts */
+const MOSCOW_ID = "0c5b2444-70a0-4932-980c-b4ed0d6f2ee5";
 const SPB_ID = "c2deb16a-0330-4f05-821f-1d09c93331e6";
 const KAZAN_ID = "93b3df57-4c89-44df-ac42-96f72943e636";
 

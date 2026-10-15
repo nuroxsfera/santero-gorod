@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Locality } from "@/geography";
 import type { Place } from "../domain/types";
 import { getPlaceService } from "../service/PlaceService";
+import { EmptyState, LoadingState } from "@/app/ui/states";
 
 interface Props {
   city: Locality | null;
@@ -71,13 +72,12 @@ export function PlacesListScreen({ city, onBack, onOpenMap }: Props) {
       )}
 
       <div className="flex-1 overflow-y-auto px-4 py-3" style={{ paddingBottom: 32 }}>
-        {loading && (
-          <p className="py-8 text-center text-[14px] text-gray-400">Загрузка…</p>
-        )}
+        {loading && <LoadingState />}
         {!loading && items.length === 0 && (
-          <p className="py-8 text-center text-[14px] text-gray-500">
-            Для этого города пока нет точек в каталоге.
-          </p>
+          <EmptyState
+            title="Нет точек"
+            description="Для этого города пока нет мест в каталоге."
+          />
         )}
         <ul className="space-y-2">
           {items.map((p) => (

@@ -1,22 +1,18 @@
 # Santero Город — рабочий отчёт
 
-**Обновление:** 2026-10-15 14:40 CEST
+**2026-10-15 14:50 CEST**
 
-## Где смотреть полный план
+## H2 (код)
 
-| Документ | Зачем |
-|----------|--------|
-| [`MASTER_PLAN.md`](./MASTER_PLAN.md) | Видение, модули, архитектура, горизонты |
-| [`PROGRESS.md`](./PROGRESS.md) | **Все** горизонты 1–6 + модули A–AA + галочки |
+Закрыто без Postgres: search, places, map B1, more, **nav icons**, **states**, **MOBILE_SMOKE.md**.
 
-## Пилот
+Открыто в H2: только **Neon** (владелец).
 
-Новосибирск. Map B1 (MapLibre + OSM + демо-маркеры) — в коде, CI green (#19).
+## Документы
 
-## Сейчас в работе / далее
+- `PROGRESS.md` — все горизонты
+- `MOBILE_SMOKE.md` — чеклист телефона
 
-Universal search v0 · больше POI · экран «Ещё».
+## Далее
 
-## Ждёт вас
-
-Neon · legal RSS · погода API.
+H3-prep или ждать DATABASE_URL. Mobile smoke — прогон владельцем.

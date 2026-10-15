@@ -5,6 +5,7 @@ import type { Locality } from "@/geography";
 import type { NewsArticle, NewsCategory, NewsCategoryId } from "../domain/types";
 import { getNewsService } from "../service/NewsService";
 import { NEWS_CATEGORIES } from "../data/demo";
+import { EmptyState, ErrorState, LoadingState } from "@/app/ui/states";
 
 type ScopeTab = "city" | "region" | "federal";
 
@@ -33,6 +34,7 @@ export function NewsFeedScreen({ city, onOpenArticle, onBack }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDemo, setIsDemo] = useState(true);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -64,7 +66,7 @@ export function NewsFeedScreen({ city, onOpenArticle, onBack }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [city?.id, city?.regionId, scope, categoryId, query]);
+  }, [city?.id, city?.regionId, scope, categoryId, query, tick]);
 
   const scopes: { id: ScopeTab; label: string }[] = [
     { id: "city", label: city?.name ?? "Город" },
@@ -104,9 +106,7 @@ export function NewsFeedScreen({ city, onOpenArticle, onBack }: Props) {
               type="button"
               onClick={() => setScope(s.id)}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium ${
-                scope === s.id
-                  ? "bg-[#058BED] text-white"
-                  : "bg-gray-100 text-gray-700"
+                scope === s.id ? "bg-[#058BED] text-white" : "bg-gray-100 text-gray-700"
               }`}
             >
               {s.label}
@@ -147,16 +147,19 @@ export function NewsFeedScreen({ city, onOpenArticle, onBack }: Props) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-3">
-        {loading && (
-          <p className="py-10 text-center text-[14px] text-gray-500">Загрузка…</p>
-        )}
+        {loading && <LoadingState />}
         {!loading && error && (
-          <p className="py-10 text-center text-[14px] text-red-500">{error}</p>
+          <ErrorState
+            title={error}
+            description="Проверьте соединение и попробуйте снова."
+            onRetry={() => setTick((n) => n + 1)}
+          />
         )}
         {!loading && !error && items.length === 0 && (
-          <p className="py-10 text-center text-[14px] text-gray-500">
-            Нет материалов для выбранных фильтров
-          </p>
+          <EmptyState
+            title="Нет материалов"
+            description="Для выбранных фильтров пока ничего нет."
+          />
         )}
         {!loading && !error && items.length > 0 && (
           <div className="space-y-3">
@@ -177,18 +180,6 @@ export function NewsFeedScreen({ city, onOpenArticle, onBack }: Props) {
                     <>
                       <span>·</span>
                       <span>{a.geo.localityName}</span>
-                    </>
-                  )}
-                  {!a.geo.localityName && a.geo.regionName && (
-                    <>
-                      <span>·</span>
-                      <span>{a.geo.regionName}</span>
-                    </>
-                  )}
-                  {a.geo.scope === "federal" && (
-                    <>
-                      <span>·</span>
-                      <span>Россия</span>
                     </>
                   )}
                 </div>

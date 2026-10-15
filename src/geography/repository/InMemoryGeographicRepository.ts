@@ -5,6 +5,7 @@ import type {
   SearchOptions,
   SearchResult,
 } from "../domain/types";
+import { SEED_CATALOG } from "../data/seed";
 import { matchesQuery, normalizeSearchText } from "../lib/normalize";
 import type { GeographicRepository } from "./types";
 
@@ -25,11 +26,15 @@ export class InMemoryGeographicRepository implements GeographicRepository {
     if (this.loadPromise) return this.loadPromise;
 
     this.loadPromise = (async () => {
-      const res = await fetch(CATALOG_URL, { cache: "force-cache" });
-      if (!res.ok) {
-        throw new Error(`Failed to load geographic catalog: ${res.status}`);
+      let data: GeographicCatalog = SEED_CATALOG;
+      try {
+        const res = await fetch(CATALOG_URL, { cache: "force-cache" });
+        if (res.ok) {
+          data = (await res.json()) as GeographicCatalog;
+        }
+      } catch {
+        // offline / missing file → seed
       }
-      const data = (await res.json()) as GeographicCatalog;
       this.catalog = data;
       this.byId.clear();
       this.regionsById.clear();

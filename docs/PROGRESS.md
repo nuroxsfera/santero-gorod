@@ -9,50 +9,42 @@
 
 | Измерение | % |
 |-----------|---|
-| Функции прототипа | ~68 |
-| Визуальная оболочка | ~45 |
-| Инфраструктура | ~58 |
-| Публичный запуск | ~40 |
+| Функции прототипа | ~78 |
+| Визуальная оболочка | ~62 |
+| Инфраструктура | ~62 |
+| Публичный запуск | ~48 |
 
 ---
 
-## Горизонт 1 — ✅ ЗАКРЫТ
-
-## Горизонт 2 — ✅ ЗАКРЫТ ПОЛНОСТЬЮ
-
----
-
-## Горизонт 3 — польза жителям ✅ CODE-COMPLETE
-
-- [x] Alerts domain + **Alerts UI**
-- [x] 2+ live news sources (toggazeta + Lenta)
-- [x] Jobs «только demo»
-- [x] **Places catalog НСК** — curated ~25 POI (не полный OSM dump; source `curated-osm-nsk`)
-- [x] **Weather** — Open-Meteo (без API-ключа) + виджет на главной
-- [x] **Auth H3** — профиль гостя (имя на устройстве); OAuth/пароль — позже
-- [x] **Moderation basics** — очередь + API demo (`/api/v1/moderation`)
-
-> Полный OSM extract города и серверный OAuth — расширение после H3, не блокеры закрытия code-scope H3.
+## Горизонт 1 — ✅
+## Горизонт 2 — ✅
+## Горизонт 3 — ✅
 
 ---
 
-## Горизонт 4 — экосистема + отложенное
+## Горизонт 4 — ✅ CODE-COMPLETE
 
-- [x] Events / Transport domain skeletons
-- [ ] **Neon schema apply** — таблицы ещё не накатывались
-- [ ] **Design pass 2** — UX уровня Яндекс/Сбер
-- [ ] Events calendar UI
-- [ ] Transport UI / GTFS
-- [ ] Organization profiles
-- [ ] Map B2
-- [ ] Business tools U · Notifications V · Realty
-- [ ] Full OSM extract pipeline · OAuth accounts
+- [x] Events domain + **Events UI**
+- [x] Transport domain + **Transport UI** (без realtime/GTFS live)
+- [x] Organization profiles (demo UI)
+- [x] Map **B2** (категорийные маркеры, подпись B2)
+- [x] Business tools U (каркас экрана)
+- [x] Notifications V (локальный inbox)
+- [x] Realty reference catalog (demo)
+- [x] **Design pass 2** (токены surface/radius/shadow, меньше «карточной стены»)
+- [x] Schema v1.1.0 в репо + migrate statements (places, events, moderation)
+- [ ] Owner: **применить schema** на Neon (SQL Editor или migrate API) — операция, не код
+- [ ] Full OSM extract pipeline · OAuth — перенос в H5 (масштаб)
+
+**Итог H4 по коду:** закрыт. Применить schema на Neon — единственный owner-шаг.
 
 ---
 
 ## Горизонт 5 — spatial
 
 - [ ] Map B3 · layers · 3D · offline
+- [ ] Full OSM extract pipeline
+- [ ] OAuth accounts
 
 ---
 
@@ -64,5 +56,6 @@
 
 ## Очередь
 
-1. CI H3 close
-2. H4: schema / design-2 / Events UI — по приоритету
+1. CI H4
+2. Owner: schema apply на Neon
+3. H5 по плану

@@ -1,11 +1,9 @@
 # Рабочий отчёт
 
-**2026-10-16 — H3 code-complete**
+**H4 code-complete**
 
-- NSK places catalog ~25
-- Open-Meteo weather widget
-- Guest profile screen
-- Moderation queue API
+Events/Transport UI · Orgs · Realty · Notifications · Business shell · Map B2 · design-2 tokens · schema 1.1.0
 
-H1 ✅ · H2 ✅ · H3 code ✅  
-H4: schema + design-2 still open
+Owner: run migrate on Neon.
+
+H1–H4 code ✅

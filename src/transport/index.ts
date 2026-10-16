@@ -6,3 +6,4 @@ export type {
   TransportCatalogResult,
 } from "./domain/types";
 export { TransportService, getTransportService } from "./service/TransportService";
+export { TransportScreen } from "./ui/TransportScreen";

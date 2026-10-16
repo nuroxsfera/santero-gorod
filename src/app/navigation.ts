@@ -16,12 +16,20 @@ export type Screen =
   | "more"
   | "alerts"
   | "profile"
+  | "account"
   | "events"
   | "transport"
   | "orgs"
   | "realty"
   | "notifications"
-  | "business";
+  | "business"
+  | "medicine"
+  | "education"
+  | "tourism"
+  | "sport"
+  | "municipal"
+  | "safety"
+  | "accessibility";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

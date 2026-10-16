@@ -4,35 +4,59 @@ interface Props {
   onBack: () => void;
   onOpenAlerts?: () => void;
   onOpenProfile?: () => void;
+  onOpenAccount?: () => void;
   onOpenEvents?: () => void;
   onOpenOrgs?: () => void;
   onOpenRealty?: () => void;
   onOpenNotifications?: () => void;
   onOpenBusiness?: () => void;
+  onOpenMedicine?: () => void;
+  onOpenEducation?: () => void;
+  onOpenTourism?: () => void;
+  onOpenSport?: () => void;
+  onOpenMunicipal?: () => void;
+  onOpenSafety?: () => void;
+  onOpenAccessibility?: () => void;
 }
 
-type LinkItem = { title: string; note: string; onClick?: () => void; open?: boolean };
+type LinkItem = { title: string; note: string; onClick?: () => void };
 
-export function MoreScreen({
-  onBack,
-  onOpenAlerts,
-  onOpenProfile,
-  onOpenEvents,
-  onOpenOrgs,
-  onOpenRealty,
-  onOpenNotifications,
-  onOpenBusiness,
-}: Props) {
+export function MoreScreen(props: Props) {
+  const {
+    onBack,
+    onOpenAlerts,
+    onOpenProfile,
+    onOpenAccount,
+    onOpenEvents,
+    onOpenOrgs,
+    onOpenRealty,
+    onOpenNotifications,
+    onOpenBusiness,
+    onOpenMedicine,
+    onOpenEducation,
+    onOpenTourism,
+    onOpenSport,
+    onOpenMunicipal,
+    onOpenSafety,
+    onOpenAccessibility,
+  } = props;
+
   const links: LinkItem[] = [
-    { title: "Профиль", note: "Гость · имя на устройстве", onClick: onOpenProfile, open: true },
-    { title: "Уведомления", note: "Локальный inbox", onClick: onOpenNotifications, open: true },
-    { title: "Предупреждения", note: "Отключения · H3", onClick: onOpenAlerts, open: true },
-    { title: "События", note: "Календарь · демо", onClick: onOpenEvents, open: true },
-    { title: "Организации", note: "Профили · демо", onClick: onOpenOrgs, open: true },
-    { title: "Недвижимость", note: "Справочник · демо", onClick: onOpenRealty, open: true },
-    { title: "Для бизнеса", note: "Кабинет · каркас", onClick: onOpenBusiness, open: true },
-    { title: "Медицина", note: "Справочник учреждений" },
-    { title: "Образование", note: "Школы и кружки" },
+    { title: "Аккаунт", note: "Гость · OAuth позже", onClick: onOpenAccount },
+    { title: "Профиль", note: "Имя на устройстве", onClick: onOpenProfile },
+    { title: "Уведомления", note: "Локальный inbox", onClick: onOpenNotifications },
+    { title: "Предупреждения", note: "Алерты города", onClick: onOpenAlerts },
+    { title: "События", note: "Календарь · демо", onClick: onOpenEvents },
+    { title: "Медицина", note: "Каталог · H5", onClick: onOpenMedicine },
+    { title: "Образование", note: "Каталог · H5", onClick: onOpenEducation },
+    { title: "Туризм и культура", note: "Каталог · H5", onClick: onOpenTourism },
+    { title: "Спорт", note: "Каталог · H5", onClick: onOpenSport },
+    { title: "Организации", note: "Профили · демо", onClick: onOpenOrgs },
+    { title: "Недвижимость", note: "Справочник · демо", onClick: onOpenRealty },
+    { title: "Муниципальные", note: "Официальные ссылки", onClick: onOpenMunicipal },
+    { title: "Безопасность", note: "112 · алерты", onClick: onOpenSafety },
+    { title: "Доступность", note: "Текст · анимации", onClick: onOpenAccessibility },
+    { title: "Для бизнеса", note: "Кабинет · каркас", onClick: onOpenBusiness },
   ];
 
   return (
@@ -50,9 +74,9 @@ export function MoreScreen({
       </header>
       <div className="flex-1 overflow-y-auto px-4 py-4">
         <ul className="space-y-2">
-          {links.map((u) =>
-            u.onClick ? (
-              <li key={u.title}>
+          {links.map((u) => (
+            <li key={u.title}>
+              {u.onClick ? (
                 <button
                   type="button"
                   onClick={u.onClick}
@@ -66,24 +90,14 @@ export function MoreScreen({
                     Открыть
                   </span>
                 </button>
-              </li>
-            ) : (
-              <li
-                key={u.title}
-                className="rounded-[var(--sg-radius-lg)] bg-white/70 p-4 ring-1 ring-[var(--sg-border)]"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[15px] font-semibold text-[var(--sg-ink)]">{u.title}</p>
-                    <p className="mt-0.5 text-[13px] text-[var(--sg-ink-faint)]">{u.note}</p>
-                  </div>
-                  <span className="shrink-0 rounded-full bg-[var(--sg-surface)] px-2.5 py-1 text-[11px] font-semibold text-[var(--sg-ink-muted)]">
-                    Скоро
-                  </span>
+              ) : (
+                <div className="rounded-[var(--sg-radius-lg)] bg-white/70 p-4 ring-1 ring-[var(--sg-border)]">
+                  <p className="text-[15px] font-semibold text-[var(--sg-ink)]">{u.title}</p>
+                  <p className="mt-0.5 text-[13px] text-[var(--sg-ink-faint)]">{u.note}</p>
                 </div>
-              </li>
-            )
-          )}
+              )}
+            </li>
+          ))}
         </ul>
       </div>
     </div>

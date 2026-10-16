@@ -23,13 +23,19 @@ import { PlacesListScreen } from "@/places";
 import { CityMapScreen } from "@/map";
 import { SearchScreen } from "@/search/ui/SearchScreen";
 import { AlertsScreen } from "@/alerts";
-import { ProfileScreen } from "@/auth";
+import { ProfileScreen, AccountScreen } from "@/auth";
 import { EventsScreen } from "@/events";
 import { TransportScreen } from "@/transport";
 import { OrgsScreen } from "@/orgs";
 import { RealtyScreen } from "@/realty";
 import { NotificationsScreen } from "@/notifications";
 import { BusinessScreen } from "@/business";
+import {
+  CategoryPlacesScreen,
+  MunicipalScreen,
+  SafetyScreen,
+  AccessibilityScreen,
+} from "@/catalogs";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -81,27 +87,18 @@ export default function App() {
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
-    if (tab === "home") {
-      setScreen("main");
-      return;
-    }
-    if (tab === "news") {
-      setScreen("news");
-      return;
-    }
-    if (tab === "more") {
-      setScreen("more");
-      return;
-    }
-    if (tab === "transport") {
-      setScreen("transport");
-    }
+    if (tab === "home") setScreen("main");
+    else if (tab === "news") setScreen("news");
+    else if (tab === "more") setScreen("more");
+    else if (tab === "transport") setScreen("transport");
   };
 
   const backHome = () => {
     setActiveTab("home");
     setScreen("main");
   };
+
+  const backMore = () => setScreen("more");
 
   return (
     <div className="fixed inset-0 h-dvh w-full overflow-hidden bg-[var(--sg-surface)]">
@@ -160,60 +157,134 @@ export default function App() {
               onBack={backHome}
               onOpenAlerts={() => setScreen("alerts")}
               onOpenProfile={() => setScreen("profile")}
+              onOpenAccount={() => setScreen("account")}
               onOpenEvents={() => setScreen("events")}
               onOpenOrgs={() => setScreen("orgs")}
               onOpenRealty={() => setScreen("realty")}
               onOpenNotifications={() => setScreen("notifications")}
               onOpenBusiness={() => setScreen("business")}
+              onOpenMedicine={() => setScreen("medicine")}
+              onOpenEducation={() => setScreen("education")}
+              onOpenTourism={() => setScreen("tourism")}
+              onOpenSport={() => setScreen("sport")}
+              onOpenMunicipal={() => setScreen("municipal")}
+              onOpenSafety={() => setScreen("safety")}
+              onOpenAccessibility={() => setScreen("accessibility")}
             />
+          </motion.div>
+        )}
+
+        {screen === "account" && (
+          <motion.div key="account" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <AccountScreen onBack={backMore} onOpenProfile={() => setScreen("profile")} />
           </motion.div>
         )}
 
         {screen === "profile" && (
           <motion.div key="profile" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <ProfileScreen onBack={() => setScreen("more")} />
+            <ProfileScreen onBack={backMore} />
+          </motion.div>
+        )}
+
+        {screen === "medicine" && (
+          <motion.div key="medicine" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CategoryPlacesScreen
+              city={city}
+              title="Медицина"
+              categories={["health"]}
+              note="Каталог точек health из пилота. Не запись к врачу."
+              onBack={backMore}
+            />
+          </motion.div>
+        )}
+
+        {screen === "education" && (
+          <motion.div key="education" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CategoryPlacesScreen
+              city={city}
+              title="Образование"
+              categories={["education"]}
+              note="Каталог education. Не приёмная комиссия."
+              onBack={backMore}
+            />
+          </motion.div>
+        )}
+
+        {screen === "tourism" && (
+          <motion.div key="tourism" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CategoryPlacesScreen
+              city={city}
+              title="Туризм и культура"
+              categories={["culture", "poi", "park"]}
+              note="Ориентиры и культура. Не турагентство."
+              onBack={backMore}
+            />
+          </motion.div>
+        )}
+
+        {screen === "sport" && (
+          <motion.div key="sport" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CategoryPlacesScreen
+              city={city}
+              title="Спорт"
+              categories={["sport", "park"]}
+              note="Площадки и парки из каталога."
+              onBack={backMore}
+            />
+          </motion.div>
+        )}
+
+        {screen === "municipal" && (
+          <motion.div key="municipal" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <MunicipalScreen onBack={backMore} />
+          </motion.div>
+        )}
+
+        {screen === "safety" && (
+          <motion.div key="safety" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <SafetyScreen onBack={backMore} onOpenAlerts={() => setScreen("alerts")} />
+          </motion.div>
+        )}
+
+        {screen === "accessibility" && (
+          <motion.div key="accessibility" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <AccessibilityScreen onBack={backMore} />
           </motion.div>
         )}
 
         {screen === "events" && (
           <motion.div key="events" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <EventsScreen city={city} onBack={() => setScreen("more")} />
+            <EventsScreen city={city} onBack={backMore} />
           </motion.div>
         )}
 
         {screen === "transport" && (
           <motion.div key="transport" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <TransportScreen
-              city={city}
-              onBack={() => {
-                setActiveTab("home");
-                setScreen("main");
-              }}
-            />
+            <TransportScreen city={city} onBack={backHome} />
           </motion.div>
         )}
 
         {screen === "orgs" && (
           <motion.div key="orgs" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <OrgsScreen city={city} onBack={() => setScreen("more")} />
+            <OrgsScreen city={city} onBack={backMore} />
           </motion.div>
         )}
 
         {screen === "realty" && (
           <motion.div key="realty" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <RealtyScreen city={city} onBack={() => setScreen("more")} />
+            <RealtyScreen city={city} onBack={backMore} />
           </motion.div>
         )}
 
         {screen === "notifications" && (
           <motion.div key="notifications" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <NotificationsScreen onBack={() => setScreen("more")} />
+            <NotificationsScreen onBack={backMore} />
           </motion.div>
         )}
 
         {screen === "business" && (
           <motion.div key="business" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
-            <BusinessScreen onBack={() => setScreen("more")} />
+            <BusinessScreen onBack={backMore} />
           </motion.div>
         )}
 

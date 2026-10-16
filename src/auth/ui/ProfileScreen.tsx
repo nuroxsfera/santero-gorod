@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   getOrCreateGuestSession,
   setGuestDisplayName,
@@ -11,16 +11,14 @@ interface Props {
   onBack: () => void;
 }
 
-export function ProfileScreen({ onBack }: Props) {
-  const [session, setSession] = useState<GuestSession | null>(null);
-  const [name, setName] = useState("");
-  const [saved, setSaved] = useState(false);
+function readSession(): GuestSession {
+  return getOrCreateGuestSession();
+}
 
-  useEffect(() => {
-    const s = getOrCreateGuestSession();
-    setSession(s);
-    setName(s.displayName ?? "");
-  }, []);
+export function ProfileScreen({ onBack }: Props) {
+  const [session, setSession] = useState<GuestSession>(() => readSession());
+  const [name, setName] = useState(() => readSession().displayName ?? "");
+  const [saved, setSaved] = useState(false);
 
   const save = () => {
     const next = setGuestDisplayName(name.trim() || null);
@@ -66,18 +64,16 @@ export function ProfileScreen({ onBack }: Props) {
           {saved ? "Сохранено" : "Сохранить"}
         </button>
 
-        {session && (
-          <div className="mt-6 rounded-[var(--sg-radius-lg)] bg-white p-4 text-[13px] text-[var(--sg-ink-muted)] ring-1 ring-[var(--sg-border)]">
-            <p>
-              <span className="font-semibold text-[var(--sg-ink)]">ID гостя:</span>{" "}
-              <span className="break-all font-mono text-[11px]">{session.id}</span>
-            </p>
-            <p className="mt-2">
-              <span className="font-semibold text-[var(--sg-ink)]">Создан:</span>{" "}
-              {new Date(session.createdAt).toLocaleString("ru-RU")}
-            </p>
-          </div>
-        )}
+        <div className="mt-6 rounded-[var(--sg-radius-lg)] bg-white p-4 text-[13px] text-[var(--sg-ink-muted)] ring-1 ring-[var(--sg-border)]">
+          <p>
+            <span className="font-semibold text-[var(--sg-ink)]">ID гостя:</span>{" "}
+            <span className="break-all font-mono text-[11px]">{session.id}</span>
+          </p>
+          <p className="mt-2">
+            <span className="font-semibold text-[var(--sg-ink)]">Создан:</span>{" "}
+            {new Date(session.createdAt).toLocaleString("ru-RU")}
+          </p>
+        </div>
       </div>
     </div>
   );

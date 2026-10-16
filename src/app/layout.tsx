@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Rubik } from "next/font/google";
+import { PwaRegister } from "./ui/PwaRegister";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
   title: "Santero Город",
   description:
     "Цифровое пространство города: карта, новости, работа и сервисы — в одном месте.",
+  manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -36,7 +38,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#f4f6f9",
+  themeColor: "#058bed",
 };
 
 export default function RootLayout({
@@ -47,7 +49,10 @@ export default function RootLayout({
       lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} ${logoFont.variable} h-full`}
     >
-      <body className="h-full overflow-hidden antialiased">{children}</body>
+      <body className="h-full overflow-hidden antialiased">
+        <PwaRegister />
+        {children}
+      </body>
     </html>
   );
 }

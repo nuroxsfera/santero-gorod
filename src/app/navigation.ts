@@ -29,7 +29,11 @@ export type Screen =
   | "sport"
   | "municipal"
   | "safety"
-  | "accessibility";
+  | "accessibility"
+  | "community"
+  | "family"
+  | "commerce"
+  | "emergency";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

@@ -36,6 +36,10 @@ import {
   SafetyScreen,
   AccessibilityScreen,
 } from "@/catalogs";
+import { CommunityScreen } from "@/community";
+import { FamilyScreen } from "@/family";
+import { CommerceScreen } from "@/commerce";
+import { EmergencyScreen } from "@/emergency";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -170,6 +174,10 @@ export default function App() {
               onOpenMunicipal={() => setScreen("municipal")}
               onOpenSafety={() => setScreen("safety")}
               onOpenAccessibility={() => setScreen("accessibility")}
+              onOpenCommunity={() => setScreen("community")}
+              onOpenFamily={() => setScreen("family")}
+              onOpenCommerce={() => setScreen("commerce")}
+              onOpenEmergency={() => setScreen("emergency")}
             />
           </motion.div>
         )}
@@ -183,6 +191,30 @@ export default function App() {
         {screen === "profile" && (
           <motion.div key="profile" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
             <ProfileScreen onBack={backMore} />
+          </motion.div>
+        )}
+
+        {screen === "community" && (
+          <motion.div key="community" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CommunityScreen city={city} onBack={backMore} />
+          </motion.div>
+        )}
+
+        {screen === "family" && (
+          <motion.div key="family" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <FamilyScreen onBack={backMore} />
+          </motion.div>
+        )}
+
+        {screen === "commerce" && (
+          <motion.div key="commerce" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CommerceScreen onBack={backMore} />
+          </motion.div>
+        )}
+
+        {screen === "emergency" && (
+          <motion.div key="emergency" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <EmergencyScreen onBack={backMore} onOpenAlerts={() => setScreen("alerts")} />
           </motion.div>
         )}
 

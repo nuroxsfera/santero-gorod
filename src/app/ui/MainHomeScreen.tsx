@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import type { Locality } from "@/geography";
 import { PILOT_CITY } from "@/config/pilot";
@@ -49,7 +49,6 @@ export function MainHomeScreen({
       transition={{ duration: 0.35 }}
     >
       <div className="mx-auto flex h-full w-full max-w-lg flex-col">
-        {/* Top bar */}
         <div className="relative z-20 px-4 pb-1 pt-[max(0.85rem,env(safe-area-inset-top))]">
           <div className="flex items-center gap-2.5">
             <button
@@ -97,7 +96,6 @@ export function MainHomeScreen({
           className="flex-1 overflow-y-auto px-4"
           style={{ paddingBottom: 128 }}
         >
-          {/* Hero */}
           <motion.div
             className="sg-hero-gradient relative mb-6 overflow-hidden rounded-[var(--sg-radius-xl)] text-white shadow-[var(--sg-shadow-glow)]"
             animate={{
@@ -131,7 +129,6 @@ export function MainHomeScreen({
             </div>
           </motion.div>
 
-          {/* Bento services */}
           <p className="mb-3 px-1 text-[12px] font-semibold uppercase tracking-[0.1em] text-[var(--sg-ink-faint)]">
             Сервисы
           </p>
@@ -186,7 +183,6 @@ export function MainHomeScreen({
             />
           </div>
 
-          {/* Now */}
           <p className="mb-3 px-1 text-[12px] font-semibold uppercase tracking-[0.1em] text-[var(--sg-ink-faint)]">
             Сейчас
           </p>
@@ -206,7 +202,7 @@ export function MainHomeScreen({
                 <span className="block text-[15px] font-semibold text-[var(--sg-ink)]">Предупреждения</span>
                 <span className="mt-0.5 block text-[13px] text-[var(--sg-ink-muted)]">Честная лента · без шума</span>
               </span>
-              <svg className="shrink-0 text-[var(--sg-ink-faint)] opacity-60 transition group-active:translate-x-0.5" width="16" height="16" viewBox="0 0 16 16">
+              <svg className="shrink-0 text-[var(--sg-ink-faint)] opacity-60" width="16" height="16" viewBox="0 0 16 16">
                 <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" />
               </svg>
             </button>
@@ -255,7 +251,7 @@ function ServiceTile({
   subtitle: string;
   onClick: () => void;
   tone: keyof typeof TONE;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }) {
   const t = TONE[tone];
   return (

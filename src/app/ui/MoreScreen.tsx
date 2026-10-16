@@ -3,19 +3,18 @@
 interface Props {
   onBack: () => void;
   onOpenAlerts?: () => void;
+  onOpenProfile?: () => void;
 }
 
 const UPCOMING = [
   { title: "Транспорт", note: "Маршруты и остановки" },
   { title: "События", note: "Календарь досуга" },
-  { title: "Погода", note: "После согласования API" },
   { title: "Медицина", note: "Справочник учреждений" },
   { title: "Образование", note: "Школы и кружки" },
   { title: "Недвижимость", note: "Объявления с картой" },
-  { title: "Профиль", note: "После авторизации (H3+)" },
 ];
 
-export function MoreScreen({ onBack, onOpenAlerts }: Props) {
+export function MoreScreen({ onBack, onOpenAlerts, onOpenProfile }: Props) {
   return (
     <div className="flex h-full flex-col bg-[var(--sg-surface)]">
       <header className="flex items-center gap-3 bg-white/90 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[var(--sg-shadow-sm)] backdrop-blur-md">
@@ -31,8 +30,26 @@ export function MoreScreen({ onBack, onOpenAlerts }: Props) {
       </header>
       <div className="flex-1 overflow-y-auto px-4 py-5">
         <p className="mb-4 text-[14px] leading-relaxed text-[var(--sg-ink-muted)]">
-          Доступные разделы и честный roadmap без фейковых экранов.
+          Доступные разделы и roadmap без фейковых экранов.
         </p>
+
+        {onOpenProfile && (
+          <button
+            type="button"
+            onClick={onOpenProfile}
+            className="mb-3 w-full rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Профиль</p>
+                <p className="mt-0.5 text-[13px] text-[var(--sg-ink-faint)]">Гость · имя на устройстве</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-[var(--sg-blue-soft)] px-2.5 py-1 text-[11px] font-semibold text-[var(--sg-blue)]">
+                Открыть
+              </span>
+            </div>
+          </button>
+        )}
 
         {onOpenAlerts && (
           <button
@@ -43,9 +60,7 @@ export function MoreScreen({ onBack, onOpenAlerts }: Props) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Предупреждения</p>
-                <p className="mt-0.5 text-[13px] text-[var(--sg-ink-faint)]">
-                  Отключения и уведомления · H3
-                </p>
+                <p className="mt-0.5 text-[13px] text-[var(--sg-ink-faint)]">Отключения · H3</p>
               </div>
               <span className="shrink-0 rounded-full bg-[var(--sg-blue-soft)] px-2.5 py-1 text-[11px] font-semibold text-[var(--sg-blue)]">
                 Открыть

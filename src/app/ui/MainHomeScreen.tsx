@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { Locality } from "@/geography";
 import { PILOT_CITY } from "@/config/pilot";
+import { WeatherCard } from "@/weather";
 import type { Tab } from "../navigation";
 import { BottomNav } from "./BottomNav";
 
@@ -125,13 +126,14 @@ export function MainHomeScreen({
             <ServiceTile title="Карта" subtitle="2D · OSM" accent="#e8f4fd" icon="🗺️" onClick={onOpenMap} />
             <ServiceTile title="Новости" subtitle="Live + демо" accent="#f0f9ff" icon="📰" onClick={onOpenNews} />
             <ServiceTile title="Работа" subtitle="Только демо" accent="#f0fdf4" icon="💼" onClick={onOpenJobs} />
-            <ServiceTile title="Места" subtitle="Точки города" accent="#fefce8" icon="📍" onClick={onOpenPlaces} />
+            <ServiceTile title="Места" subtitle="Каталог НСК" accent="#fefce8" icon="📍" onClick={onOpenPlaces} />
           </div>
 
           <p className="mb-3 px-0.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[var(--sg-ink-faint)]">
             Сейчас
           </p>
           <div className="space-y-3">
+            <WeatherCard city={city} />
             <button
               type="button"
               onClick={onOpenAlerts}
@@ -142,11 +144,6 @@ export function MainHomeScreen({
                 Demo-лента · без фейковых угроз
               </p>
             </button>
-            <InfoCard
-              title="Погода"
-              body="Виджет появится после подключения API. Пока без выдуманных цифр."
-              muted
-            />
             <button
               type="button"
               onClick={onOpenMap}
@@ -154,7 +151,7 @@ export function MainHomeScreen({
             >
               <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Открыть карту</p>
               <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
-                Новосибирск · маркеры пилота · OpenStreetMap
+                Новосибирск · каталог мест · OpenStreetMap
               </p>
             </button>
           </div>
@@ -194,26 +191,5 @@ function ServiceTile({
       <span className="text-[15px] font-semibold text-[var(--sg-ink)]">{title}</span>
       <span className="mt-0.5 text-[12px] text-[var(--sg-ink-faint)]">{subtitle}</span>
     </button>
-  );
-}
-
-function InfoCard({
-  title,
-  body,
-  muted,
-}: {
-  title: string;
-  body: string;
-  muted?: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-[var(--sg-radius-lg)] p-4 ring-1 ring-[var(--sg-border)] ${
-        muted ? "bg-white/70" : "bg-white shadow-[var(--sg-shadow-sm)]"
-      }`}
-    >
-      <p className="text-[15px] font-semibold text-[var(--sg-ink)]">{title}</p>
-      <p className="mt-1 text-[13px] leading-relaxed text-[var(--sg-ink-muted)]">{body}</p>
-    </div>
   );
 }

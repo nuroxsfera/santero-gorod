@@ -3,3 +3,4 @@ export {
   setGuestDisplayName,
   type GuestSession,
 } from "./guest";
+export { ProfileScreen } from "./ui/ProfileScreen";

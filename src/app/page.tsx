@@ -23,6 +23,7 @@ import { PlacesListScreen } from "@/places";
 import { CityMapScreen } from "@/map";
 import { SearchScreen } from "@/search/ui/SearchScreen";
 import { AlertsScreen } from "@/alerts";
+import { ProfileScreen } from "@/auth";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -163,7 +164,18 @@ export default function App() {
                 setScreen("main");
               }}
               onOpenAlerts={() => setScreen("alerts")}
+              onOpenProfile={() => setScreen("profile")}
             />
+          </motion.div>
+        )}
+
+        {screen === "profile" && (
+          <motion.div
+            key="profile"
+            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
+            {...sheet}
+          >
+            <ProfileScreen onBack={() => setScreen("more")} />
           </motion.div>
         )}
 

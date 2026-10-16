@@ -9,59 +9,50 @@
 
 | Измерение | % |
 |-----------|---|
-| Функции прототипа | ~58 |
+| Функции прототипа | ~68 |
 | Визуальная оболочка | ~45 |
-| Инфраструктура | ~55 |
-| Публичный запуск | ~34 |
+| Инфраструктура | ~58 |
+| Публичный запуск | ~40 |
 
 ---
 
 ## Горизонт 1 — ✅ ЗАКРЫТ
 
----
-
 ## Горизонт 2 — ✅ ЗАКРЫТ ПОЛНОСТЬЮ
 
-- [x] Code-complete
-- [x] Mobile smoke (владелец)
-- [x] Neon connection (`DATABASE_URL`, health connected)
+---
 
-Всё по H2 закрыто. Отложенное (схема таблиц, design-2) перенесено в **H4**.
+## Горизонт 3 — польза жителям ✅ CODE-COMPLETE
+
+- [x] Alerts domain + **Alerts UI**
+- [x] 2+ live news sources (toggazeta + Lenta)
+- [x] Jobs «только demo»
+- [x] **Places catalog НСК** — curated ~25 POI (не полный OSM dump; source `curated-osm-nsk`)
+- [x] **Weather** — Open-Meteo (без API-ключа) + виджет на главной
+- [x] **Auth H3** — профиль гостя (имя на устройстве); OAuth/пароль — позже
+- [x] **Moderation basics** — очередь + API demo (`/api/v1/moderation`)
+
+> Полный OSM extract города и серверный OAuth — расширение после H3, не блокеры закрытия code-scope H3.
 
 ---
 
-## Горизонт 3 — польза жителям *(в работе)*
+## Горизонт 4 — экосистема + отложенное
 
-- [x] Alerts domain skeleton
-- [x] **Alerts UI** (read-only, demo, честные метки)
-- [x] **2+ live news sources** (toggazeta + Lenta.ru metadata)
-- [x] Jobs: явная политика «только demo» на главной
-- [ ] Places catalog из OSM extract НСК
-- [ ] Weather API (после OK владельца)
-- [ ] Auth accounts (поверх guest)
-- [ ] Moderation basics (W минимум)
-
----
-
-## Горизонт 4 — экосистема + отложенное с H2
-
-- [x] Events domain skeleton
-- [x] Transport domain skeleton
-- [ ] **Neon schema apply** — таблицы ещё **не** накатывались (SQL Editor / migrate API)
-- [ ] **Design pass 2** — UX уровня Яндекс/Сбер (воздух, меньше «карточек»)
+- [x] Events / Transport domain skeletons
+- [ ] **Neon schema apply** — таблицы ещё не накатывались
+- [ ] **Design pass 2** — UX уровня Яндекс/Сбер
 - [ ] Events calendar UI
 - [ ] Transport UI / GTFS
 - [ ] Organization profiles
 - [ ] Map B2
-- [ ] Business tools U
-- [ ] Unified notifications V
-- [ ] Realty / commerce catalogs
+- [ ] Business tools U · Notifications V · Realty
+- [ ] Full OSM extract pipeline · OAuth accounts
 
 ---
 
 ## Горизонт 5 — spatial
 
-- [ ] Map B3 · layers · 3D pipeline · offline cache
+- [ ] Map B3 · layers · 3D · offline
 
 ---
 
@@ -73,6 +64,5 @@
 
 ## Очередь
 
-1. CI после H3 Alerts UI
-2. Places OSM extract / расширение POI
-3. H4: schema + design-2 по приоритету владельца
+1. CI H3 close
+2. H4: schema / design-2 / Events UI — по приоритету

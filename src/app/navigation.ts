@@ -14,7 +14,8 @@ export type Screen =
   | "map"
   | "search"
   | "more"
-  | "alerts";
+  | "alerts"
+  | "profile";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

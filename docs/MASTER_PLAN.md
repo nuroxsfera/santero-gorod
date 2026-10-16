@@ -1,480 +1,98 @@
 # Santero Город — мастер-план экосистемы
 
-**Статус документа:** источник истины для продукта (v1.0, 2026-10-15)  
-**Связанные отчёты:** `docs/PROJECT_REPORT.md`, `docs/STATUS.md`, модульные README  
-**Принцип:** сначала описываем всю экосистему, затем строим по горизонтам. Не смешиваем «спроектировано» с «работает».
+**Версия:** 1.2 · 2026-10-16  
+**Пилот:** Новосибирск  
+**Принцип:** не смешивать «спроектировано» и «работает». Demo всегда помечен.
+
+См. также: `docs/PROGRESS.md` (галочки горизонтов).
 
 ---
 
-## 1. Продуктовое видение
+## 1. Видение
 
-Santero Город — **единое цифровое пространство жизни в городе**: информация, сервисы, карта, работа, досуг, инфраструктура и бизнес в одной согласованной системе.
+Единое цифровое пространство жизни в городе: информация, карта, сервисы, работа, досуг, инфраструктура и бизнес — с честными границами demo / live / partner.
 
-Пользователь (житель, гость, семья, предприниматель, организация) должен в одном продукте:
-
-- понимать, что происходит в городе сейчас;
-- находить места, услуги, специалистов и организации;
-- ориентироваться через **интерактивную 3D-карту** (ключевой модуль);
-- получать надёжные городские предупреждения;
-- планировать досуг и события;
-- искать работу, жильё, образование, медицину, товары;
-- пользоваться доступными цифровыми услугами;
-- взаимодействовать с бизнесом и инфраструктурой;
-- получать персональную и своевременную информацию **без десятка разрозненных приложений**.
-
-Это **долгосрочное** видение. Реализация — поэтапная, с честными границами demo / real / partner-only.
-
-**Не цели первой версии:** цифровой двойник всех зданий, оплата, госуслуги «как Госуслуги», медицинская диагностика, «офиставка всего».
+**Не цели ранних горизонтов:** полный 3D-twin всех зданий, оплата «как маркетплейс», госуслуги «как Госуслуги», меддиагностика.
 
 ---
 
-## 2. Аудит текущего состояния (Horizon 1)
+## 2. Горизонты (чеклист)
 
-### Что есть в репозитории (подтверждено кодом)
+### Horizon 1 — платформа ✅
+Geography · News/Jobs demo · shell · CI · API v1 · DB layer ready
 
-| Область | Состояние |
-|---------|-----------|
-| Next.js App Router + TS + Tailwind + Framer Motion | Да |
-| Splash, city select, travel, main shell, bottom nav | Да (UI) |
-| Geography: localityId, регионы, поиск, CityContext | Да, client + seed/catalog |
-| News: domain, filters, demo feed, article UI, API v1 | Да, **данные demo** |
-| Jobs: vacancies/resume/applications demo + UI + API GET | Да, **данные demo** |
-| RSS parser metadata-only + preview API (off) | Да, **не в публичной ленте** |
-| CI (typecheck, tests, lint, build) | Да |
-| Postgres / Neon | **Не подключено** |
-| Auth | **Нет** |
-| 3D-карта | **Нет** |
-| Погода, транспорт, недвижимость, POI-каталог | **Нет** |
-| Push / единые уведомления | **Нет** |
+### Horizon 2 — цельная демонстрация ✅
+Map B1 · Search · Places · honest labels · hybrid news · mobile smoke · Neon connect
 
-### Уровни готовности (глобально)
+### Horizon 3 — польза ✅
+Alerts UI · live RSS≥2 · NSK places catalog · Open-Meteo · guest profile · moderation queue
 
-| Измерение | Оценка | Комментарий |
-|-----------|--------|-------------|
-| Функциональная (прототип) | ~25% | Город + demo news/jobs + API контракт |
-| Визуальная (оболочка) | ~35% | Splash/main/news/jobs; нет карты и многих экранов |
-| Инфраструктура | ~15% | CI + API routes; нет БД/auth/CDN 3D |
-| Публичный запуск | ~10% | Нельзя выдавать demo за real city OS |
+### Horizon 4 — экосистема ✅ code
+Events/Transport UI · Orgs · Realty · Notifications · Business shell · Map B2 · Design-2 · schema 1.1
 
-**Критерии галочки в этом плане:** только если реализовано **и** проверено (CI / браузер / контракт). Заглушка ≠ готово.
+**Owner ops (не код):** apply schema on Neon
+
+### Horizon 5 — spatial + depth ✅ code
+Map B3 layers + pitch · OSM pipeline docs · account model · catalogs F/G/N/O/Q/R · accessibility settings  
+**Не закрыто кодом:** full OSM dump · real OAuth · mesh twin · full offline tiles → H6
+
+### Horizon 6 — multi-city / ops / partner
+Onboarding · SLA · Partner API · Push · UGC · Family · Commerce payments · Emergency official · real OAuth · full OSM in DB · PWA polish · leftover owner ops
 
 ---
 
-## 3. Общие сущности и архитектура связей
+## 3. Модули (статус)
 
-### 3.1 Ядро платформы (Platform Core)
-
-Общие строительные блоки — **не дублировать** в каждом модуле:
-
-| Сущность | Назначение |
-|----------|------------|
-| `Locality` / `Region` / `fiasId` | География (уже v1.0 contract) |
-| `Place` / `Building` / `Address` | Точки и адреса на карте |
-| `Organization` | Юрлицо / ИП / учреждение |
-| `ServiceOffer` | Услуга организации |
-| `GeoFeature` | Точка / линия / полигон |
-| `ContentItem` | Новость, объявление, предупреждение |
-| `EventOccurrence` | Событие во времени и месте |
-| `Listing` | Вакансия, объявление жилья, товар |
-| `User` / `OrgMember` | Аккаунт (позже) |
-| `Subscription` | Подписка на территорию/категорию |
-| `ModerationCase` | Жалоба / модерация |
-
-### 3.2 Схема взаимосвязей (логическая)
-
-```
-                    ┌─────────────────────┐
-                    │   Universal Search  │
-                    └──────────┬──────────┘
-                               │
-┌──────────────┐    ┌──────────▼──────────┐    ┌────────────────┐
-│ Notifications│◄───│   Platform Core     │───►│  Auth & Roles  │
-│  (unified)   │    │ Geo · Place · Org   │    │   (later)      │
-└──────┬───────┘    └──────────┬──────────┘    └────────────────┘
-       │                       │
-       │         ┌─────────────┼─────────────┐
-       │         ▼             ▼             ▼
-       │    ┌────────┐   ┌──────────┐  ┌───────────┐
-       └───►│  Map   │◄──│ Content  │  │ Listings  │
-            │ 3D/2D  │   │ News·Alert│  │ Jobs·RE  │
-            └────┬───┘   │ Events   │  │ Commerce │
-                 │       └──────────┘  └───────────┘
-                 │             │              │
-            Places · Transport · Weather · POI layers
-```
-
-**Правила связей:**
-
-- Карта — **пространственный индекс** Place/Org/Event/Alert/Listing.
-- Новости и предупреждения несут `geo` + `source` + `isOfficial` / `isDemo`.
-- Событие → Place + время + опционально маршрут/погода.
-- Недвижимость → Place + соседние Place (школы, медицина) **только из каталога**.
-- Организация → карточка на карте + вакансии + события + контакты.
-- Погода влияет на **рекомендации**, не на «гарантии».
-- Уведомления — **один** пайплайн (модуль V), модули только публикуют события.
-- Geography `localityId` — единственный стабильный городской ключ для контента.
-
-### 3.3 Технический стек (эволюция без смены платформы)
-
-| Слой | Сейчас | Цель |
-|------|--------|------|
-| Client | Next.js App Router | То же + PWA позже |
-| API | Route Handlers `/api/v1/*` | То же + versioned contracts |
-| Data | InMemory + demo | **Neon Postgres** (free) |
-| Geo | Catalog/seed | Postgres + tile/vector sources |
-| Map | — | MapLibre / Cesium / deck.gl — выбор на Horizon 2–3 |
-| Auth | — | Отложить до нужды записи пользовательских данных |
-| Media / 3D assets | — | Object storage (после согласия) |
-| CI | GitHub Actions | Сохранить |
-
-**Запреты плана:** платные сервисы без OK владельца; нелегальный скрейпинг; выдача demo за live; хранение медданных без правовой модели.
+| ID | Название | Статус |
+|----|----------|--------|
+| A | Home | partial+ |
+| B | Map | B1–B3 shell |
+| C | News | hybrid live+demo |
+| D | Alerts | demo UI |
+| E | Weather | Open-Meteo live |
+| F | Medicine | catalog filter |
+| G | Education | catalog filter |
+| H | Jobs | demo only |
+| I | Realty | demo |
+| J/K | Commerce/Food | not started |
+| L | Transport | ref catalog |
+| M | Events | demo UI |
+| N/O | Tourism/Sport | catalog |
+| P | Family | H6 |
+| Q/R | Municipal/Safety | demo contacts |
+| S | Community | H6 |
+| T | Search/Profile | partial |
+| U | Business | shell |
+| V | Notifications | local |
+| W | Moderation | queue API |
+| X | Accessibility | settings |
+| Y | Emergency | H6 |
+| Z/AA | Partner / multi-city | H6 |
 
 ---
 
-## 4. Продуктовая карта модулей
+## 4. Карта (уровни B)
 
-Легенда готовности модуля: **0%** нет · **1–20%** контракт/demo · **21–50%** UI+logic partial · **51–80%** real data partial · **81–100%** production-ready path.
-
----
-
-### Модуль A. Главная и персональный городской центр
-
-| | |
-|--|--|
-| **Польза** | За 10 секунд: город, важное, быстрые действия |
-| **Сценарии** | Открыл приложение → выбрал город → увидел сводку → перешёл в новости/работу/карту |
-| **Экраны** | Home, empty/onboarding, customize widgets (позже) |
-| **v1** | Город, shortcuts, карточки News/Jobs, honest stubs |
-| **Будущее** | Погода, алерты, события рядом, избранное, рекомендации, настройка блоков |
-| **Данные** | CityContext; позже Content + Weather + Alerts |
-| **Backend/Auth** | Чтение без auth; персонализация — с auth |
-| **PII** | Избранное/адрес — только с согласия |
-| **DoD** | Нет ложных «живых» блоков; пустые состояния честные |
-| **Статус** | ~40% UI прототипа |
-| **Зависимости** | Geography, Nav |
+| Level | Содержание | Статус |
+|-------|------------|--------|
+| B1 | 2D OSM + markers | ✅ |
+| B2 | Category colors | ✅ |
+| B3 | Layers + pitch/3D camera | ✅ shell |
+| B3+ | Mesh twin / full offline | H6 |
 
 ---
 
-### Модуль B. Интерактивная 3D-карта (ключевой)
+## 5. Данные и закон
 
-| | |
-|--|--|
-| **Польза** | Пространственное понимание города, объекты «на месте» |
-| **Сценарии** | Найти место; ткнуть здание; слой транспорта; маршрут; посмотреть ремонт на улице |
-| **Экраны** | Map fullscreen, object sheet, layer picker, search-on-map, 2D fallback |
-
-**Уровни реализации**
-
-| Уровень | Содержание | Данные / лицензии | Когда |
-|---------|------------|-------------------|-------|
-| **B1** | 2D/лёгкий 3D-terrain + маркеры Place, поиск, sheet | OSM / MapLibre GL, без детальных мешей зданий | Horizon 2–3 |
-| **B2** | Extrusion/LOD зданий где есть height/footprint; слои POI; алерты-полигоны | OSM buildings + optional paid tiles **только с OK** | Horizon 4 |
-| **B3** | Детальный twin выборочных зон, кастомные модели | Контракты на модели, хостинг mesh, сильная infra | Horizon 5 |
-
-**Реализм:** детальные модели *всех* зданий из открытых данных **недоступны** дёшево. B1 — обязательный честный старт. Accessibility: всегда 2D-режим и список.
-
-| **Статус** | 0% |
-| **Риски** | Лицензии тайлов, perf mobile, стоимость 3D |
+- RSS: metadata only  
+- OSM: attribution required  
+- Demo ≠ official alert  
+- No paid APIs without owner OK  
 
 ---
 
-### Модуль C. Новости и информационная среда
-
-| | |
-|--|--|
-| **Польза** | Понятная лента с источником и географией |
-| **Сценарии** | Город/регион/федерация; фильтр; открыть; перейти к оригиналу |
-| **v1** | Demo + API; metadata RSS prepared |
-| **Будущее** | Live sources, org news, corrections/retractions UI |
-| **Данные** | Legal RSS/API only; title+link+date минимум |
-| **Статус** | ~45% product shell, **0% live content in feed** |
-| **Риски** | Copyright; 403 official sites |
-
----
-
-### Модуль D. Умные городские уведомления и предупреждения
-
-| | |
-|--|--|
-| **Польза** | «Затронет ли меня отключение?» без шума |
-| **Сценарии** | Подписка на район; статус planned/active/done; источник |
-| **v1** | Модель Alert + UI read-only из официальных фидов |
-| **Будущее** | Полигоны, push, точный адрес **только при подтверждённых данных** |
-| **Правило** | Никогда не утверждать «ваш дом» без точных данных |
-| **Статус** | 0% |
-| **Зависимости** | Geo, Notifications V, надёжные источники |
-
----
-
-### Модуль E. Погода и окружающая среда
-
-| | |
-|--|--|
-| **Польза** | Контекст для дня и досуга |
-| **v1** | Виджет на home + экран прогноза (API с лицензией, после OK) |
-| **Правило** | Прогноз ≠ измерение; указать провайдера |
-| **Статус** | 0% |
-
----
-
-### Модуль F. Медицина и здоровье
-
-| | |
-|--|--|
-| **Польза** | Справочник учреждений, часы, маршрут |
-| **v1** | Каталог POI + карта |
-| **Не делать** | Диагностика, ЭМК, «гарантированная» неотложка |
-| **PII** | Не хранить медданные пользователя в MVP |
-| **Статус** | 0% |
-
----
-
-### Модуль G. Образование и развитие
-
-| | |
-|--|--|
-| **Польза** | Сады, школы, кружки, вузы — поиск и карта |
-| **Особо** | Защита данных несовершеннолетних |
-| **Статус** | 0% |
-
----
-
-### Модуль H. Работа
-
-| | |
-|--|--|
-| **Польза** | Вакансии по городу / remote |
-| **Сейчас** | Demo feed, resume, applications **локально** |
-| **v1 public** | Честный demo или партнёрский feed; apply на сервер после auth |
-| **Статус** | ~40% demo product |
-
----
-
-### Модуль I. Недвижимость
-
-| | |
-|--|--|
-| **Польза** | Аренда/продажа с картой и инфраструктурой рядом |
-| **v1** | Каталог listings + moderation path |
-| **Риски** | Мошенничество — верификация и жалобы обязательны до scale |
-| **Статус** | 0% |
-
----
-
-### Модуль J. Магазины и коммерция
-
-Справочник → позже акции/наличие от партнёров. **Нет вымышленных цен.** Статус: 0%.
-
-### Модуль K. Еда и доставка
-
-Справочник заведений → заказ/оплата только с платёжной моделью. Статус: 0%.
-
-### Модуль L. Транспорт
-
-Остановки/маршруты (справочник) → GTFS/realtime при наличии. Связь с картой и алертами. Статус: 0%.
-
-### Модуль M. События и досуг
-
-Календарь + Place + погода. Билеты — партнёры. Статус: 0% (shortcut «События» сейчас ведёт к новостям — **продуктовый долг**).
-
-### Модуль N. Туризм и история
-
-POI + маршруты + карта. Статус: 0%.
-
-### Модуль O. Спорт и отдых
-
-Площадки, парки, секции. Статус: 0%.
-
-### Модуль P. Семья и бытовые услуги
-
-Каталог услуг + verification исполнителей. Статус: 0%.
-
-### Модуль Q. Муниципальные услуги
-
-Справочник контактов + ссылки на официальные порталы. **Не имитировать** подачу обращений без интеграции. Статус: 0%.
-
-### Модуль R. Безопасность и помощь
-
-Официальные контакты и алерты. UGC ≠ official. Статус: 0%.
-
-### Модуль S. Сообщества и объявления
-
-UGC с модерацией, антиспам, PII limits. Статус: 0%.
-
-### Модуль T. Профиль, поиск, персонализация
-
-Universal search поверх индексов модулей. Гостевой режим для публичного чтения. Статус: ~5% (только city search).
-
-### Модуль U. Бизнес-кабинет
-
-Владение карточкой Org, контент, вакансии. Нужны auth + verification. Статус: 0%.
-
-### Модуль V. Единые уведомления
-
-Один event bus: alerts, news digests, jobs, events. Приоритеты, dedupe, expiry. Статус: 0% (есть только toast-заглушка nav).
-
-### Модуль W. Админка и качество данных
-
-Sources, moderation, audit log, catalogs. Статус: 0%.
-
-### Дополнительные направления (анализ)
-
-| ID | Модуль | Зачем |
-|----|--------|-------|
-| X | **Accessibility city** | Пандусы, низкопольный транспорт, plain language |
-| Y | **Emergency / civil defense** | Только официальные источники |
-| Z | **Developer platform** | Публичные API для партнёров (после стабилизации v1) |
-| AA | **Multi-city ops** | Онбординг города, SLA данных (Horizon 6) |
-
----
-
-## 5. Дизайн-система и экраны
-
-### Уже есть (частично)
-
-Splash · City select · City list · Main · News feed/article · Jobs feed/detail · Resume · Applications · Travel · Bottom nav · Demo banners.
-
-### Нужны (очередь)
-
-Map · Object sheet · Layer control · Alerts list/detail · Weather · Universal search · Profile · Favorites · Notifications center · Org profile · Event detail · Listing detail · Empty/Error/Loading patterns · Admin (internal).
-
-### Принципы UI
-
-- Палитра Santero (`#058BED` и нейтрали) — сохранить.
-- Mobile-first, max-width column на desktop.
-- 3D не блокирует: fallback 2D + list.
-- Честные empty states («скоро» / «демо» / «нет данных»).
-- Не менять весь UI разом — эволюция по экранам.
-
-**Визуальный долг:** иконки nav-квадраты; путаница «События» = новости.
-
----
-
-## 6. Данные, API, безопасность
-
-### API (эволюция)
-
-Уже: `/api/v1/health`, news, jobs (demo), rss-preview (off).
-
-Дальше (по мере модулей): `/places`, `/alerts`, `/events`, `/orgs`, `/search` — единый стиль ошибок `{ error, message }`, без stack trace клиенту.
-
-### Postgres (Neon — выбранный free path)
-
-См. `docs/backend/POSTGRES.md`. Миграции только после `DATABASE_URL` от владельца.
-
-Минимальные таблицы старта: `news_*`, затем `places`, `organizations`, `alerts`.
-
-### Безопасность
-
-- Секреты только в env/Vercel.
-- Нет PII в логах.
-- Auth обязателен для write (отклики, избранное, UGC).
-- Rate limit на ingestion.
-- Модерация до публичного UGC.
-
----
-
-## 7. Горизонты реализации
-
-### Horizon 1 — Текущий прототип *(сейчас)*
-
-- [x] Geography contract + city UX
-- [x] Demo News + Jobs UI
-- [x] API v1 read (demo)
-- [x] CI green
-- [x] MASTER_PLAN создан
-- [ ] Neon connected *(ждёт владельца)*
-- [ ] Live news metadata in feed *(ждёт legal OK)*
-
-### Horizon 2 — Цельная публичная демонстрация
-
-**Обязательно**
-
-- [ ] Единый честный UX: нигде demo не маскируется под live
-- [ ] Home: погода *или* явный stub; алерты stub/list
-- [ ] Map **B1** (2D/terrain + markers) хотя бы для одного пилотного города
-- [ ] Universal search v0 (news + jobs + places stub)
-- [ ] Навигация: развести «События» и «Новости»
-- [ ] Postgres для news metadata (если Neon OK)
-- [ ] Performance/mobile smoke checklist
-
-**Не обязательно:** auth, 3D buildings, payments.
-
-### Horizon 3 — Полезно жителям пилотного города
-
-- [ ] 1–2 live news sources (legal)
-- [ ] Places catalog (OSM-derived) + map
-- [ ] Alerts v1 from official feeds where possible
-- [ ] Weather widget (licensed API after OK)
-- [ ] Jobs: либо партнёр, либо clear «demo only» region
-- [ ] Auth for favorites/subscriptions
-- [ ] Moderation basics (W)
-
-### Horizon 4 — Расширенная экосистема
-
-- [ ] Events, transport layers, org profiles
-- [ ] Map B2 (extrusions / richer layers)
-- [ ] Business tools U (claimed profiles)
-- [ ] Unified notifications V (push after OK)
-- [ ] Real estate / commerce **reference** catalogs
-
-### Horizon 5 — Пространственная платформа
-
-- [ ] Map B3 selective twin
-- [ ] Deep spatial analytics / more layers
-- [ ] Partner 3D assets pipeline
-
-### Horizon 6 — Мультигород
-
-- [ ] City onboarding playbook
-- [ ] Standardized feeds & SLAs
-- [ ] Ops & support model
-
----
-
-## 8. Критический путь и риски
-
-**Зависимости:** Geography → Content geo → Map places → Alerts polygons → Personalization.
-
-| Риск | Митигация |
-|------|-----------|
-| Copyright news | Metadata-only; contracts; no full-text scrape |
-| Map cost/perf | B1 first; 2D fallback; progressive tiles |
-| Fake trust | isDemo / source labels everywhere |
-| Scope creep | Horizons + MASTER_PLAN gate |
-| Free DB pause (Supabase) | Neon preferred |
-| No official RSS (nso.ru 403) | Alternate sources + formal requests |
-
----
-
-## 9. Решения, ожидающие владельца
-
-- [ ] Neon: создать проект, `DATABASE_URL` в Vercel
-- [ ] Live news: OK на metadata toggazeta.ru или другой источник
-- [ ] `ENABLE_RSS_PREVIEW=1` только для теста
-- [ ] Погодный API (какой, платность)
-- [ ] Пилотный город для карты B1 (Тогучин / Новосибирск / другой)
-- [ ] Когда включать Auth
-
----
-
-## 10. Ближайшие задачи (после этого документа)
-
-1. **Согласовать MASTER_PLAN** с владельцем (этот файл).
-2. **Продуктовый долг навигации:** «События» ≠ «Новости» (label/route).
-3. **Place domain skeleton** (types + empty repo) — фундамент карты и POI без UI-фейка.
-4. После OK Neon — миграции news_articles metadata.
-5. После legal OK — controlled RSS metadata ingest job (не full text).
-
----
-
-## 11. Как вести работу
-
-1. Перед крупной фичей — открыть этот файл, взять приоритет Horizon.
-2. После работы — чекбоксы только при DoD; обновить `PROJECT_REPORT.md`.
-3. Новые идеи — сначала секция модуля + горизонт, потом код.
-4. CI после существенных изменений.
-
----
-
-*Конец MASTER_PLAN v1.0. Масштаб зафиксирован: городская экосистема с 3D-картой как опорой; сейчас — честный прототип Geography + demo News/Jobs + API foundation.*
+## 6. Следующий фокус
+
+1. H6 multi-city / partner  
+2. Owner: Neon migrate  
+3. Real OAuth when secrets ready  

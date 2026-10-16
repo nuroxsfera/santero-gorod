@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locality } from "@/geography";
 import type { Place, PlaceCategory } from "@/places";
 import { getPlaceService } from "@/places";
@@ -11,6 +11,17 @@ interface Props {
   onBack: () => void;
   onOpenList: () => void;
 }
+
+const LAYER_OPTIONS: { id: PlaceCategory | "all"; label: string }[] = [
+  { id: "all", label: "Все" },
+  { id: "transport_stop", label: "Транспорт" },
+  { id: "culture", label: "Культура" },
+  { id: "park", label: "Парки" },
+  { id: "education", label: "Учёба" },
+  { id: "health", label: "Медицина" },
+  { id: "shop", label: "Магазины" },
+  { id: "sport", label: "Спорт" },
+];
 
 function markerColor(category: PlaceCategory): string {
   switch (category) {
@@ -37,7 +48,7 @@ function markerColor(category: PlaceCategory): string {
   }
 }
 
-/** Map B2: category-colored markers + richer chrome. Still 2D OSM, not twin. */
+/** Map B3: layers + pitch (3D camera). Not a mesh twin. */
 export function CityMapScreen({ city, onBack, onOpenList }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("maplibre-gl").Map | null>(null);
@@ -45,10 +56,17 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
   const [selected, setSelected] = useState<Place | null>(null);
   const [places, setPlaces] = useState<Place[]>([]);
   const [ready, setReady] = useState(false);
+  const [layer, setLayer] = useState<PlaceCategory | "all">("all");
+  const [pitch3d, setPitch3d] = useState(false);
 
   const center: [number, number] = city
     ? [city.lon ?? PILOT_CITY.lon, city.lat ?? PILOT_CITY.lat]
     : [PILOT_CITY.lon, PILOT_CITY.lat];
+
+  const visible = useMemo(() => {
+    if (layer === "all") return places;
+    return places.filter((p) => p.category === layer);
+  }, [places, layer]);
 
   useEffect(() => {
     let cancelled = false;
@@ -92,10 +110,15 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
           },
           center,
           zoom: 12.2,
+          pitch: 0,
+          maxPitch: 60,
         });
 
         map.addControl(
-          new maplibregl.NavigationControl({ showCompass: true, visualizePitch: true }),
+          new maplibregl.NavigationControl({
+            showCompass: true,
+            visualizePitch: true,
+          }),
           "top-right"
         );
         mapRef.current = map;
@@ -116,7 +139,13 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
   }, [city?.id]);
 
   useEffect(() => {
-    if (!ready || places.length === 0) return;
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    map.easeTo({ pitch: pitch3d ? 45 : 0, duration: 450 });
+  }, [pitch3d, ready]);
+
+  useEffect(() => {
+    if (!ready) return;
     let cancelled = false;
     const markers: import("maplibre-gl").Marker[] = [];
 
@@ -124,7 +153,7 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
       const maplibregl = await import("maplibre-gl");
       if (cancelled || !mapRef.current) return;
 
-      for (const p of places) {
+      for (const p of visible) {
         const el = document.createElement("button");
         el.type = "button";
         el.style.cssText = `width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:${markerColor(
@@ -135,7 +164,6 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
           e.stopPropagation();
           setSelected(p);
         });
-
         markers.push(
           new maplibregl.Marker({ element: el })
             .setLngLat([p.geo.lon, p.geo.lat])
@@ -148,32 +176,61 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
       cancelled = true;
       markers.forEach((m) => m.remove());
     };
-  }, [places, ready]);
+  }, [visible, ready]);
 
   return (
     <div className="relative flex h-full flex-col bg-[var(--sg-surface)]">
-      <header className="relative z-20 flex items-center gap-2 bg-white/90 px-3 py-2.5 backdrop-blur-md">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sg-surface)]"
-          aria-label="Назад"
-        >
-          ←
-        </button>
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[16px] font-semibold text-[var(--sg-ink)]">Карта</h1>
-          <p className="truncate text-[11px] text-[var(--sg-ink-faint)]">
-            {city?.name ?? PILOT_CITY.name} · B2 · OSM
-          </p>
+      <header className="relative z-20 bg-white/90 px-3 py-2.5 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sg-surface)]"
+            aria-label="Назад"
+          >
+            ←
+          </button>
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-[16px] font-semibold text-[var(--sg-ink)]">Карта</h1>
+            <p className="truncate text-[11px] text-[var(--sg-ink-faint)]">
+              {city?.name ?? PILOT_CITY.name} · B3 · слои
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPitch3d((v) => !v)}
+            className={`rounded-full px-3 py-1.5 text-[12px] font-medium ${
+              pitch3d
+                ? "bg-[var(--sg-blue)] text-white"
+                : "bg-[var(--sg-surface)] text-[var(--sg-ink)]"
+            }`}
+          >
+            {pitch3d ? "3D" : "2D"}
+          </button>
+          <button
+            type="button"
+            onClick={onOpenList}
+            className="rounded-full bg-[var(--sg-surface)] px-3 py-1.5 text-[12px] font-medium text-[var(--sg-ink)]"
+          >
+            Список
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={onOpenList}
-          className="rounded-full bg-[var(--sg-surface)] px-3 py-1.5 text-[12px] font-medium text-[var(--sg-ink)]"
-        >
-          Список
-        </button>
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-0.5">
+          {LAYER_OPTIONS.map((opt) => (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => setLayer(opt.id)}
+              className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold ${
+                layer === opt.id
+                  ? "bg-[var(--sg-blue-soft)] text-[var(--sg-blue)]"
+                  : "bg-[var(--sg-surface)] text-[var(--sg-ink-muted)]"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </header>
 
       <div className="relative min-h-0 flex-1">
@@ -185,7 +242,7 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
         <div ref={containerRef} className="absolute inset-0" />
         <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-10">
           <p className="rounded-[14px] bg-white/90 px-2.5 py-1.5 text-[10px] text-[var(--sg-ink-muted)] shadow-[var(--sg-shadow-sm)]">
-            B2 · цвет маркера = категория · © OpenStreetMap
+            B3 · слои POI · pitch ≠ 3D-twin зданий · © OpenStreetMap
           </p>
         </div>
       </div>

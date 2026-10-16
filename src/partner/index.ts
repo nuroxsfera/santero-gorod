@@ -1,0 +1,1 @@
+export { assertPartnerAccess } from "./auth";

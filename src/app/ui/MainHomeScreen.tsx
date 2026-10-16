@@ -42,39 +42,48 @@ export function MainHomeScreen({
   return (
     <motion.div
       key="main"
-      className="absolute inset-0 flex flex-col bg-[var(--sg-surface)]"
+      className="sg-ambient absolute inset-0 flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.35 }}
     >
       <div className="mx-auto flex h-full w-full max-w-lg flex-col">
-        <div className="relative z-20 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
-          <div className="flex items-center gap-2">
+        {/* Top bar */}
+        <div className="relative z-20 px-4 pb-1 pt-[max(0.85rem,env(safe-area-inset-top))]">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={onOpenCityList}
-              className="flex min-w-0 flex-1 items-center gap-2 rounded-[var(--sg-radius-pill)] bg-white px-4 py-2.5 shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
+              className="sg-glass flex min-w-0 flex-1 items-center gap-2.5 rounded-[var(--sg-radius-pill)] px-3.5 py-2.5 transition active:scale-[0.99]"
             >
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--sg-blue-soft)] text-[13px]">
-                📍
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--sg-blue-soft)]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"
+                    stroke="var(--sg-blue)"
+                    strokeWidth="1.8"
+                    fill="rgba(10,132,255,0.15)"
+                  />
+                  <circle cx="12" cy="10" r="2.2" fill="var(--sg-blue)" />
+                </svg>
               </span>
-              <span className="truncate text-[15px] font-semibold text-[var(--sg-ink)]">
+              <span className="truncate text-[15px] font-semibold tracking-tight text-[var(--sg-ink)]">
                 {cityName}
               </span>
-              <svg className="ml-auto shrink-0 opacity-40" width="14" height="14" viewBox="0 0 16 16">
+              <svg className="ml-auto shrink-0 text-[var(--sg-ink-faint)]" width="14" height="14" viewBox="0 0 16 16">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" />
               </svg>
             </button>
             <button
               type="button"
               onClick={onOpenSearch}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-95"
+              className="sg-glass flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition active:scale-95"
               aria-label="Поиск"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <circle cx="11" cy="11" r="6.5" stroke="#64748b" strokeWidth="1.8" />
-                <path d="M16 16l4 4" stroke="#64748b" strokeWidth="1.8" strokeLinecap="round" />
+                <circle cx="11" cy="11" r="6.5" stroke="var(--sg-ink-muted)" strokeWidth="1.8" />
+                <path d="M16 16l4 4" stroke="var(--sg-ink-muted)" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
             </button>
           </div>
@@ -83,53 +92,102 @@ export function MainHomeScreen({
         <div
           ref={scrollRef}
           onScroll={() => {
-            if (scrollRef.current) setCollapsed(scrollRef.current.scrollTop > 24);
+            if (scrollRef.current) setCollapsed(scrollRef.current.scrollTop > 20);
           }}
           className="flex-1 overflow-y-auto px-4"
-          style={{ paddingBottom: 120 }}
+          style={{ paddingBottom: 128 }}
         >
+          {/* Hero */}
           <motion.div
-            className="mb-5 overflow-hidden rounded-[var(--sg-radius-xl)] p-5 text-white shadow-[var(--sg-shadow-md)]"
-            style={{
-              background:
-                "linear-gradient(145deg, #3ba4f5 0%, #058BED 50%, #0369b1 100%)",
+            className="sg-hero-gradient relative mb-6 overflow-hidden rounded-[var(--sg-radius-xl)] text-white shadow-[var(--sg-shadow-glow)]"
+            animate={{
+              minHeight: collapsed ? 64 : 148,
             }}
-            animate={{ height: collapsed ? 72 : "auto", opacity: 1 }}
-            transition={{ duration: 0.28 }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           >
-            {!collapsed && (
-              <>
-                <div className="mb-1 flex items-center gap-2">
-                  {isPilot && (
-                    <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-semibold backdrop-blur">
-                      Пилот
-                    </span>
-                  )}
-                </div>
-                <h2 className="text-[22px] font-semibold leading-tight tracking-tight">
-                  Добро пожаловать
-                </h2>
-                <p className="mt-1.5 text-[14px] leading-snug text-white/85">
-                  Карта, сервисы и городская информация — без лишнего шума.
-                </p>
-              </>
-            )}
-            {collapsed && (
-              <p className="text-[15px] font-semibold leading-[40px]">{cityName}</p>
-            )}
+            <div className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-12 left-8 h-32 w-32 rounded-full bg-[#0047b8]/30 blur-2xl" />
+            <div className="relative px-5 py-5">
+              {!collapsed ? (
+                <>
+                  <div className="mb-3 flex items-center gap-2">
+                    {isPilot && (
+                      <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-semibold backdrop-blur-md">
+                        Пилот
+                      </span>
+                    )}
+                    <span className="text-[12px] font-medium text-white/70">Сегодня</span>
+                  </div>
+                  <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em]">
+                    {cityName}
+                  </h2>
+                  <p className="mt-1.5 max-w-[16rem] text-[14px] leading-snug text-white/80">
+                    Всё важное — на одном спокойном экране
+                  </p>
+                </>
+              ) : (
+                <p className="text-[16px] font-semibold leading-[32px] tracking-tight">{cityName}</p>
+              )}
+            </div>
           </motion.div>
 
-          <p className="mb-3 px-0.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[var(--sg-ink-faint)]">
+          {/* Bento services */}
+          <p className="mb-3 px-1 text-[12px] font-semibold uppercase tracking-[0.1em] text-[var(--sg-ink-faint)]">
             Сервисы
           </p>
-          <div className="mb-6 grid grid-cols-2 gap-3">
-            <ServiceTile title="Карта" subtitle="2D · OSM" accent="#e8f4fd" icon="🗺️" onClick={onOpenMap} />
-            <ServiceTile title="Новости" subtitle="Live + демо" accent="#f0f9ff" icon="📰" onClick={onOpenNews} />
-            <ServiceTile title="Работа" subtitle="Только демо" accent="#f0fdf4" icon="💼" onClick={onOpenJobs} />
-            <ServiceTile title="Места" subtitle="Каталог НСК" accent="#fefce8" icon="📍" onClick={onOpenPlaces} />
+          <div className="mb-7 grid grid-cols-2 gap-3">
+            <ServiceTile
+              title="Карта"
+              subtitle="Слои · B3"
+              onClick={onOpenMap}
+              tone="blue"
+              icon={
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5V6.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M9 4v13.5M15 6.5V20" stroke="currentColor" strokeWidth="1.6" />
+                </svg>
+              }
+            />
+            <ServiceTile
+              title="Новости"
+              subtitle="Live + RSS"
+              onClick={onOpenNews}
+              tone="violet"
+              icon={
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 5h12a2 2 0 012 2v11H7a2 2 0 01-2-2V5z" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M8 9h8M8 13h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              }
+            />
+            <ServiceTile
+              title="Места"
+              subtitle="Каталог НСК"
+              onClick={onOpenPlaces}
+              tone="teal"
+              icon={
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z" stroke="currentColor" strokeWidth="1.6" />
+                  <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+                </svg>
+              }
+            />
+            <ServiceTile
+              title="Работа"
+              subtitle="Демо"
+              onClick={onOpenJobs}
+              tone="amber"
+              icon={
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="1.6" />
+                </svg>
+              }
+            />
           </div>
 
-          <p className="mb-3 px-0.5 text-[13px] font-semibold uppercase tracking-[0.06em] text-[var(--sg-ink-faint)]">
+          {/* Now */}
+          <p className="mb-3 px-1 text-[12px] font-semibold uppercase tracking-[0.1em] text-[var(--sg-ink-faint)]">
             Сейчас
           </p>
           <div className="space-y-3">
@@ -137,22 +195,38 @@ export function MainHomeScreen({
             <button
               type="button"
               onClick={onOpenAlerts}
-              className="w-full rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
+              className="sg-glass-strong group flex w-full items-center gap-4 rounded-[var(--sg-radius-lg)] p-4 text-left transition active:scale-[0.99]"
             >
-              <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Предупреждения</p>
-              <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
-                Demo-лента · без фейковых угроз
-              </p>
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-amber-50 text-amber-600">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 9v4M12 17h.01M10.3 4.3L2.8 18a2 2 0 001.7 3h15a2 2 0 001.7-3L13.7 4.3a2 2 0 00-3.4 0z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                </svg>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-semibold text-[var(--sg-ink)]">Предупреждения</span>
+                <span className="mt-0.5 block text-[13px] text-[var(--sg-ink-muted)]">Честная лента · без шума</span>
+              </span>
+              <svg className="shrink-0 text-[var(--sg-ink-faint)] opacity-60 transition group-active:translate-x-0.5" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+              </svg>
             </button>
             <button
               type="button"
               onClick={onOpenMap}
-              className="w-full rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.99]"
+              className="sg-glass-strong group flex w-full items-center gap-4 rounded-[var(--sg-radius-lg)] p-4 text-left transition active:scale-[0.99]"
             >
-              <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Открыть карту</p>
-              <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
-                Новосибирск · каталог мест · OpenStreetMap
-              </p>
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-[var(--sg-blue-soft)] text-[var(--sg-blue)]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5V6.5z" stroke="currentColor" strokeWidth="1.6" />
+                </svg>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-semibold text-[var(--sg-ink)]">Открыть карту</span>
+                <span className="mt-0.5 block text-[13px] text-[var(--sg-ink-muted)]">Места · слои · OpenStreetMap</span>
+              </span>
+              <svg className="shrink-0 text-[var(--sg-ink-faint)] opacity-60" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+              </svg>
             </button>
           </div>
         </div>
@@ -163,32 +237,40 @@ export function MainHomeScreen({
   );
 }
 
+const TONE: Record<string, { bg: string; fg: string }> = {
+  blue: { bg: "rgba(10,132,255,0.12)", fg: "#0a84ff" },
+  violet: { bg: "rgba(120,90,255,0.12)", fg: "#6d5efc" },
+  teal: { bg: "rgba(16,185,129,0.12)", fg: "#0d9488" },
+  amber: { bg: "rgba(245,158,11,0.14)", fg: "#d97706" },
+};
+
 function ServiceTile({
   title,
   subtitle,
-  accent,
-  icon,
   onClick,
+  tone,
+  icon,
 }: {
   title: string;
   subtitle: string;
-  accent: string;
-  icon: string;
   onClick: () => void;
+  tone: keyof typeof TONE;
+  icon: React.ReactNode;
 }) {
+  const t = TONE[tone];
   return (
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-start rounded-[var(--sg-radius-lg)] bg-white p-4 text-left shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)] transition active:scale-[0.98]"
+      className="sg-glass-strong flex flex-col items-start rounded-[var(--sg-radius-lg)] p-4 text-left transition active:scale-[0.97]"
     >
       <span
-        className="mb-3 flex h-11 w-11 items-center justify-center rounded-[14px] text-[20px]"
-        style={{ background: accent }}
+        className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-[15px]"
+        style={{ background: t.bg, color: t.fg }}
       >
         {icon}
       </span>
-      <span className="text-[15px] font-semibold text-[var(--sg-ink)]">{title}</span>
+      <span className="text-[15px] font-semibold tracking-tight text-[var(--sg-ink)]">{title}</span>
       <span className="mt-0.5 text-[12px] text-[var(--sg-ink-faint)]">{subtitle}</span>
     </button>
   );

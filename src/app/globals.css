@@ -1,33 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  /* Design pass 2 — softer surface hierarchy, less “card wall” */
-  --sg-blue: #058bed;
-  --sg-blue-soft: #eef6fd;
-  --sg-blue-deep: #0270c9;
-  --sg-ink: #0b1220;
-  --sg-ink-muted: #5b6b7c;
-  --sg-ink-faint: #8b9aab;
-  --sg-surface: #eef1f6;
-  --sg-surface-elevated: #f7f8fb;
+  /* Design OS 3.0 — luminous, calm, premium */
+  --sg-blue: #0a84ff;
+  --sg-blue-mid: #3b9eff;
+  --sg-blue-soft: rgba(10, 132, 255, 0.1);
+  --sg-blue-glow: rgba(10, 132, 255, 0.45);
+  --sg-blue-deep: #0060df;
+  --sg-ink: #0a0e17;
+  --sg-ink-muted: #5c6b7a;
+  --sg-ink-faint: #8e9aab;
+  --sg-surface: #f0f2f7;
+  --sg-surface-elevated: rgba(255, 255, 255, 0.72);
   --sg-card: #ffffff;
-  --sg-border: rgba(11, 18, 32, 0.05);
-  --sg-border-strong: rgba(11, 18, 32, 0.09);
-  --sg-danger: #e11d48;
-  --sg-warning-bg: #fff7ed;
-  --sg-warning-text: #9a3412;
-  --sg-success-soft: #ecfdf5;
+  --sg-border: rgba(10, 14, 23, 0.06);
+  --sg-border-strong: rgba(10, 14, 23, 0.1);
+  --sg-danger: #ff3b5c;
+  --sg-warning-bg: #fff6eb;
+  --sg-warning-text: #9a4d0a;
+  --sg-success-soft: #e8faf0;
 
-  --sg-radius-sm: 14px;
-  --sg-radius-md: 20px;
+  --sg-radius-sm: 16px;
+  --sg-radius-md: 22px;
   --sg-radius-lg: 28px;
-  --sg-radius-xl: 36px;
+  --sg-radius-xl: 40px;
   --sg-radius-pill: 999px;
 
-  --sg-shadow-sm: 0 1px 3px rgba(11, 18, 32, 0.03);
-  --sg-shadow-md: 0 10px 30px rgba(11, 18, 32, 0.05);
-  --sg-shadow-lg: 0 20px 50px rgba(11, 18, 32, 0.08);
-  --sg-shadow-nav: 0 14px 44px rgba(11, 18, 32, 0.1);
+  --sg-shadow-sm: 0 2px 8px rgba(10, 14, 23, 0.04);
+  --sg-shadow-md: 0 12px 40px rgba(10, 14, 23, 0.07);
+  --sg-shadow-lg: 0 24px 64px rgba(10, 14, 23, 0.1);
+  --sg-shadow-nav: 0 16px 48px rgba(10, 14, 23, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  --sg-shadow-glow: 0 12px 40px var(--sg-blue-glow);
+
+  --sg-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --sg-blur: 24px;
 
   --background: var(--sg-surface);
   --foreground: var(--sg-ink);
@@ -52,13 +58,43 @@ body {
   overflow: hidden;
   background: var(--sg-surface);
   color: var(--sg-ink);
-  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
   font-feature-settings: "ss01" on, "cv11" on;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   text-rendering: optimizeLegibility;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+}
+
+/* Ambient mesh behind app column */
+.sg-ambient {
+  background:
+    radial-gradient(120% 80% at 10% -10%, rgba(10, 132, 255, 0.14) 0%, transparent 55%),
+    radial-gradient(90% 60% at 100% 0%, rgba(120, 90, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(80% 50% at 50% 100%, rgba(10, 132, 255, 0.06) 0%, transparent 45%),
+    var(--sg-surface);
+}
+
+.sg-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(var(--sg-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--sg-blur)) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--sg-shadow-sm);
+}
+
+.sg-glass-strong {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(32px) saturate(1.5);
+  -webkit-backdrop-filter: blur(32px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--sg-shadow-md);
+}
+
+.sg-hero-gradient {
+  background:
+    linear-gradient(145deg, #5eb0ff 0%, #0a84ff 42%, #0066e0 78%, #0050c8 100%);
 }
 
 ::-webkit-scrollbar {
@@ -71,13 +107,29 @@ body {
   scrollbar-width: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+html[data-reduce-motion="1"] *,
+html[data-reduce-motion="1"] *::before,
+html[data-reduce-motion="1"] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
 .maplibregl-ctrl-attrib {
   font-size: 10px !important;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .maplibregl-ctrl-group {
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   overflow: hidden;
   box-shadow: var(--sg-shadow-md) !important;
   border: 1px solid var(--sg-border) !important;

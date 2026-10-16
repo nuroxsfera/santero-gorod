@@ -52,39 +52,46 @@ export function WeatherCard({ city }: Props) {
 
   if (loading) {
     return (
-      <div className="rounded-[var(--sg-radius-lg)] bg-white p-4 ring-1 ring-[var(--sg-border)]">
-        <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Погода</p>
-        <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">Загрузка…</p>
+      <div className="sg-glass-strong animate-pulse rounded-[var(--sg-radius-lg)] p-5">
+        <div className="h-4 w-20 rounded bg-[var(--sg-surface)]" />
+        <div className="mt-3 h-8 w-16 rounded bg-[var(--sg-surface)]" />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="rounded-[var(--sg-radius-lg)] bg-white/70 p-4 ring-1 ring-[var(--sg-border)]">
+      <div className="sg-glass rounded-[var(--sg-radius-lg)] p-5">
         <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Погода</p>
         <p className="mt-1 text-[13px] text-[var(--sg-ink-muted)]">
-          Сейчас недоступна. Источник: Open-Meteo.
+          Сейчас недоступна · Open-Meteo
         </p>
       </div>
     );
   }
 
+  const temp =
+    data.temperatureC > 0 ? `+${data.temperatureC}` : `${data.temperatureC}`;
+
   return (
-    <div className="rounded-[var(--sg-radius-lg)] bg-white p-4 shadow-[var(--sg-shadow-sm)] ring-1 ring-[var(--sg-border)]">
-      <div className="flex items-start justify-between gap-3">
+    <div className="sg-glass-strong relative overflow-hidden rounded-[var(--sg-radius-lg)] p-5">
+      <div className="pointer-events-none absolute -right-6 -top-8 h-28 w-28 rounded-full bg-[var(--sg-blue-soft)] blur-2xl" />
+      <div className="relative flex items-start justify-between gap-3">
         <div>
-          <p className="text-[15px] font-semibold text-[var(--sg-ink)]">Погода</p>
-          <p className="mt-0.5 text-[13px] text-[var(--sg-ink-muted)]">
-            {data.localityName ?? "Город"} · {data.weatherLabelRu}
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--sg-ink-faint)]">
+            Погода
           </p>
+          <p className="mt-1 text-[15px] font-medium text-[var(--sg-ink-muted)]">
+            {data.localityName ?? "Город"}
+          </p>
+          <p className="mt-0.5 text-[14px] text-[var(--sg-ink)]">{data.weatherLabelRu}</p>
         </div>
-        <p className="text-[28px] font-semibold tabular-nums tracking-tight text-[var(--sg-ink)]">
-          {data.temperatureC > 0 ? `+${data.temperatureC}` : data.temperatureC}°
+        <p className="text-[40px] font-semibold tabular-nums tracking-[-0.04em] text-[var(--sg-ink)]">
+          {temp}°
         </p>
       </div>
       {data.windSpeedMs != null && (
-        <p className="mt-2 text-[12px] text-[var(--sg-ink-faint)]">
+        <p className="relative mt-3 text-[12px] text-[var(--sg-ink-faint)]">
           Ветер ~{Math.round(data.windSpeedMs)} м/с · Open-Meteo
         </p>
       )}

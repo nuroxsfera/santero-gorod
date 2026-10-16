@@ -1,34 +1,24 @@
-# Santero Город — мастер-план экосистемы
+# Santero Город — мастер-план
 
-**Версия:** 1.3 · 2026-10-16 · **H1–H6 code-complete**
+**v1.4 · 2026-10-16**
 
----
+## Горизонты H1–H6
 
-## Горизонты
+Закрыты по коду. См. `docs/PROGRESS.md`.
 
-| H | Содержание | Код |
-|---|------------|-----|
-| 1 | Platform | ✅ |
-| 2 | Demo city shell | ✅ |
-| 3 | Resident value | ✅ |
-| 4 | Ecosystem modules | ✅ |
-| 5 | Spatial + catalogs | ✅ |
-| 6 | Ops · partner · PWA · UGC shells | ✅ |
+## Текущая фаза: NSK Daily
 
-**Owner remaining:** Neon schema apply · OAuth secrets · Push keys · full OSM DB load
+Не «ещё модули», а:
 
----
+1. **Design OS 3.0** — визуал и motion уровня лучших потребительских приложений 2026
+2. **Глубина 3–4 сценариев** — карта/места, новости, погода+сейчас, транспорт или алерты
+3. **Живые данные** — Neon + OSM catalog, меньше demo на главной
 
-## Partner API
+**Не в фокусе:** мультигород, оплата, 3D-twin, ещё skeleton-экраны.
 
-See `docs/api/PARTNER.md` — read-only places/news/health.
+## Принципы UI
 
-## Ops
-
-- `docs/ops/CITY_ONBOARDING.md`
-- `docs/ops/SLA.md`
-- `docs/ops/RUNBOOK.md`
-
-## Modules
-
-Full A–AA status in `docs/PROGRESS.md`.
+- Воздух, мягкий свет, glass, крупные радиусы
+- Одна типографическая шкала
+- Честные demo-метки без «серого UI 2012»
+- Mobile-first, max-width column

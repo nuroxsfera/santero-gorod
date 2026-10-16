@@ -24,6 +24,12 @@ import { CityMapScreen } from "@/map";
 import { SearchScreen } from "@/search/ui/SearchScreen";
 import { AlertsScreen } from "@/alerts";
 import { ProfileScreen } from "@/auth";
+import { EventsScreen } from "@/events";
+import { TransportScreen } from "@/transport";
+import { OrgsScreen } from "@/orgs";
+import { RealtyScreen } from "@/realty";
+import { NotificationsScreen } from "@/notifications";
+import { BusinessScreen } from "@/business";
 import { type Screen, type Tab } from "./navigation";
 import { useCityBootstrap } from "./hooks/useCityBootstrap";
 import { SplashScreen } from "./ui/SplashScreen";
@@ -46,7 +52,6 @@ export default function App() {
   const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
   const [activeVacancy, setActiveVacancy] = useState<Vacancy | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("home");
-  const [navHint, setNavHint] = useState<string | null>(null);
 
   useEffect(() => {
     if (screen !== "splash") return;
@@ -64,12 +69,6 @@ export default function App() {
     }, 1800);
     return () => clearTimeout(t);
   }, [screen, nextCity, setCity]);
-
-  useEffect(() => {
-    if (!navHint) return;
-    const t = setTimeout(() => setNavHint(null), 2200);
-    return () => clearTimeout(t);
-  }, [navHint]);
 
   const handleSelectCity = (selected: Locality) => {
     if (city && selected.id === city.id) {
@@ -94,7 +93,14 @@ export default function App() {
       setScreen("more");
       return;
     }
-    setNavHint("Раздел «Транспорт» пока в разработке");
+    if (tab === "transport") {
+      setScreen("transport");
+    }
+  };
+
+  const backHome = () => {
+    setActiveTab("home");
+    setScreen("main");
   };
 
   return (
@@ -137,11 +143,7 @@ export default function App() {
         )}
 
         {screen === "search" && (
-          <motion.div
-            key="search"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
+          <motion.div key="search" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
             <SearchScreen
               city={city}
               onBack={() => setScreen("main")}
@@ -153,82 +155,91 @@ export default function App() {
         )}
 
         {screen === "more" && (
-          <motion.div
-            key="more"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
+          <motion.div key="more" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
             <MoreScreen
-              onBack={() => {
-                setActiveTab("home");
-                setScreen("main");
-              }}
+              onBack={backHome}
               onOpenAlerts={() => setScreen("alerts")}
               onOpenProfile={() => setScreen("profile")}
+              onOpenEvents={() => setScreen("events")}
+              onOpenOrgs={() => setScreen("orgs")}
+              onOpenRealty={() => setScreen("realty")}
+              onOpenNotifications={() => setScreen("notifications")}
+              onOpenBusiness={() => setScreen("business")}
             />
           </motion.div>
         )}
 
         {screen === "profile" && (
-          <motion.div
-            key="profile"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
+          <motion.div key="profile" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
             <ProfileScreen onBack={() => setScreen("more")} />
           </motion.div>
         )}
 
-        {screen === "alerts" && (
-          <motion.div
-            key="alerts"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
-            <AlertsScreen city={city} onBack={() => setScreen("main")} />
+        {screen === "events" && (
+          <motion.div key="events" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <EventsScreen city={city} onBack={() => setScreen("more")} />
           </motion.div>
         )}
 
-        {screen === "map" && (
-          <motion.div
-            key="map"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
-            <CityMapScreen
-              city={city}
-              onBack={() => setScreen("main")}
-              onOpenList={() => setScreen("places")}
-            />
-          </motion.div>
-        )}
-
-        {screen === "places" && (
-          <motion.div
-            key="places"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
-            <PlacesListScreen
-              city={city}
-              onBack={() => setScreen("main")}
-              onOpenMap={() => setScreen("map")}
-            />
-          </motion.div>
-        )}
-
-        {screen === "news" && (
-          <motion.div
-            key="news"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
-            <NewsFeedScreen
+        {screen === "transport" && (
+          <motion.div key="transport" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <TransportScreen
               city={city}
               onBack={() => {
                 setActiveTab("home");
                 setScreen("main");
               }}
+            />
+          </motion.div>
+        )}
+
+        {screen === "orgs" && (
+          <motion.div key="orgs" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <OrgsScreen city={city} onBack={() => setScreen("more")} />
+          </motion.div>
+        )}
+
+        {screen === "realty" && (
+          <motion.div key="realty" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <RealtyScreen city={city} onBack={() => setScreen("more")} />
+          </motion.div>
+        )}
+
+        {screen === "notifications" && (
+          <motion.div key="notifications" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <NotificationsScreen onBack={() => setScreen("more")} />
+          </motion.div>
+        )}
+
+        {screen === "business" && (
+          <motion.div key="business" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <BusinessScreen onBack={() => setScreen("more")} />
+          </motion.div>
+        )}
+
+        {screen === "alerts" && (
+          <motion.div key="alerts" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <AlertsScreen city={city} onBack={() => setScreen("main")} />
+          </motion.div>
+        )}
+
+        {screen === "map" && (
+          <motion.div key="map" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <CityMapScreen city={city} onBack={() => setScreen("main")} onOpenList={() => setScreen("places")} />
+          </motion.div>
+        )}
+
+        {screen === "places" && (
+          <motion.div key="places" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <PlacesListScreen city={city} onBack={() => setScreen("main")} onOpenMap={() => setScreen("map")} />
+          </motion.div>
+        )}
+
+        {screen === "news" && (
+          <motion.div key="news" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
+            <NewsFeedScreen
+              city={city}
+              onBack={backHome}
               onOpenArticle={(article) => {
                 setActiveArticle(article);
                 setScreen("news-article");
@@ -238,11 +249,7 @@ export default function App() {
         )}
 
         {screen === "news-article" && activeArticle && (
-          <motion.div
-            key="news-article"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
-            {...sheet}
-          >
+          <motion.div key="news-article" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white" {...sheet}>
             <NewsArticleScreen
               article={activeArticle}
               onBack={() => {
@@ -254,11 +261,7 @@ export default function App() {
         )}
 
         {screen === "jobs" && (
-          <motion.div
-            key="jobs"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
+          <motion.div key="jobs" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
             <JobsFeedScreen
               city={city}
               onBack={() => setScreen("main")}
@@ -273,11 +276,7 @@ export default function App() {
         )}
 
         {screen === "vacancy" && activeVacancy && (
-          <motion.div
-            key="vacancy"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
-            {...sheet}
-          >
+          <motion.div key="vacancy" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white" {...sheet}>
             <VacancyDetailScreen
               vacancy={activeVacancy}
               onBack={() => {
@@ -290,35 +289,19 @@ export default function App() {
         )}
 
         {screen === "resume" && (
-          <motion.div
-            key="resume"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white"
-            {...sheet}
-          >
+          <motion.div key="resume" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-white" {...sheet}>
             <ResumeScreen onBack={() => setScreen("jobs")} />
           </motion.div>
         )}
 
         {screen === "applications" && (
-          <motion.div
-            key="applications"
-            className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]"
-            {...sheet}
-          >
+          <motion.div key="applications" className="absolute inset-0 mx-auto flex w-full max-w-lg flex-col bg-[var(--sg-surface)]" {...sheet}>
             <ApplicationsScreen onBack={() => setScreen("jobs")} />
           </motion.div>
         )}
 
         {screen === "travel" && nextCity && <TravelScreen city={nextCity} />}
       </AnimatePresence>
-
-      {navHint && (
-        <div className="pointer-events-none absolute bottom-28 left-0 right-0 z-40 flex justify-center px-4">
-          <p className="rounded-[var(--sg-radius-pill)] bg-[var(--sg-ink)]/90 px-4 py-2.5 text-center text-[13px] font-medium text-white shadow-[var(--sg-shadow-lg)] backdrop-blur">
-            {navHint}
-          </p>
-        </div>
-      )}
     </div>
   );
 }

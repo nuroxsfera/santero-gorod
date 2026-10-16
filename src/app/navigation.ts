@@ -15,7 +15,13 @@ export type Screen =
   | "search"
   | "more"
   | "alerts"
-  | "profile";
+  | "profile"
+  | "events"
+  | "transport"
+  | "orgs"
+  | "realty"
+  | "notifications"
+  | "business";
 
 export type Tab = "home" | "transport" | "news" | "more";
 

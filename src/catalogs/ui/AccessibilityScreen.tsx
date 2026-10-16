@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const KEY = "sg-a11y";
 
@@ -18,6 +18,7 @@ function load(): A11y {
 }
 
 function apply(a: A11y) {
+  if (typeof document === "undefined") return;
   document.documentElement.style.fontSize = a.largeText ? "18px" : "";
   document.documentElement.dataset.reduceMotion = a.reduceMotion ? "1" : "0";
 }
@@ -27,13 +28,11 @@ interface Props {
 }
 
 export function AccessibilityScreen({ onBack }: Props) {
-  const [a, setA] = useState<A11y>({ largeText: false, reduceMotion: false });
-
-  useEffect(() => {
+  const [a, setA] = useState<A11y>(() => {
     const v = load();
-    setA(v);
     apply(v);
-  }, []);
+    return v;
+  });
 
   const update = (patch: Partial<A11y>) => {
     const next = { ...a, ...patch };
@@ -50,7 +49,7 @@ export function AccessibilityScreen({ onBack }: Props) {
         </button>
         <h1 className="text-[18px] font-semibold text-[var(--sg-ink)]">Доступность</h1>
       </header>
-      <div className="flex-1 px-4 py-4 space-y-3">
+      <div className="flex-1 space-y-3 px-4 py-4">
         <label className="flex items-center justify-between rounded-[var(--sg-radius-lg)] bg-white/90 p-4 ring-1 ring-[var(--sg-border)]">
           <span className="text-[15px] font-medium text-[var(--sg-ink)]">Крупный текст</span>
           <input

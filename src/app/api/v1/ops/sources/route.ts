@@ -19,7 +19,7 @@ async function checkRss(url: string): Promise<{ ok: boolean; ms: number; detail:
     return {
       ok: res.ok,
       ms: Date.now() - t0,
-      detail: res.ok ? `HTTP ${res.status}` : `HTTP ${res.status}`,
+      detail: `HTTP ${res.status}`,
     };
   } catch (e) {
     return {
@@ -85,12 +85,16 @@ export async function GET() {
     try {
       const { probeDatabase } = await import("@/db/status");
       const p = await probeDatabase();
+      const latency =
+        "latencyMs" in p && typeof (p as { latencyMs?: number }).latencyMs === "number"
+          ? (p as { latencyMs: number }).latencyMs
+          : undefined;
       db = {
         id: "postgres",
         label: "Postgres / Neon",
         ok: p.connected,
         detail: p.message,
-        latencyMs: p.latencyMs,
+        latencyMs: latency,
       };
     } catch (e) {
       db = {

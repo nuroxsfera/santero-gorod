@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { Locality } from "@/geography";
 import type { RealtyKind, RealtyListing } from "../domain/types";
 import { InMemoryRealtyRepository } from "../repository/InMemoryRealtyRepository";
@@ -137,7 +137,7 @@ export function RealtyScreen({ city, onBack }: Props) {
   );
 }
 
-function MetaChip({ children }: { children: React.ReactNode }) {
+function MetaChip({ children }: { children: ReactNode }) {
   return (
     <span className="rounded-full bg-[var(--sg-surface)] px-2.5 py-1 text-[12px] font-medium text-[var(--sg-ink-muted)]">
       {children}

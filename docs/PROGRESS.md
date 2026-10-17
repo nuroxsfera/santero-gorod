@@ -10,29 +10,30 @@
 | Измерение | % |
 |-----------|---|
 | Функции прототипа | ~92 |
-| Визуальная оболочка | ~86 |
+| Визуальная оболочка | ~90 |
 | Инфраструктура | ~72 |
 | Публичный запуск | ~58 |
 
 ---
 
-## H1–H6 — ✅ code-complete
+## H1–H6 — ✅
 
 ---
 
-## Фаза «NSK Daily» — дизайн + глубина
+## Фаза «NSK Daily» — Design OS 3.0
 
-### Design OS 3.0
-- [x] Токены / glass / ambient
-- [x] Splash · city select · home · nav · weather
-- [x] **Realty media-cards** — фото, цена, адрес, комнаты, этаж, район
-- [x] **Places structured cards** — cover по категории, адрес, метка
-- [x] More list 3.0
-- [ ] News / Jobs media cards
-- [ ] Map chrome 3.0
-- [ ] Events cards with image slots
+- [x] Токены / splash / home / nav / weather
+- [x] Realty media-cards
+- [x] Places structured cards
+- [x] More 3.0
+- [x] **News media-cards** (hero + thumb)
+- [x] **Jobs cards** (avatar · salary · chips)
+- [x] **Events posters** + image slots
+- [x] **Map chrome 3.0** (glass · sheet)
+- [ ] Article / vacancy detail polish
+- [ ] Micro-interactions pass 2
 
 ### Продукт
-- [ ] Каталог мест ×N + реальные фото
+- [ ] Больше реальных данных / фото
 - [ ] Neon write-path
-- [ ] Owner: schema / OAuth
+- [ ] Owner ops

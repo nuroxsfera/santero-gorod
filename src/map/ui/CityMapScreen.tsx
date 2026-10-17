@@ -23,6 +23,19 @@ const LAYER_OPTIONS: { id: PlaceCategory | "all"; label: string }[] = [
   { id: "sport", label: "Спорт" },
 ];
 
+const CATEGORY_RU: Partial<Record<PlaceCategory, string>> = {
+  culture: "Культура",
+  park: "Парк",
+  shop: "Магазин",
+  food: "Еда",
+  health: "Медицина",
+  education: "Образование",
+  sport: "Спорт",
+  transport_stop: "Транспорт",
+  government: "Госучреждение",
+  poi: "Место",
+};
+
 function markerColor(category: PlaceCategory): string {
   switch (category) {
     case "culture":
@@ -44,11 +57,11 @@ function markerColor(category: PlaceCategory): string {
     case "food":
       return "#c2410c";
     default:
-      return "#058BED";
+      return "#0a84ff";
   }
 }
 
-/** Map B3: layers + pitch (3D camera). Not a mesh twin. */
+/** Map B3 chrome 3.0 — glass header + elevated sheet */
 export function CityMapScreen({ city, onBack, onOpenList }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("maplibre-gl").Map | null>(null);
@@ -156,9 +169,9 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
       for (const p of visible) {
         const el = document.createElement("button");
         el.type = "button";
-        el.style.cssText = `width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:${markerColor(
+        el.style.cssText = `width:28px;height:28px;border-radius:50%;border:2.5px solid #fff;background:${markerColor(
           p.category
-        )};box-shadow:0 4px 12px rgba(11,18,32,.2);cursor:pointer;padding:0;`;
+        )};box-shadow:0 6px 16px rgba(10,14,23,.22);cursor:pointer;padding:0;`;
         el.setAttribute("aria-label", p.name);
         el.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -180,29 +193,31 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
 
   return (
     <div className="relative flex h-full flex-col bg-[var(--sg-surface)]">
-      <header className="relative z-20 bg-white/90 px-3 py-2.5 backdrop-blur-md">
+      <header className="sg-glass relative z-20 px-3 py-2.5">
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onBack}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--sg-surface)]"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/80"
             aria-label="Назад"
           >
             ←
           </button>
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-[16px] font-semibold text-[var(--sg-ink)]">Карта</h1>
+            <h1 className="truncate text-[16px] font-semibold tracking-tight text-[var(--sg-ink)]">
+              Карта
+            </h1>
             <p className="truncate text-[11px] text-[var(--sg-ink-faint)]">
-              {city?.name ?? PILOT_CITY.name} · B3 · слои
+              {city?.name ?? PILOT_CITY.name} · слои · {visible.length} точек
             </p>
           </div>
           <button
             type="button"
             onClick={() => setPitch3d((v) => !v)}
-            className={`rounded-full px-3 py-1.5 text-[12px] font-medium ${
+            className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold ${
               pitch3d
-                ? "bg-[var(--sg-blue)] text-white"
-                : "bg-[var(--sg-surface)] text-[var(--sg-ink)]"
+                ? "bg-[var(--sg-blue)] text-white shadow-[var(--sg-shadow-glow)]"
+                : "bg-white/80 text-[var(--sg-ink)] ring-1 ring-[var(--sg-border)]"
             }`}
           >
             {pitch3d ? "3D" : "2D"}
@@ -210,21 +225,21 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
           <button
             type="button"
             onClick={onOpenList}
-            className="rounded-full bg-[var(--sg-surface)] px-3 py-1.5 text-[12px] font-medium text-[var(--sg-ink)]"
+            className="rounded-full bg-white/80 px-3.5 py-1.5 text-[12px] font-semibold text-[var(--sg-ink)] ring-1 ring-[var(--sg-border)]"
           >
             Список
           </button>
         </div>
-        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-0.5">
+        <div className="mt-2.5 flex gap-1.5 overflow-x-auto pb-0.5">
           {LAYER_OPTIONS.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => setLayer(opt.id)}
-              className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold ${
+              className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold ${
                 layer === opt.id
                   ? "bg-[var(--sg-blue-soft)] text-[var(--sg-blue)]"
-                  : "bg-[var(--sg-surface)] text-[var(--sg-ink-muted)]"
+                  : "bg-white/70 text-[var(--sg-ink-muted)]"
               }`}
             >
               {opt.label}
@@ -241,28 +256,40 @@ export function CityMapScreen({ city, onBack, onOpenList }: Props) {
         )}
         <div ref={containerRef} className="absolute inset-0" />
         <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-10">
-          <p className="rounded-[14px] bg-white/90 px-2.5 py-1.5 text-[10px] text-[var(--sg-ink-muted)] shadow-[var(--sg-shadow-sm)]">
-            B3 · слои POI · pitch ≠ 3D-twin зданий · © OpenStreetMap
+          <p className="rounded-[16px] bg-white/90 px-3 py-2 text-[10px] text-[var(--sg-ink-muted)] shadow-[var(--sg-shadow-md)] backdrop-blur-md">
+            © OpenStreetMap · pitch ≠ 3D-twin зданий
           </p>
         </div>
       </div>
 
       {selected && (
-        <div className="absolute bottom-0 left-0 right-0 z-30 bg-white/95 p-4 shadow-[var(--sg-shadow-lg)] backdrop-blur-md">
-          <div className="mx-auto max-w-lg">
+        <div className="absolute bottom-0 left-0 right-0 z-30 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div className="sg-glass-strong mx-auto max-w-lg overflow-hidden rounded-[var(--sg-radius-xl)] p-4 shadow-[var(--sg-shadow-lg)]">
             <div className="mb-2 flex items-start justify-between gap-2">
-              <h2 className="text-[16px] font-semibold text-[var(--sg-ink)]">{selected.name}</h2>
-              <button type="button" onClick={() => setSelected(null)} className="text-[13px] text-[var(--sg-ink-faint)]">
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--sg-blue)]">
+                  {CATEGORY_RU[selected.category] ?? selected.category}
+                </p>
+                <h2 className="mt-0.5 text-[17px] font-semibold tracking-tight text-[var(--sg-ink)]">
+                  {selected.name}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="shrink-0 rounded-full bg-[var(--sg-surface)] px-3 py-1.5 text-[12px] font-medium text-[var(--sg-ink-muted)]"
+              >
                 Закрыть
               </button>
             </div>
             {selected.addressText && (
-              <p className="text-[13px] text-[var(--sg-ink-muted)]">{selected.addressText}</p>
+              <p className="text-[13px] leading-snug text-[var(--sg-ink-muted)]">
+                {selected.addressText}
+              </p>
             )}
-            <p className="mt-2 text-[11px] text-[var(--sg-ink-faint)]">
-              {selected.category}
-              {selected.isDemo ? " · демо" : ""}
-            </p>
+            {selected.isDemo && (
+              <p className="mt-2 text-[11px] text-[var(--sg-ink-faint)]">Демо-точка каталога</p>
+            )}
           </div>
         </div>
       )}

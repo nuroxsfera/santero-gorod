@@ -24,6 +24,8 @@ export interface CityEvent {
   endsAt: string | null;
   sourceName: string;
   sourceUrl: string | null;
+  /** Poster / cover — demo stock allowed */
+  imageUrl: string | null;
   isDemo: boolean;
 }
 
